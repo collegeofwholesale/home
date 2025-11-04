@@ -1,11 +1,11 @@
-<!-- College of Wholesale — Full Site + SF-Aware Repair Calculator (v4.5) -->
+<!-- College of Wholesale — Full Website + Offer/Repair Calculators (v5.0 all-in-one) -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>College of Wholesale — Offer Calculator & Training</title>
-<meta name="description" content="College of Wholesale: training, tools, and community for new wholesalers. Includes a beginner-friendly Offer Calculator and state-adjusted, SF-aware Repair Calculator." />
+<meta name="description" content="College of Wholesale: training, tools, and community for new wholesalers. Includes a beginner-friendly Offer Calculator and square-footage + state-adjusted Repair Calculator." />
 <style>
   :root{
     --bg:#0b0f1a; --card:#121829; --ink:#e6ebff; --muted:#9aa3b2;
@@ -103,6 +103,29 @@
         <a class="btn secondary" href="#resources">See Training Resources</a>
       </div>
     </div>
+    <div class="wrap">
+      <div class="grid two">
+        <div class="card">
+          <h3>What you’ll learn</h3>
+          <ul class="small">
+            <li>How to find motivated sellers (probate, code violations, tax liens, pre-foreclosure, & more)</li>
+            <li>How to estimate repairs with square-footage presets (no contractor needed)</li>
+            <li>How to make offers using the 70% rule and protect your fee</li>
+            <li>How to follow up like a pro and move deals to closing</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Fast start checklist</h3>
+          <ol class="small">
+            <li>Pick a market & pull a small niche list (500–1,000 leads)</li>
+            <li>Practice the cold call script 10× out loud</li>
+            <li>Use the SF-aware Repair Calculator during calls</li>
+            <li>Plug numbers into the Offer Calculator & make the offer</li>
+            <li>Follow up using your CRM tags (1w / 1m / 3m)</li>
+          </ol>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ABOUT -->
@@ -127,6 +150,12 @@
             <li>Anyone who needs a repeatable system to scale</li>
           </ul>
         </div>
+      </div>
+
+      <h3 style="margin-top:20px">What members say</h3>
+      <div class="grid two">
+        <div class="card small">“The repair presets made talking numbers 10× easier on my first calls.”</div>
+        <div class="card small">“Offer Calculator = instant confidence. I finally knew what to say.”</div>
       </div>
     </div>
   </section>
@@ -171,6 +200,8 @@
               <div class="out" id="mao">$0</div>
               <div class="small">Suggested first offer range:</div>
               <div class="out" id="range">$0 – $0</div>
+              <div class="hr"></div>
+              <div class="small">Heads-up: quick screening tool for beginners. Actual buyers & exits vary.</div>
             </div>
           </div>
         </section>
@@ -371,14 +402,14 @@ const STATE_NAMES = {
 /* ---------- Default Rates (baseline; state multiplier applies AFTER) ---------- */
 const RATES = {
   paint_in_psf: 1.25,     // $/SF interior paint
-  paint_out_psf: 1.50,    // $/SF exterior paint (approx by living SF)
-  floor_psf: 3.50,        // $/SF flooring materials+install
+  paint_out_psf: 1.50,    // $/SF exterior paint
+  floor_psf: 3.50,        // $/SF flooring
   roof_per_square: 450,   // $ per 100 SF of roof area
   window_each: 450,       // $ per window
-  elect_psf: 1.00,        // $/SF light electrical repairs/updates
-  plumb_psf: 0.80,        // $/SF light plumbing repairs
+  elect_psf: 1.00,        // $/SF electrical repairs/updates
+  plumb_psf: 0.80,        // $/SF plumbing repairs
   kitchen_base: 8000,     // per kitchen refresh
-  kitchen_sf_kicker: 500, // +$ per 1000 SF of house
+  kitchen_sf_kicker: 500, // +$ per 1,000 SF of house
   bath_base: 3500,        // per bathroom refresh
   hvac_small: 4500,       // <1200 SF
   hvac_med: 6500,         // 1200–2000 SF
@@ -387,7 +418,7 @@ const RATES = {
   misc_flat: 2000
 };
 
-/* ---------- Repair Line Items (now SF-aware where it makes sense) ---------- */
+/* ---------- Repair Line Items (SF-aware where it makes sense) ---------- */
 const LINE_ITEMS = [
   { id:"paint_in",   label:"Interior Paint (SF-Based)",                 type:"psf",   rateKey:"paint_in_psf" },
   { id:"paint_out",  label:"Exterior Paint (SF-Based)",                 type:"psf",   rateKey:"paint_out_psf" },
@@ -442,7 +473,6 @@ function buildLineItems(){
     row1.append(lb, cb);
     card.append(row1);
 
-    // show rate hint
     const row2 = document.createElement("div");
     row2.className = "row";
     const hint = document.createElement("div");
@@ -471,7 +501,7 @@ function describeRate(it){
     case "psf": return `Baseline: $${RATES[it.rateKey].toFixed(2)} per SF (before state multiplier)`;
     case "roof": return `Baseline: $${RATES.roof_per_square.toFixed(0)} per 100 SF of roof area (roof area ≈ 1.2 × living SF)`;
     case "windows": return `Baseline: ~$${RATES.window_each.toFixed(0)} per window (≈ 1 window / 200 SF)`;
-    case "kitchen": return `Baseline: $${RATES.kitchen_base.toLocaleString()} each (+ ~${fmt(RATES.kitchen_sf_kicker)} per 1,000 SF of house)`;
+    case "kitchen": return `Baseline: $${RATES.kitchen_base.toLocaleString()} each (+ ${fmt(RATES.kitchen_sf_kicker)} per 1,000 SF)`;
     case "bath": return `Baseline: $${RATES.bath_base.toLocaleString()} per bathroom`;
     case "hvac": return `Baseline: SF-banded — <1200 SF ~$${RATES.hvac_small}, 1200–2000 SF ~$${RATES.hvac_med}, >2000 SF ~$${RATES.hvac_large}`;
     case "flat": return `Baseline flat: ${fmt(it.flat)}`;
@@ -497,7 +527,6 @@ function detectStateFromAddress(){
 /* Scan address box for a “sqft” number (e.g., 1,650 sqft / 1650 sf) */
 function scanSqftFromAddress(){
   const txt = ($("#addr").value||"").toLowerCase();
-  // patterns: 1,650 sqft | 1650 sqft | 1650 sf | 1.650 sf (we'll catch digits + optional , .)
   const m = txt.match(/([\d,.]+)\s*(sq\s?ft|sf|sqft)/i);
   if(m){
     const num = parseInt(m[1].replace(/[^\d]/g,""),10);
@@ -531,7 +560,6 @@ function calcMAO(){
 
 /* ---------- Repair Calc (SF-aware) ---------- */
 function getRates(){
-  // pull possible overrides from Advanced section; fall back to defaults
   const r = {...RATES};
   const map = {
     rate_paint_in:"paint_in_psf",
@@ -552,17 +580,14 @@ function getRates(){
 function calcItemCost(it, sqft, rates){
   switch(it.type){
     case "psf":{
-      const base = sqft * (rates[it.rateKey]||0);
-      return base;
+      return sqft * (rates[it.rateKey]||0);
     }
     case "roof":{
-      // roof area ≈ 1.2 × living SF (simple heuristic)
-      const roofArea = sqft * 1.2;
-      const squares = roofArea / 100;
+      const roofArea = sqft * 1.2;        // heuristic
+      const squares = roofArea / 100;     // 100 sf per square
       return squares * (rates.roof_per_square||0);
     }
     case "windows":{
-      // approx windows = SF / 200, rounded
       const windows = Math.max(1, Math.round(sqft/200));
       return windows * (rates.window_each||0);
     }
@@ -629,7 +654,7 @@ function calcRepairs(){
   return total;
 }
 
-/* ---------- Tab (inside Calculator card) ---------- */
+/* ---------- Calc Tabs (inside Calculator card) ---------- */
 function switchCalcTab(id){
   ["offer","repair","help"].forEach(t=>{
     const sec = $("#tab-"+t);
@@ -645,7 +670,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   // Nav links
   $$(".navlink").forEach(a=>{
-    a.addEventListener("click", e=>{
+    a.addEventListener("click", ()=>{
       $$(".navlink").forEach(l=>l.classList.remove("active"));
       a.classList.add("active");
     });
