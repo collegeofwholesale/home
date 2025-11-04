@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐄</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = { theme: { extend: { colors: { brand: '#3b82f6', ink: '#0b1220', milk:'#f1f5f9' }}}}
+    tailwind.config = { theme: { extend: { colors: { brand:'#3b82f6', ink:'#0b1220', milk:'#f1f5f9' }}}}
   </script>
   <style>
     html{scroll-behavior:smooth}
@@ -16,6 +16,9 @@
     .container{max-width:1100px}
     .hidden-section{display:none}
     .active-link{color:#3b82f6}
+    .input{background:#0f172aCC;border:1px solid rgba(255,255,255,.1);border-radius:.75rem;padding:.65rem .9rem}
+    .card{border:1px solid rgba(255,255,255,.1);background:#0b1220CC;border-radius:1rem;padding:1.25rem}
+    .k{color:#94a3b8}
   </style>
 </head>
 <body class="bg-ink text-slate-100">
@@ -24,11 +27,10 @@
     <div class="container mx-auto px-4 py-3 flex items-center justify-between">
       <a href="#/" data-nav="home" class="flex items-center gap-2 font-bold"><span class="text-2xl">🐄</span><span>College of Wholesale</span></a>
       <nav class="hidden md:flex items-center gap-6 text-sm">
-        <!-- Internal “pages” (SPA) -->
         <a href="#/calculators" data-nav="calculators" class="hover:text-brand">Calculators</a>
+        <a href="#/terms" data-nav="terms" class="hover:text-brand">Seller Finance</a>
         <a href="#/internship" data-nav="internship" class="hover:text-brand">Internship</a>
         <a href="#/contact" data-nav="contact" class="hover:text-brand">Contact</a>
-        <!-- External direct links -->
         <a href="https://drive.google.com/drive/folders/1aA0tk53ojvfzD08nyDDAZ1sdDLp7T3zS" target="_blank" rel="noopener" class="hover:text-brand">Training</a>
         <a href="https://whop.com/collegeofwholesale" target="_blank" rel="noopener" class="hover:text-brand">Community</a>
         <a href="https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676" target="_blank" rel="noopener" class="hover:text-brand">Notion HQ</a>
@@ -39,6 +41,7 @@
       <nav class="container mx-auto px-4 py-3 grid gap-3 text-sm">
         <a href="#/" data-nav="home" class="hover:text-brand">Home</a>
         <a href="#/calculators" data-nav="calculators" class="hover:text-brand">Calculators</a>
+        <a href="#/terms" data-nav="terms" class="hover:text-brand">Seller Finance</a>
         <a href="#/internship" data-nav="internship" class="hover:text-brand">Internship</a>
         <a href="#/contact" data-nav="contact" class="hover:text-brand">Contact</a>
         <hr class="border-white/10">
@@ -49,9 +52,7 @@
     </div>
   </header>
 
-  <!-- PAGES (SPA SECTIONS) -->
   <main>
-
     <!-- HOME -->
     <section id="page-home" class="container mx-auto px-4 py-20">
       <h1 class="text-5xl font-extrabold leading-tight">Learn Wholesaling. <span class="text-brand">Close Deals.</span></h1>
@@ -68,42 +69,152 @@
           <div class="grid md:grid-cols-3 gap-6">
             <a href="#/calculators" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
               <h3 class="text-lg font-semibold">Deal Calculator</h3>
-              <p class="mt-2 text-slate-300 text-sm">MAO / 70% rule + suggestions.</p>
+              <p class="mt-2 text-slate-300 text-sm">MAO / LAO / exit suggestions.</p>
+            </a>
+            <a href="#/terms" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
+              <h3 class="text-lg font-semibold">Seller Finance</h3>
+              <p class="mt-2 text-slate-300 text-sm">P&I, CoC, DSCR, balloon balance.</p>
             </a>
             <a href="#/internship" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
               <h3 class="text-lg font-semibold">Internship & Team</h3>
               <p class="mt-2 text-slate-300 text-sm">Apply in 2 minutes and start learning.</p>
-            </a>
-            <a href="#/contact" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
-              <h3 class="text-lg font-semibold">Contact</h3>
-              <p class="mt-2 text-slate-300 text-sm">Business inquiries & partnerships.</p>
             </a>
           </div>
         </div>
       </section>
     </section>
 
-    <!-- CALCULATORS -->
+    <!-- WHOLESALE CALCULATOR -->
     <section id="page-calculators" class="container mx-auto px-4 py-16 hidden-section">
-      <h1 class="text-4xl font-bold">Deal Calculator</h1>
-      <p class="mt-2 text-slate-300">Quick math to sanity-check offers and exit strategies.</p>
+      <h1 class="text-4xl font-bold">Wholesale Deal Calculator</h1>
+      <p class="mt-2 text-slate-300">Get a realistic <b>offer range</b> using both the classic 70% rule and a reverse-engineered buyer-profit method.</p>
 
-      <div class="mt-8 grid lg:grid-cols-2 gap-6">
-        <div class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
-          <h3 class="text-xl font-semibold">MAO / 70% Rule</h3>
-          <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
-            <label class="grid gap-1"><span>ARV</span><input id="arv" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2" placeholder="350000"></label>
-            <label class="grid gap-1"><span>Repairs</span><input id="repairs" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2" placeholder="45000"></label>
-            <label class="grid gap-1"><span>Assignment Fee</span><input id="fee" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2" placeholder="15000"></label>
-            <label class="grid gap-1"><span>Holding/Closing</span><input id="holding" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2" placeholder="10000"></label>
+      <div class="mt-8 grid xl:grid-cols-3 gap-6">
+        <!-- Inputs -->
+        <div class="card xl:col-span-2">
+          <h3 class="text-xl font-semibold">Inputs</h3>
+          <div class="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+            <label class="grid gap-1"><span class="k">ARV</span><input id="arv" type="number" class="input" placeholder="350000"></label>
+            <label class="grid gap-1"><span class="k">Repairs</span><input id="repairs" type="number" class="input" placeholder="45000"></label>
+            <label class="grid gap-1"><span class="k">Assignment Fee</span><input id="fee" type="number" class="input" placeholder="15000"></label>
+            <label class="grid gap-1"><span class="k">Holding/Closing (total)</span><input id="holding" type="number" class="input" placeholder="10000"></label>
+            <label class="grid gap-1"><span class="k">Liens/Payoff (optional)</span><input id="liens" type="number" class="input" placeholder="0"></label>
+            <label class="grid gap-1"><span class="k">Market Contingency %</span><input id="contg" type="number" class="input" placeholder="3" value="3"></label>
+
+            <label class="grid gap-1"><span class="k">MAO % of ARV</span><input id="maoPct" type="number" class="input" placeholder="70" value="70"></label>
+            <label class="grid gap-1"><span class="k">Buyer Profit % (rev.)</span><input id="profitPct" type="number" class="input" placeholder="12" value="12"></label>
+            <label class="grid gap-1"><span class="k">Selling Costs % (rev.)</span><input id="sellPct" type="number" class="input" placeholder="8" value="8"></label>
+
+            <label class="grid gap-1"><span class="k">Negotiation Buffer % (LAO)</span><input id="bufferPct" type="number" class="input" placeholder="12" value="12"></label>
+            <label class="grid gap-1"><span class="k">Monthly Hold (opt.)</span><input id="holdMonthly" type="number" class="input" placeholder="1200"></label>
+            <label class="grid gap-1"><span class="k">Hold Months (opt.)</span><input id="holdMonths" type="number" class="input" placeholder="3"></label>
           </div>
+
           <button id="calcBtn" class="mt-4 rounded-xl bg-brand px-4 py-2 font-semibold">Calculate</button>
-          <div id="calcOut" class="mt-4 text-sm text-slate-200 hidden"></div>
         </div>
-        <div class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
-          <h3 class="text-xl font-semibold">Strategy Suggestions</h3>
-          <ul id="strategyOut" class="mt-4 space-y-2 text-sm list-disc pl-5">
+
+        <!-- Output -->
+        <div class="card">
+          <h3 class="text-xl font-semibold">Results</h3>
+          <div id="calcOut" class="mt-4 text-sm text-slate-200 hidden"></div>
+          <div id="rangeOut" class="mt-4 hidden">
+            <div class="text-slate-300 text-xs mb-1">Suggested Offer Range</div>
+            <div class="text-2xl font-extrabold"><span id="laoSpan">—</span> → <span id="maoSpan">—</span></div>
+            <div class="text-slate-400 text-xs mt-1">LAO = anchoring offer (with buffer). MAO = walk-away ceiling.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6 mt-6">
+        <div class="card">
+          <h3 class="text-lg font-semibold">How we calculate</h3>
+          <ul class="mt-3 list-disc pl-5 text-sm text-slate-300">
+            <li><b>Classic MAO:</b> (ARV × MAO%) − Repairs − Holding − Assignment − Liens − Contingency.</li>
+            <li><b>Reverse MAO:</b> ARV × (1 − Selling% − BuyerProfit%) − Repairs − Holding − Assignment − Liens − Contingency.</li>
+            <li><b>Final MAO:</b> We take the <i>lower</i> of Classic vs Reverse for safety.</li>
+            <li><b>LAO (anchor):</b> MAO × (1 − Buffer%).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="text-lg font-semibold">Strategy Hints</h3>
+          <ul id="strategyOut" class="mt-3 space-y-2 text-sm list-disc pl-5">
             <li>Enter numbers to see suggestions.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELLER FINANCE CALCULATOR -->
+    <section id="page-terms" class="container mx-auto px-4 py-16 hidden-section">
+      <h1 class="text-4xl font-bold">Seller-Finance Calculator</h1>
+      <p class="mt-2 text-slate-300">Model P&I, cash flow, <b>cash-on-cash</b>, <b>DSCR</b>, and balloon balance.</p>
+
+      <div class="mt-8 grid xl:grid-cols-3 gap-6">
+        <!-- Inputs -->
+        <div class="card xl:col-span-2">
+          <h3 class="text-xl font-semibold">Terms & Income</h3>
+          <div class="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+            <label class="grid gap-1"><span class="k">Purchase Price</span><input id="t_price" type="number" class="input" placeholder="350000"></label>
+            <label class="grid gap-1"><span class="k">Down Payment %</span><input id="t_down" type="number" class="input" placeholder="10" value="10"></label>
+            <label class="grid gap-1"><span class="k">Interest %</span><input id="t_rate" type="number" class="input" placeholder="4" value="4"></label>
+
+            <label class="grid gap-1"><span class="k">Amort Years</span><input id="t_amort" type="number" class="input" placeholder="30" value="30"></label>
+            <label class="grid gap-1"><span class="k">Balloon (yrs, opt.)</span><input id="t_balloon" type="number" class="input" placeholder="7"></label>
+            <label class="grid gap-1"><span class="k">Closing Costs (cash)</span><input id="t_close" type="number" class="input" placeholder="4000" value="4000"></label>
+
+            <label class="grid gap-1"><span class="k">Monthly Rent</span><input id="t_rent" type="number" class="input" placeholder="2600"></label>
+            <label class="grid gap-1"><span class="k">Taxes / mo</span><input id="t_tax" type="number" class="input" placeholder="300"></label>
+            <label class="grid gap-1"><span class="k">Insurance / mo</span><input id="t_ins" type="number" class="input" placeholder="150"></label>
+
+            <label class="grid gap-1"><span class="k">HOA / mo (opt.)</span><input id="t_hoa" type="number" class="input" placeholder="0"></label>
+            <label class="grid gap-1"><span class="k">Maintenance % rent</span><input id="t_maint" type="number" class="input" placeholder="8" value="8"></label>
+            <label class="grid gap-1"><span class="k">Vacancy % rent</span><input id="t_vac" type="number" class="input" placeholder="6" value="6"></label>
+
+            <label class="grid gap-1"><span class="k">Mgmt % rent</span><input id="t_mgmt" type="number" class="input" placeholder="8" value="8"></label>
+            <label class="grid gap-1"><span class="k">Other Exp / mo</span><input id="t_other" type="number" class="input" placeholder="0"></label>
+            <label class="grid gap-1"><span class="k">Repairs (initial cash)</span><input id="t_repairs" type="number" class="input" placeholder="0"></label>
+
+            <label class="grid gap-1"><span class="k">Target DSCR</span><input id="t_dscr_target" type="number" class="input" placeholder="1.20" value="1.20"></label>
+          </div>
+          <button id="termsBtn" class="mt-4 rounded-xl bg-brand px-4 py-2 font-semibold">Calculate Terms</button>
+        </div>
+
+        <!-- Output -->
+        <div class="card">
+          <h3 class="text-xl font-semibold">Results</h3>
+          <div id="termsOut" class="mt-4 text-sm text-slate-200 hidden"></div>
+          <div id="termsRange" class="mt-4 hidden">
+            <div class="text-slate-300 text-xs mb-1">Key Metrics</div>
+            <div class="space-y-1">
+              <div>Monthly P&I: <b id="t_pmt">—</b></div>
+              <div>Monthly Cash Flow: <b id="t_cf">—</b></div>
+              <div>CoC Return: <b id="t_coc">—</b></div>
+              <div>DSCR: <b id="t_dscr">—</b> (Target <span id="t_dscr_target_view">1.20</span>+)</div>
+              <div class="text-xs text-slate-400">Balloon balance at year <span id="t_balloon_year">—</span>: <b id="t_balloon_bal">—</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6 mt-6">
+        <div class="card">
+          <h3 class="text-lg font-semibold">How it works</h3>
+          <ul class="mt-3 list-disc pl-5 text-sm text-slate-300">
+            <li><b>P&I:</b> Amortized payment on (Price − Down Payment) at Interest %, Amort Years.</li>
+            <li><b>NOI:</b> Rent − (Taxes, Insurance, HOA, Maint%, Vac%, Mgmt%, Other).</li>
+            <li><b>Cash Flow:</b> NOI − P&I.</li>
+            <li><b>CoC:</b> Annual Cash Flow ÷ Cash Invested (Down + Closing + Repairs).</li>
+            <li><b>DSCR:</b> NOI ÷ P&I (≥ target is safer; lenders often want 1.20+).</li>
+            <li><b>Balloon:</b> Remaining balance after N months if balloon year is set.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="text-lg font-semibold">Negotiation Hints</h3>
+          <ul id="termsTips" class="mt-3 space-y-2 text-sm list-disc pl-5">
+            <li>Lower rate or longer amort = lower P&I → stronger DSCR & CoC.</li>
+            <li>Raise down payment only if it improves CoC materially.</li>
+            <li>If DSCR &lt; target, ask for interest-only for 12–24 months or rate buydown.</li>
+            <li>Beware HOA-heavy townhomes; check rent comps & restrictions.</li>
           </ul>
         </div>
       </div>
@@ -113,9 +224,8 @@
     <section id="page-internship" class="container mx-auto px-4 py-16 hidden-section">
       <h1 class="text-4xl font-bold">Internship & Team</h1>
       <p class="mt-2 text-slate-300 max-w-xl">Learn the full pipeline — from list pulling to closing — and earn commissions while training.</p>
-
       <div class="mt-6 grid md:grid-cols-3 gap-6">
-        <div class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
+        <div class="card">
           <h3 class="font-semibold">What You’ll Do</h3>
           <ul class="mt-3 list-disc pl-5 text-sm text-slate-300">
             <li>Pull lists weekly (probate, code violations, tax liens, etc.)</li>
@@ -123,7 +233,7 @@
             <li>Cold call with WAVV scripts and coaching</li>
           </ul>
         </div>
-        <div class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
+        <div class="card">
           <h3 class="font-semibold">What You’ll Get</h3>
           <ul class="mt-3 list-disc pl-5 text-sm text-slate-300">
             <li>Direct mentorship and training modules</li>
@@ -131,7 +241,7 @@
             <li>Resume credit and experience</li>
           </ul>
         </div>
-        <div class="rounded-2xl p-6 border border-white/10 bg-slate-900/40 flex flex-col justify-between">
+        <div class="card flex flex-col justify-between">
           <div>
             <h3 class="font-semibold">Apply Now</h3>
             <p class="mt-2 text-slate-300 text-sm">Apply in under 2 minutes. We review and reply within 48 hours.</p>
@@ -151,13 +261,13 @@
           <li>🎥 TikTok: <a href="https://www.tiktok.com/@the.college.of.wholesale" target="_blank" rel="noopener" class="underline">@the.college.of.wholesale</a></li>
           <li>📸 Instagram: <a href="https://instagram.com/arya.saliany" target="_blank" rel="noopener" class="underline">@arya.saliany</a></li>
         </ul>
-        <form class="rounded-2xl p-6 border border-white/10 bg-slate-900/40 grid gap-3" action="https://formspree.io/f/your-id" method="POST">
+        <form class="card grid gap-3" action="https://formspree.io/f/your-id" method="POST">
           <div class="grid sm:grid-cols-2 gap-3">
-            <input class="bg-slate-800/70 border border-white/10 rounded-xl px-4 py-3" name="name" placeholder="Name" required>
-            <input class="bg-slate-800/70 border border-white/10 rounded-xl px-4 py-3" name="email" type="email" placeholder="Email" required>
+            <input class="input" name="name" placeholder="Name" required>
+            <input class="input" name="email" type="email" placeholder="Email" required>
           </div>
-          <input class="bg-slate-800/70 border border-white/10 rounded-xl px-4 py-3" name="subject" placeholder="Subject">
-          <textarea class="bg-slate-800/70 border border-white/10 rounded-xl px-4 py-3 min-h-[120px]" name="message" placeholder="How can we help?" required></textarea>
+          <input class="input" name="subject" placeholder="Subject">
+          <textarea class="input min-h-[120px]" name="message" placeholder="How can we help?" required></textarea>
           <button class="rounded-xl bg-brand px-5 py-3 font-semibold">Send</button>
           <p class="text-xs text-slate-400">Powered by Formspree — replace with your endpoint.</p>
         </form>
@@ -165,14 +275,12 @@
     </section>
   </main>
 
-  <!-- FOOTER -->
   <footer class="border-t border-white/10">
     <div class="container mx-auto px-4 py-8 text-sm text-slate-400 text-center">
       © <span id="year"></span> College of Wholesale • All rights reserved.
     </div>
   </footer>
 
-  <!-- SCRIPTS -->
   <script>
     // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -182,71 +290,171 @@
     const mobileMenu = document.getElementById('mobileMenu');
     menuBtn?.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
-    // Simple SPA Router (hash-based)
-    const routes = {
-      '/': 'page-home',
-      '/calculators': 'page-calculators',
-      '/internship': 'page-internship',
-      '/contact': 'page-contact'
-    };
-
+    // Router
+    const routes = { '/':'page-home','/calculators':'page-calculators','/terms':'page-terms','/internship':'page-internship','/contact':'page-contact' };
     function setActiveLink(route){
       document.querySelectorAll('[data-nav]').forEach(a => a.classList.remove('active-link'));
       const key = route === '/' ? 'home' : route.replace('/','');
-      const el = document.querySelector(`[data-nav="${key}"]`);
-      el?.classList.add('active-link');
+      document.querySelector(`[data-nav="${key}"]`)?.classList.add('active-link');
     }
-
-    function showRoute() {
-      const hash = location.hash.replace('#','');
-      const route = hash || '/';
-      // hide all
-      Object.values(routes).forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden-section');
-      });
-      // show current
-      const activeId = routes[route] || routes['/'];
-      document.getElementById(activeId)?.classList.remove('hidden-section');
-      setActiveLink(route);
-      // close mobile menu on navigation
-      mobileMenu?.classList.add('hidden');
-      // scroll to top for page feel
-      window.scrollTo({ top: 0, behavior: 'instant' });
+    function showRoute(){
+      const route = (location.hash || '#/').replace('#','');
+      Object.values(routes).forEach(id => document.getElementById(id)?.classList.add('hidden-section'));
+      (document.getElementById(routes[route]) || document.getElementById('page-home'))?.classList.remove('hidden-section');
+      setActiveLink(route); mobileMenu?.classList.add('hidden'); window.scrollTo({top:0,behavior:'instant'});
     }
     window.addEventListener('hashchange', showRoute);
     window.addEventListener('DOMContentLoaded', showRoute);
 
-    // Calculator logic
+    // Helpers
     const $ = id => document.getElementById(id);
-    const fmt = n => n?.toLocaleString(undefined, { style:'currency', currency:'USD' });
-    document.addEventListener('click', e => {
-      if (e.target && e.target.id === 'calcBtn') {
-        const arv = +($('arv')?.value || 0),
-              repairs = +($('repairs')?.value || 0),
-              fee = +($('fee')?.value || 0),
-              holding = +($('holding')?.value || 0);
-        if (!arv) { alert('Enter ARV'); return; }
-        const mao70 = arv*0.70 - repairs - holding - fee;
-        const mao75 = arv*0.75 - repairs - holding - fee;
-        const wholetail = arv*0.85 - (repairs*0.4) - holding - fee;
-        const nov = arv*0.92 - holding - (arv*0.06);
-        const out = `
-          <div>MAO (70%): <b>${fmt(mao70)}</b></div>
-          <div>Stretch (75%): <b>${fmt(mao75)}</b></div>
-          <div>Wholetail: <b>${fmt(wholetail)}</b></div>
-          <div>Novation: <b>${fmt(nov)}</b></div>`;
-        const outEl = $('calcOut');
-        outEl.innerHTML = out;
-        outEl.classList.remove('hidden');
-        const ideas = [];
-        if (repairs <= 20000) ideas.push('⭕ Try wholetail if light repairs.');
-        if (repairs > 20000) ideas.push('🧱 Consider novation or seller finance.');
-        ideas.push('💵 Protect your assignment fee with proper anchoring.');
-        $('strategyOut').innerHTML = ideas.map(i => `<li>${i}</li>`).join('');
+    const fmt = n => (isFinite(n) ? n.toLocaleString(undefined,{style:'currency',currency:'USD'}) : '—');
+
+    /* =========================
+       WHOLESALE CALCULATOR
+    ==========================*/
+    function val(id){ return +($(id)?.value || 0) }
+    function calcWholesale(){
+      const ARV = val('arv');
+      if(!ARV){ alert('Enter ARV'); return; }
+
+      let repairs = val('repairs');
+      let fee = val('fee');
+      let holding = val('holding');
+      const liens = val('liens');
+      const contgPct = val('contg')/100;
+
+      // Optional monthly holding override
+      const holdMonthly = val('holdMonthly'), holdMonths = val('holdMonths');
+      if(holdMonthly && holdMonths){ holding = holdMonthly * holdMonths }
+
+      const maoPct = val('maoPct')/100 || 0.70;
+      const profitPct = val('profitPct')/100 || 0.12;
+      const sellPct = val('sellPct')/100 || 0.08;
+      const bufferPct = val('bufferPct')/100 || 0.12;
+
+      const contingency = ARV * contgPct;
+
+      // MAO variants
+      const classicMAO = (ARV * maoPct) - repairs - holding - fee - liens - contingency;
+      const reverseMAO = (ARV * (1 - sellPct - profitPct)) - repairs - holding - fee - liens - contingency;
+      const MAO = Math.min(classicMAO, reverseMAO);
+      const LAO = MAO * (1 - bufferPct);
+
+      // Output
+      $('calcOut').innerHTML = [
+        `<div>Classic MAO (ARV × ${Math.round(maoPct*100)}% − costs): <b>${fmt(classicMAO)}</b></div>`,
+        `<div>Reverse MAO (ARV − selling% − buyer profit% − costs): <b>${fmt(reverseMAO)}</b></div>`,
+        `<hr class="my-2 border-white/10">`,
+        `<div>Contingency (${Math.round(contgPct*100)}% of ARV): <b>${fmt(contingency)}</b></div>`,
+        `<div>Repairs: <b>${fmt(repairs)}</b> • Holding: <b>${fmt(holding)}</b> • Assignment: <b>${fmt(fee)}</b> • Liens: <b>${fmt(liens)}</b></div>`
+      ].join('');
+      $('calcOut').classList.remove('hidden');
+      $('laoSpan').textContent = fmt(LAO);
+      $('maoSpan').textContent = fmt(MAO);
+      $('rangeOut').classList.remove('hidden');
+
+      // Strategy tips
+      const tips = [];
+      if (repairs <= 20000) tips.push('⭕ Light repairs: wholetail may work if retail-ready neighborhood.');
+      if (repairs > 20000) tips.push('🧱 Heavier repairs: consider novation or seller-finance offers.');
+      if (bufferPct < 0.1) tips.push('🎯 Increase buffer to 10–15% to anchor stronger.');
+      if (profitPct < 0.1) tips.push('💵 Many buyers target 10–15% profit; adjust if your buyers differ.');
+      if (sellPct < 0.06) tips.push('🧾 Selling costs often 7–9% (agent, concessions, closing).');
+      tips.push('📞 Always verify liens/payoff and taxes—unknowns kill spreads.');
+      $('strategyOut').innerHTML = tips.map(t => `<li>${t}</li>`).join('');
+    }
+    document.addEventListener('click', e => { if (e.target?.id === 'calcBtn') calcWholesale(); });
+
+    /* =========================
+       SELLER-FINANCE CALCULATOR
+    ==========================*/
+    function pmt(rateMonthly, n, pv){
+      if(rateMonthly === 0) return pv / n;
+      const r = rateMonthly;
+      return pv * r / (1 - Math.pow(1+r, -n));
+    }
+    function calcTerms(){
+      const price = +$('t_price').value || 0;
+      const downPct = (+$('t_down').value || 0)/100;
+      const rate = (+$('t_rate').value || 0)/100;
+      const amortYears = +$('t_amort').value || 30;
+      const balloonYears = +$('t_balloon').value || 0;
+      const closeCash = +$('t_close').value || 0;
+
+      const rent = +$('t_rent').value || 0;
+      const tax = +$('t_tax').value || 0;
+      const ins = +$('t_ins').value || 0;
+      const hoa = +$('t_hoa').value || 0;
+      const maintPct = (+$('t_maint').value || 0)/100;
+      const vacPct = (+$('t_vac').value || 0)/100;
+      const mgmtPct = (+$('t_mgmt').value || 0)/100;
+      const other = +$('t_other').value || 0;
+      const repairsInit = +$('t_repairs').value || 0;
+      const dscrTarget = +$('t_dscr_target').value || 1.2;
+      $('t_dscr_target_view').textContent = dscrTarget.toFixed(2);
+
+      if(!price || !amortYears){ alert('Enter price and amortization years'); return; }
+
+      const dp = price * downPct;
+      const pv = price - dp; // financed principal
+      const n = amortYears * 12;
+      const rm = rate/12;
+      const payment = pmt(rm, n, pv);
+
+      // Operating costs (monthly)
+      const maint = rent * maintPct;
+      const vac = rent * vacPct;
+      const mgmt = rent * mgmtPct;
+      const noi = rent - (tax + ins + hoa + maint + vac + mgmt + other);
+      const cashFlow = noi - payment;
+
+      // CoC
+      const cashInvested = dp + closeCash + repairsInit;
+      const coc = cashInvested > 0 ? (cashFlow*12)/cashInvested : 0;
+
+      // DSCR
+      const dscr = payment > 0 ? (noi / payment) : 0;
+
+      // Balloon balance
+      let balloonBal = 0, balloonYearLabel = '—';
+      if (balloonYears > 0){
+        const k = balloonYears * 12;
+        if(rm === 0){
+          balloonBal = pv * (1 - k/n);
+        } else {
+          const pow = Math.pow(1+rm, k);
+          balloonBal = pv*pow - payment*((pow-1)/rm);
+        }
+        balloonYearLabel = String(balloonYears);
       }
-    });
+
+      // Output
+      const currency = v => (isFinite(v)? v.toLocaleString(undefined,{style:'currency',currency:'USD'}) : '—');
+      $('t_pmt').textContent = currency(payment);
+      $('t_cf').textContent = currency(cashFlow);
+      $('t_coc').textContent = isFinite(coc) ? (coc*100).toFixed(1)+'%' : '—';
+      $('t_dscr').textContent = isFinite(dscr) ? dscr.toFixed(2) : '—';
+      $('t_balloon_year').textContent = balloonYearLabel;
+      $('t_balloon_bal').textContent = currency(balloonBal);
+
+      $('termsOut').innerHTML = [
+        `<div>Financed Principal: <b>${currency(pv)}</b> • Down: <b>${currency(dp)}</b></div>`,
+        `<div>NOI (monthly): <b>${currency(noi)}</b></div>`,
+        `<div>Cash Invested (Down + Closing + Repairs): <b>${currency(cashInvested)}</b></div>`
+      ].join('');
+      $('termsOut').classList.remove('hidden');
+      $('termsRange').classList.remove('hidden');
+
+      const tips = [];
+      if (dscr < dscrTarget) tips.push('📉 DSCR below target — negotiate lower rate or longer amortization.');
+      if (coc < 0.10) tips.push('💰 CoC under 10% — consider higher down only if P&I drops enough.');
+      if (cashFlow < 0) tips.push('⚠️ Negative cash flow — increase rent or improve terms (rate/years).');
+      if (balloonYears && cashFlow > 0) tips.push('⏳ Plan exit before balloon: refi, sell, or extend note.');
+      $('termsTips').innerHTML = tips.length ? tips.map(t => `<li>${t}</li>`).join('') :
+        '<li>Looks solid — confirm taxes/insurance and HOA rules.</li>';
+    }
+    document.addEventListener('click', e => { if (e.target?.id === 'termsBtn') calcTerms(); });
   </script>
 </body>
 </html>
-
