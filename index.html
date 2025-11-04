@@ -4,53 +4,98 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>College of Wholesale | Learn Wholesaling, Find Deals, Get Paid</title>
-  <meta name="description" content="College of Wholesale (CoW) — Learn real estate wholesaling step-by-step. Free training, internships, calculators, tools, and community to get your first or next deal." />
+  <meta name="description" content="College of Wholesale — training, tools, community, and internships to help you learn wholesaling and close deals." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐄</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{brand:'#3b82f6',ink:'#0b1220',milk:'#f1f5f9'}}}};</script>
-  <style>html{scroll-behavior:smooth}.glass{backdrop-filter:saturate(180%) blur(16px);background:rgba(15,23,42,.6)}.container{max-width:1100px}</style>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { brand: '#3b82f6', ink: '#0b1220', milk:'#f1f5f9' }}}}
+  </script>
+  <style>
+    html{scroll-behavior:smooth}
+    .glass{backdrop-filter:saturate(180%) blur(16px);background:rgba(15,23,42,.6)}
+    .container{max-width:1100px}
+    .hidden-section{display:none}
+    .active-link{color:#3b82f6}
+  </style>
 </head>
 <body class="bg-ink text-slate-100">
-
   <!-- NAVBAR -->
   <header class="sticky top-0 z-40 glass border-b border-white/10">
     <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="#top" class="flex items-center gap-2 font-bold"><span class="text-2xl">🐄</span><span>College of Wholesale</span></a>
+      <a href="#/" data-nav="home" class="flex items-center gap-2 font-bold"><span class="text-2xl">🐄</span><span>College of Wholesale</span></a>
       <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="https://drive.google.com/drive/folders/1aA0tk53ojvfzD08nyDDAZ1sdDLp7T3zS" target="_blank" class="hover:text-brand">Training</a>
-        <a href="#calculators" class="hover:text-brand">Calculators</a>
-        <a href="#resources" class="hover:text-brand">Resources</a>
-        <a href="https://whop.com/collegeofwholesale" target="_blank" class="hover:text-brand">Community</a>
-        <a href="#interns" class="hover:text-brand">Internship</a>
-        <a href="https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676" target="_blank" class="hover:text-brand">Notion HQ</a>
-        <a href="#contact" class="hover:text-brand">Contact</a>
+        <!-- Internal “pages” (SPA) -->
+        <a href="#/calculators" data-nav="calculators" class="hover:text-brand">Calculators</a>
+        <a href="#/internship" data-nav="internship" class="hover:text-brand">Internship</a>
+        <a href="#/contact" data-nav="contact" class="hover:text-brand">Contact</a>
+        <!-- External direct links -->
+        <a href="https://drive.google.com/drive/folders/1aA0tk53ojvfzD08nyDDAZ1sdDLp7T3zS" target="_blank" rel="noopener" class="hover:text-brand">Training</a>
+        <a href="https://whop.com/collegeofwholesale" target="_blank" rel="noopener" class="hover:text-brand">Community</a>
+        <a href="https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676" target="_blank" rel="noopener" class="hover:text-brand">Notion HQ</a>
+      </nav>
+      <button id="menuBtn" class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15">☰</button>
+    </div>
+    <div id="mobileMenu" class="md:hidden hidden border-t border-white/10">
+      <nav class="container mx-auto px-4 py-3 grid gap-3 text-sm">
+        <a href="#/" data-nav="home" class="hover:text-brand">Home</a>
+        <a href="#/calculators" data-nav="calculators" class="hover:text-brand">Calculators</a>
+        <a href="#/internship" data-nav="internship" class="hover:text-brand">Internship</a>
+        <a href="#/contact" data-nav="contact" class="hover:text-brand">Contact</a>
+        <hr class="border-white/10">
+        <a href="https://drive.google.com/drive/folders/1aA0tk53ojvfzD08nyDDAZ1sdDLp7T3zS" target="_blank" rel="noopener" class="hover:text-brand">Training (Drive)</a>
+        <a href="https://whop.com/collegeofwholesale" target="_blank" rel="noopener" class="hover:text-brand">Community (Whop)</a>
+        <a href="https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676" target="_blank" rel="noopener" class="hover:text-brand">Notion HQ</a>
       </nav>
     </div>
   </header>
 
-  <!-- HERO -->
-  <section id="top" class="container mx-auto px-4 py-20">
-    <h1 class="text-5xl font-extrabold leading-tight">Welcome to College of Wholesale</h1>
-    <p class="mt-4 text-lg text-slate-300 max-w-2xl">Learn wholesaling, find motivated sellers, and close deals with step-by-step systems, community support, and free tools.</p>
-    <div class="mt-6 flex flex-wrap gap-4">
-      <a href="https://drive.google.com/drive/folders/1aA0tk53ojvfzD08nyDDAZ1sdDLp7T3zS" target="_blank" class="rounded-xl bg-brand px-6 py-3 font-semibold text-white">Start Training</a>
-      <a href="https://whop.com/collegeofwholesale" target="_blank" class="rounded-xl border border-white/20 px-6 py-3 font-semibold">Join Community</a>
-      <a href="https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676" target="_blank" class="rounded-xl border border-white/20 px-6 py-3 font-semibold">Open Notion HQ</a>
-    </div>
-  </section>
+  <!-- PAGES (SPA SECTIONS) -->
+  <main>
 
-  <!-- CALCULATOR -->
-  <section id="calculators" class="bg-slate-900/30 border-y border-white/10 py-16">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold mb-8">Deal Calculator</h2>
-      <div class="grid lg:grid-cols-2 gap-6">
+    <!-- HOME -->
+    <section id="page-home" class="container mx-auto px-4 py-20">
+      <h1 class="text-5xl font-extrabold leading-tight">Learn Wholesaling. <span class="text-brand">Close Deals.</span></h1>
+      <p class="mt-4 text-lg text-slate-300 max-w-2xl">Action-based training, calculators, community, and a clear path to your first (or next) deal.</p>
+      <div class="mt-6 flex flex-wrap gap-4">
+        <a href="https://drive.google.com/drive/folders/1aA0tk53ojvfzD08nyDDAZ1sdDLp7T3zS" target="_blank" rel="noopener" class="rounded-xl bg-brand px-6 py-3 font-semibold text-white">Start Training</a>
+        <a href="https://whop.com/collegeofwholesale" target="_blank" rel="noopener" class="rounded-xl border border-white/20 px-6 py-3 font-semibold">Join Community</a>
+        <a href="https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676" target="_blank" rel="noopener" class="rounded-xl border border-white/20 px-6 py-3 font-semibold">Open Notion HQ</a>
+      </div>
+
+      <section class="bg-slate-900/30 border border-white/10 rounded-2xl mt-12">
+        <div class="container mx-auto px-4 py-12">
+          <h2 class="text-3xl font-bold mb-8">Fast Links</h2>
+          <div class="grid md:grid-cols-3 gap-6">
+            <a href="#/calculators" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
+              <h3 class="text-lg font-semibold">Deal Calculator</h3>
+              <p class="mt-2 text-slate-300 text-sm">MAO / 70% rule + suggestions.</p>
+            </a>
+            <a href="#/internship" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
+              <h3 class="text-lg font-semibold">Internship & Team</h3>
+              <p class="mt-2 text-slate-300 text-sm">Apply in 2 minutes and start learning.</p>
+            </a>
+            <a href="#/contact" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
+              <h3 class="text-lg font-semibold">Contact</h3>
+              <p class="mt-2 text-slate-300 text-sm">Business inquiries & partnerships.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- CALCULATORS -->
+    <section id="page-calculators" class="container mx-auto px-4 py-16 hidden-section">
+      <h1 class="text-4xl font-bold">Deal Calculator</h1>
+      <p class="mt-2 text-slate-300">Quick math to sanity-check offers and exit strategies.</p>
+
+      <div class="mt-8 grid lg:grid-cols-2 gap-6">
         <div class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
           <h3 class="text-xl font-semibold">MAO / 70% Rule</h3>
           <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
-            <label class="grid gap-1"><span>ARV</span><input id="arv" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2"></label>
-            <label class="grid gap-1"><span>Repairs</span><input id="repairs" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2"></label>
-            <label class="grid gap-1"><span>Assignment Fee</span><input id="fee" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2"></label>
-            <label class="grid gap-1"><span>Holding/Closing</span><input id="holding" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2"></label>
+            <label class="grid gap-1"><span>ARV</span><input id="arv" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2" placeholder="350000"></label>
+            <label class="grid gap-1"><span>Repairs</span><input id="repairs" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2" placeholder="45000"></label>
+            <label class="grid gap-1"><span>Assignment Fee</span><input id="fee" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2" placeholder="15000"></label>
+            <label class="grid gap-1"><span>Holding/Closing</span><input id="holding" type="number" class="bg-slate-800/80 border border-white/10 rounded px-3 py-2" placeholder="10000"></label>
           </div>
           <button id="calcBtn" class="mt-4 rounded-xl bg-brand px-4 py-2 font-semibold">Calculate</button>
           <div id="calcOut" class="mt-4 text-sm text-slate-200 hidden"></div>
@@ -62,46 +107,63 @@
           </ul>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- RESOURCES -->
-  <section id="resources" class="container mx-auto px-4 py-16">
-    <h2 class="text-3xl font-bold mb-6">Resources & Tools</h2>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <a href="https://whop.com/collegeofwholesale" target="_blank" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
-        <h3 class="text-lg font-semibold">Community (Whop)</h3>
-        <p class="mt-2 text-slate-300 text-sm">Access calls, templates, and live Q&A sessions.</p>
-      </a>
-      <a href="https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676" target="_blank" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
-        <h3 class="text-lg font-semibold">Cold Caller HQ (Notion)</h3>
-        <p class="mt-2 text-slate-300 text-sm">Scripts, lead SOPs, and CRM templates.</p>
-      </a>
-      <a href="https://drive.google.com/drive/folders/1aA0tk53ojvfzD08nyDDAZ1sdDLp7T3zS" target="_blank" class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
-        <h3 class="text-lg font-semibold">Training Modules (Drive)</h3>
-        <p class="mt-2 text-slate-300 text-sm">All wholesaling modules organized by topic.</p>
-      </a>
-    </div>
-  </section>
+    <!-- INTERNSHIP -->
+    <section id="page-internship" class="container mx-auto px-4 py-16 hidden-section">
+      <h1 class="text-4xl font-bold">Internship & Team</h1>
+      <p class="mt-2 text-slate-300 max-w-xl">Learn the full pipeline — from list pulling to closing — and earn commissions while training.</p>
 
-  <!-- INTERNSHIP -->
-  <section id="interns" class="bg-slate-900/30 border-y border-white/10 py-16">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold">Internship & Team</h2>
-      <p class="mt-2 text-slate-300 max-w-xl">Learn the entire pipeline — from list pulling to closing deals — and earn commissions while learning.</p>
-    </div>
-  </section>
+      <div class="mt-6 grid md:grid-cols-3 gap-6">
+        <div class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
+          <h3 class="font-semibold">What You’ll Do</h3>
+          <ul class="mt-3 list-disc pl-5 text-sm text-slate-300">
+            <li>Pull lists weekly (probate, code violations, tax liens, etc.)</li>
+            <li>Tag and organize leads in CRM</li>
+            <li>Cold call with WAVV scripts and coaching</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl p-6 border border-white/10 bg-slate-900/40">
+          <h3 class="font-semibold">What You’ll Get</h3>
+          <ul class="mt-3 list-disc pl-5 text-sm text-slate-300">
+            <li>Direct mentorship and training modules</li>
+            <li>Commission on closed deals</li>
+            <li>Resume credit and experience</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl p-6 border border-white/10 bg-slate-900/40 flex flex-col justify-between">
+          <div>
+            <h3 class="font-semibold">Apply Now</h3>
+            <p class="mt-2 text-slate-300 text-sm">Apply in under 2 minutes. We review and reply within 48 hours.</p>
+          </div>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdbL4HwSC_UFNN6EmCliiUAvejZOu18A9vSiaQ2mDcx_nxaQQ/viewform?usp=preview" target="_blank" rel="noopener" class="mt-4 inline-block rounded-xl bg-brand px-5 py-3 font-semibold text-center">Open Application Form</a>
+        </div>
+      </div>
+    </section>
 
-  <!-- CONTACT -->
-  <section id="contact" class="container mx-auto px-4 py-16">
-    <h2 class="text-3xl font-bold mb-6">Contact</h2>
-    <p class="text-slate-300">For business or partnerships:</p>
-    <ul class="mt-4 text-sm text-slate-300 space-y-2">
-      <li>📧 <a href="mailto:aaarya3455@gmail.com" class="underline">aaarya3455@gmail.com</a></li>
-      <li>🎥 TikTok: <a href="https://www.tiktok.com/@the.college.of.wholesale" target="_blank" class="underline">@the.college.of.wholesale</a></li>
-      <li>📸 Instagram: <a href="https://instagram.com/arya.saliany" target="_blank" class="underline">@arya.saliany</a></li>
-    </ul>
-  </section>
+    <!-- CONTACT -->
+    <section id="page-contact" class="container mx-auto px-4 py-16 hidden-section">
+      <h1 class="text-4xl font-bold">Contact</h1>
+      <p class="mt-2 text-slate-300">Business inquiries, partnerships, and speaking.</p>
+      <div class="grid lg:grid-cols-2 gap-6 items-start mt-6">
+        <ul class="text-sm text-slate-300 space-y-2">
+          <li>📧 <a href="mailto:aaarya3455@gmail.com" class="underline">aaarya3455@gmail.com</a></li>
+          <li>🎥 TikTok: <a href="https://www.tiktok.com/@the.college.of.wholesale" target="_blank" rel="noopener" class="underline">@the.college.of.wholesale</a></li>
+          <li>📸 Instagram: <a href="https://instagram.com/arya.saliany" target="_blank" rel="noopener" class="underline">@arya.saliany</a></li>
+        </ul>
+        <form class="rounded-2xl p-6 border border-white/10 bg-slate-900/40 grid gap-3" action="https://formspree.io/f/your-id" method="POST">
+          <div class="grid sm:grid-cols-2 gap-3">
+            <input class="bg-slate-800/70 border border-white/10 rounded-xl px-4 py-3" name="name" placeholder="Name" required>
+            <input class="bg-slate-800/70 border border-white/10 rounded-xl px-4 py-3" name="email" type="email" placeholder="Email" required>
+          </div>
+          <input class="bg-slate-800/70 border border-white/10 rounded-xl px-4 py-3" name="subject" placeholder="Subject">
+          <textarea class="bg-slate-800/70 border border-white/10 rounded-xl px-4 py-3 min-h-[120px]" name="message" placeholder="How can we help?" required></textarea>
+          <button class="rounded-xl bg-brand px-5 py-3 font-semibold">Send</button>
+          <p class="text-xs text-slate-400">Powered by Formspree — replace with your endpoint.</p>
+        </form>
+      </div>
+    </section>
+  </main>
 
   <!-- FOOTER -->
   <footer class="border-t border-white/10">
@@ -110,20 +172,81 @@
     </div>
   </footer>
 
-  <!-- SCRIPT -->
+  <!-- SCRIPTS -->
   <script>
-    document.getElementById('year').textContent=new Date().getFullYear();
-    const $=id=>document.getElementById(id);
-    const fmt=n=>n?.toLocaleString(undefined,{style:'currency',currency:'USD'});
-    $('calcBtn')?.addEventListener('click',()=>{
-      const arv=+($('arv').value||0),repairs=+($('repairs').value||0),fee=+($('fee').value||0),holding=+($('holding').value||0);
-      if(!arv)return alert('Enter ARV');
-      const mao70=arv*0.7-repairs-holding-fee,mao75=arv*0.75-repairs-holding-fee,wholetail=arv*0.85-(repairs*0.4)-holding-fee,nov=arv*0.92-holding-fee-(arv*0.06);
-      $('calcOut').innerHTML=`<div>MAO (70%): <b>${fmt(mao70)}</b><br>Stretch (75%): <b>${fmt(mao75)}</b><br>Wholetail: <b>${fmt(wholetail)}</b><br>Novation: <b>${fmt(nov)}</b></div>`;
-      $('calcOut').classList.remove('hidden');
-      const ideas=[];if(repairs<=20000)ideas.push('⭕ Try wholetail if light repairs.');if(repairs>20000)ideas.push('🧱 Consider novation or seller finance.');ideas.push('💵 Always protect your assignment fee.');
-      $('strategyOut').innerHTML=ideas.map(i=>`<li>${i}</li>`).join('');
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn?.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+    // Simple SPA Router (hash-based)
+    const routes = {
+      '/': 'page-home',
+      '/calculators': 'page-calculators',
+      '/internship': 'page-internship',
+      '/contact': 'page-contact'
+    };
+
+    function setActiveLink(route){
+      document.querySelectorAll('[data-nav]').forEach(a => a.classList.remove('active-link'));
+      const key = route === '/' ? 'home' : route.replace('/','');
+      const el = document.querySelector(`[data-nav="${key}"]`);
+      el?.classList.add('active-link');
+    }
+
+    function showRoute() {
+      const hash = location.hash.replace('#','');
+      const route = hash || '/';
+      // hide all
+      Object.values(routes).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden-section');
+      });
+      // show current
+      const activeId = routes[route] || routes['/'];
+      document.getElementById(activeId)?.classList.remove('hidden-section');
+      setActiveLink(route);
+      // close mobile menu on navigation
+      mobileMenu?.classList.add('hidden');
+      // scroll to top for page feel
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    window.addEventListener('hashchange', showRoute);
+    window.addEventListener('DOMContentLoaded', showRoute);
+
+    // Calculator logic
+    const $ = id => document.getElementById(id);
+    const fmt = n => n?.toLocaleString(undefined, { style:'currency', currency:'USD' });
+    document.addEventListener('click', e => {
+      if (e.target && e.target.id === 'calcBtn') {
+        const arv = +($('arv')?.value || 0),
+              repairs = +($('repairs')?.value || 0),
+              fee = +($('fee')?.value || 0),
+              holding = +($('holding')?.value || 0);
+        if (!arv) { alert('Enter ARV'); return; }
+        const mao70 = arv*0.70 - repairs - holding - fee;
+        const mao75 = arv*0.75 - repairs - holding - fee;
+        const wholetail = arv*0.85 - (repairs*0.4) - holding - fee;
+        const nov = arv*0.92 - holding - (arv*0.06);
+        const out = `
+          <div>MAO (70%): <b>${fmt(mao70)}</b></div>
+          <div>Stretch (75%): <b>${fmt(mao75)}</b></div>
+          <div>Wholetail: <b>${fmt(wholetail)}</b></div>
+          <div>Novation: <b>${fmt(nov)}</b></div>`;
+        const outEl = $('calcOut');
+        outEl.innerHTML = out;
+        outEl.classList.remove('hidden');
+        const ideas = [];
+        if (repairs <= 20000) ideas.push('⭕ Try wholetail if light repairs.');
+        if (repairs > 20000) ideas.push('🧱 Consider novation or seller finance.');
+        ideas.push('💵 Protect your assignment fee with proper anchoring.');
+        $('strategyOut').innerHTML = ideas.map(i => `<li>${i}</li>`).join('');
+      }
     });
   </script>
 </body>
 </html>
+
