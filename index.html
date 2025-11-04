@@ -1,11 +1,11 @@
-<!-- College of Wholesale — Full Single-File Site + Offer/Repair Calculators (v4.0) -->
+<!-- College of Wholesale — Full Site + SF-Aware Repair Calculator (v4.5) -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>College of Wholesale — Offer Calculator & Training</title>
-<meta name="description" content="College of Wholesale: training, tools, and community for new wholesalers. Includes a beginner-friendly Offer Calculator and state-adjusted Repair Calculator." />
+<meta name="description" content="College of Wholesale: training, tools, and community for new wholesalers. Includes a beginner-friendly Offer Calculator and state-adjusted, SF-aware Repair Calculator." />
 <style>
   :root{
     --bg:#0b0f1a; --card:#121829; --ink:#e6ebff; --muted:#9aa3b2;
@@ -63,6 +63,9 @@
   .faq dd{margin:6px 0 0 0;color:var(--muted)}
   footer{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
   .hide{display:none}
+  details{border:1px dashed var(--line);padding:10px 12px;border-radius:12px}
+  summary{cursor:pointer;font-weight:700}
+  .note{font-size:11px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -100,29 +103,6 @@
         <a class="btn secondary" href="#resources">See Training Resources</a>
       </div>
     </div>
-    <div class="wrap">
-      <div class="grid two">
-        <div class="card">
-          <h3>What you’ll learn</h3>
-          <ul class="small">
-            <li>How to find motivated sellers (probate, code violations, tax liens, pre-foreclosure, & more)</li>
-            <li>How to estimate repairs with simple presets (no contractor needed)</li>
-            <li>How to make offers using the 70% rule and protect your fee</li>
-            <li>How to follow up like a pro and move deals to closing</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>Fast start checklist</h3>
-          <ol class="small">
-            <li>Pick a market & pull a small niche list (500–1,000 leads)</li>
-            <li>Practice the cold call script 10× out loud</li>
-            <li>Use our Repair Calc presets for each call</li>
-            <li>Plug numbers into the Offer Calculator & make the offer</li>
-            <li>Follow up using your CRM tags (1w / 1m / 3m)</li>
-          </ol>
-        </div>
-      </div>
-    </div>
   </section>
 
   <!-- ABOUT -->
@@ -148,12 +128,6 @@
           </ul>
         </div>
       </div>
-
-      <h3 style="margin-top:20px">What members say</h3>
-      <div class="grid two">
-        <div class="card small">“The repair presets made talking numbers 10× easier on my first calls.”</div>
-        <div class="card small">“Offer Calculator = instant confidence. I finally knew what to say.”</div>
-      </div>
     </div>
   </section>
 
@@ -161,25 +135,13 @@
   <section id="calc" class="page hide">
     <div class="wrap">
       <h2>College of Wholesale Offer Calculator</h2>
-      <p class="sub">Beginner-friendly MAO + a state-adjusted Repair Calculator. Fast. Simple. CoW-approved.</p>
+      <p class="sub">Beginner-friendly MAO + a state-adjusted, <strong>square-footage–aware</strong> Repair Calculator.</p>
 
       <!-- KPI quick glance -->
       <div class="kpis" aria-hidden="true">
-        <div class="card">
-          <div class="small">Discount Rule</div>
-          <div class="num" id="kpi-discount">70%</div>
-          <div class="small muted">Adjustable</div>
-        </div>
-        <div class="card">
-          <div class="small">Your Fee (default)</div>
-          <div class="num" id="kpi-fee">$10,000</div>
-          <div class="small muted">Editable</div>
-        </div>
-        <div class="card">
-          <div class="small">Closing Buffer</div>
-          <div class="num" id="kpi-close">3% of ARV</div>
-          <div class="small muted">Auto-calc</div>
-        </div>
+        <div class="card"><div class="small">Discount Rule</div><div class="num" id="kpi-discount">70%</div><div class="small muted">Adjustable</div></div>
+        <div class="card"><div class="small">Your Fee (default)</div><div class="num" id="kpi-fee">$10,000</div><div class="small muted">Editable</div></div>
+        <div class="card"><div class="small">Closing Buffer</div><div class="num" id="kpi-close">3% of ARV</div><div class="small muted">Auto-calc</div></div>
       </div>
 
       <div class="card" style="margin-top:16px">
@@ -209,8 +171,6 @@
               <div class="out" id="mao">$0</div>
               <div class="small">Suggested first offer range:</div>
               <div class="out" id="range">$0 – $0</div>
-              <div class="hr"></div>
-              <div class="small">Heads-up: quick screening tool for beginners. Actual buyers & exits vary.</div>
             </div>
           </div>
         </section>
@@ -220,26 +180,48 @@
           <div class="grid two">
             <div class="stack">
               <div class="row wrap">
-                <label for="addr">Property Address (optional)</label>
-                <input type="text" id="addr" placeholder="123 Main St, Boca Raton, FL 33432">
+                <label for="addr">Property Address</label>
+                <input type="text" id="addr" placeholder="123 Main St, Boca Raton, FL 33432 or paste: 123 Main St ... 1,650 sqft">
                 <button class="btn secondary" id="detectState">Detect State</button>
+                <button class="btn ghost" id="scanSqft" title="Looks for '1,650 sqft' or '1650 sf' in the address box">Scan Address for Sq Ft</button>
               </div>
+              <div class="row"><label for="sqft">Square Footage</label><input type="number" id="sqft" placeholder="e.g., 1650" min="200" step="10"></div>
               <div class="row"><label for="state">State</label><select id="state"></select></div>
               <div class="row"><label>Multiplier</label><div id="multiplierView" class="pill">x1.00</div><span class="small muted">Costs auto-scale by state</span></div>
+
+              <details style="margin:10px 0">
+                <summary>Advanced: Edit cost rates (optional)</summary>
+                <div class="row"><label>Interior Paint $/SF</label><input type="number" id="rate_paint_in" step="0.1"></div>
+                <div class="row"><label>Exterior Paint $/SF</label><input type="number" id="rate_paint_out" step="0.1"></div>
+                <div class="row"><label>Flooring $/SF</label><input type="number" id="rate_floor" step="0.1"></div>
+                <div class="row"><label>Roof $ per 100 SF (“per square”)</label><input type="number" id="rate_roof_sq" step="10"></div>
+                <div class="row"><label>Window cost (each)</label><input type="number" id="rate_window_each" step="25"></div>
+                <div class="row"><label>Electrical $/SF</label><input type="number" id="rate_elect" step="0.1"></div>
+                <div class="row"><label>Plumbing $/SF</label><input type="number" id="rate_plumb" step="0.1"></div>
+                <div class="note">These are baseline rates. State multiplier applies after.</div>
+              </details>
+
               <div class="hr"></div>
-              <div class="small muted">Check items that need work. Preset averages (quantities where shown).</div>
+              <div class="small muted">Check items that need work. Items with “SF-Based” will scale by the square footage.</div>
+
               <div class="stack" id="lineItems"></div>
+
               <div class="row"><button class="btn" id="calcRepair">Calculate Repair Total</button><button class="btn ghost right" id="resetRepair">Reset</button></div>
             </div>
             <div class="stack">
-              <div class="pill">Version B: Checkboxes + Presets</div>
+              <div class="pill">Version B + SF logic</div>
               <div class="hr"></div>
               <div class="small">Estimated Repairs:</div><div class="out" id="repairsOut">$0</div>
-              <div class="small">Notes:</div>
-              <ul class="small muted" id="notes"><li>Multipliers are rough market averages to keep this beginner-friendly.</li><li>Send total straight into the Offer Calculator.</li></ul>
+              <div class="small">Breakdown:</div>
+              <ul class="small muted" id="notes"><li>No items selected yet.</li></ul>
               <div class="row"><button class="btn secondary" id="sendToOffer">Send to Offer Calculator</button></div>
               <div class="hr"></div>
-              <div class="small">Tip: If roof/HVAC &lt; 10 years, you can often uncheck those and save big.</div>
+              <div class="small">Tips:</div>
+              <ul class="small">
+                <li>Roof estimate assumes ~1.2× SF roof area on typical single-story homes.</li>
+                <li>Windows estimate uses ~1 window per 200 SF (quick heuristic).</li>
+                <li>HVAC bands by SF; kitchen/bath are per-unit with a small SF kicker.</li>
+              </ul>
             </div>
           </div>
         </section>
@@ -330,14 +312,6 @@
           <a class="btn secondary" href="mailto:aaarya3455@gmail.com">Email Arya</a>
         </div>
       </div>
-
-      <h3 style="margin-top:22px">FAQ</h3>
-      <dl class="faq">
-        <dt>Is the calculator accurate?</dt>
-        <dd>It’s a beginner screening tool to get you making offers fast. Always confirm with buyers/contractors.</dd>
-        <dt>Can I share this page?</dt>
-        <dd>Yes—send them the URL. It’s a single page app; everything’s built in.</dd>
-      </dl>
     </div>
   </section>
 
@@ -364,7 +338,6 @@ function showPage(id){
     if(p===id){ el.classList.remove("hide"); link?.classList.add("active"); }
     else{ el.classList.add("hide"); link?.classList.remove("active"); }
   });
-  // Jump to top for page switch
   window.scrollTo({top:0,behavior:"instant"});
 }
 function route(){
@@ -394,20 +367,40 @@ const STATE_NAMES = {
   SD:"South Dakota", TN:"Tennessee", TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington",
   WV:"West Virginia", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia"
 };
-// Repair line items (Version B)
+
+/* ---------- Default Rates (baseline; state multiplier applies AFTER) ---------- */
+const RATES = {
+  paint_in_psf: 1.25,     // $/SF interior paint
+  paint_out_psf: 1.50,    // $/SF exterior paint (approx by living SF)
+  floor_psf: 3.50,        // $/SF flooring materials+install
+  roof_per_square: 450,   // $ per 100 SF of roof area
+  window_each: 450,       // $ per window
+  elect_psf: 1.00,        // $/SF light electrical repairs/updates
+  plumb_psf: 0.80,        // $/SF light plumbing repairs
+  kitchen_base: 8000,     // per kitchen refresh
+  kitchen_sf_kicker: 500, // +$ per 1000 SF of house
+  bath_base: 3500,        // per bathroom refresh
+  hvac_small: 4500,       // <1200 SF
+  hvac_med: 6500,         // 1200–2000 SF
+  hvac_large: 8000,       // >2000 SF
+  land_flat: 1200,
+  misc_flat: 2000
+};
+
+/* ---------- Repair Line Items (now SF-aware where it makes sense) ---------- */
 const LINE_ITEMS = [
-  { id:"paint_in",   label:"Interior Paint",                base:3500, qty:false },
-  { id:"paint_out",  label:"Exterior Paint",                base:3200, qty:false },
-  { id:"floor",      label:"Flooring (whole house)",        base:6000, qty:false },
-  { id:"roof",       label:"Roof Replacement",              base:9500, qty:false },
-  { id:"kitchen",    label:"Kitchen Refresh",               base:8000, qty:true,  qtyLabel:"# Kitchens", min:1, val:1 },
-  { id:"bath",       label:"Bathroom Refresh",              base:3500, qty:true,  qtyLabel:"# Bathrooms", min:1, val:1 },
-  { id:"hvac",       label:"HVAC (replace/major)",          base:6500, qty:false },
-  { id:"windows",    label:"Windows (whole house)",         base:5500, qty:false },
-  { id:"elect",      label:"Electrical (repairs/update)",   base:2500, qty:false },
-  { id:"plumb",      label:"Plumbing (repairs)",            base:2200, qty:false },
-  { id:"land",       label:"Landscaping/Exterior clean-up", base:1200, qty:false },
-  { id:"misc",       label:"Misc / Contingency",            base:2000, qty:false }
+  { id:"paint_in",   label:"Interior Paint (SF-Based)",                 type:"psf",   rateKey:"paint_in_psf" },
+  { id:"paint_out",  label:"Exterior Paint (SF-Based)",                 type:"psf",   rateKey:"paint_out_psf" },
+  { id:"floor",      label:"Flooring (whole house, SF-Based)",          type:"psf",   rateKey:"floor_psf" },
+  { id:"roof",       label:"Roof Replacement (auto by SF)",             type:"roof",  rateKey:"roof_per_square" },
+  { id:"kitchen",    label:"Kitchen Refresh (per kitchen)",             type:"kitchen", qty:true, qtyLabel:"# Kitchens", min:1, val:1 },
+  { id:"bath",       label:"Bathroom Refresh (per bathroom)",           type:"bath",    qty:true, qtyLabel:"# Bathrooms", min:1, val:1 },
+  { id:"hvac",       label:"HVAC (replace/major, auto by SF)",          type:"hvac" },
+  { id:"windows",    label:"Windows (auto: ~1 per 200 SF)",             type:"windows", rateKey:"window_each" },
+  { id:"elect",      label:"Electrical (repairs/update, SF-Based)",     type:"psf",   rateKey:"elect_psf" },
+  { id:"plumb",      label:"Plumbing (repairs, SF-Based)",              type:"psf",   rateKey:"plumb_psf" },
+  { id:"land",       label:"Landscaping / Exterior clean-up (flat)",    type:"flat",  flat:RATES.land_flat },
+  { id:"misc",       label:"Misc / Contingency (flat)",                 type:"flat",  flat:RATES.misc_flat }
 ];
 
 /* ---------- Build Repair UI ---------- */
@@ -419,7 +412,7 @@ function buildStateDropdown(){
     o.value = ab; o.textContent = `${STATE_NAMES[ab]} (${ab})`;
     sel.appendChild(o);
   });
-  sel.value = "FL"; // default for your market
+  sel.value = "FL"; // default
   updateMultiplierPill();
 }
 function updateMultiplierPill(){
@@ -434,27 +427,29 @@ function buildLineItems(){
     const card = document.createElement("div");
     card.className = "card";
     card.style.padding = "12px";
+
     const row1 = document.createElement("div");
     row1.className = "row";
     const lb = document.createElement("label");
     lb.textContent = it.label;
     lb.setAttribute("for", it.id);
     const cb = document.createElement("input");
-    cb.type = "checkbox"; cb.id = it.id; cb.dataset.base = it.base;
+    cb.type = "checkbox"; cb.id = it.id;
     cb.addEventListener("change", ()=> {
       const qwrap = card.querySelector(".qtywrap");
       if(qwrap) qwrap.hidden = !cb.checked;
     });
     row1.append(lb, cb);
+    card.append(row1);
 
+    // show rate hint
     const row2 = document.createElement("div");
     row2.className = "row";
-    const base = document.createElement("div");
-    base.className = "small";
-    base.textContent = `Baseline: ${fmt(it.base)}`;
-    row2.append(base);
-
-    card.append(row1,row2);
+    const hint = document.createElement("div");
+    hint.className = "small";
+    hint.textContent = describeRate(it);
+    row2.append(hint);
+    card.append(row2);
 
     if(it.qty){
       const qwrap = document.createElement("div");
@@ -471,20 +466,44 @@ function buildLineItems(){
     host.append(card);
   });
 }
-/* Detect state from address (basic, no API) */
+function describeRate(it){
+  switch(it.type){
+    case "psf": return `Baseline: $${RATES[it.rateKey].toFixed(2)} per SF (before state multiplier)`;
+    case "roof": return `Baseline: $${RATES.roof_per_square.toFixed(0)} per 100 SF of roof area (roof area ≈ 1.2 × living SF)`;
+    case "windows": return `Baseline: ~$${RATES.window_each.toFixed(0)} per window (≈ 1 window / 200 SF)`;
+    case "kitchen": return `Baseline: $${RATES.kitchen_base.toLocaleString()} each (+ ~${fmt(RATES.kitchen_sf_kicker)} per 1,000 SF of house)`;
+    case "bath": return `Baseline: $${RATES.bath_base.toLocaleString()} per bathroom`;
+    case "hvac": return `Baseline: SF-banded — <1200 SF ~$${RATES.hvac_small}, 1200–2000 SF ~$${RATES.hvac_med}, >2000 SF ~$${RATES.hvac_large}`;
+    case "flat": return `Baseline flat: ${fmt(it.flat)}`;
+    default: return "";
+  }
+}
+
+/* Detect state from address (basic) */
 function detectStateFromAddress(){
   const txt = ($("#addr").value||"").toUpperCase();
-  // two-letter codes
   for(const ab of Object.keys(STATE_NAMES)){
     const re = new RegExp(`\\b${ab}\\b`);
     if(re.test(txt)){ $("#state").value = ab; updateMultiplierPill(); return ab; }
   }
-  // full names
   for(const [ab,name] of Object.entries(STATE_NAMES)){
     const re = new RegExp(`\\b${name.toUpperCase()}\\b`);
     if(re.test(txt)){ $("#state").value = ab; updateMultiplierPill(); return ab; }
   }
   alert("Couldn’t detect a state. Choose it manually.");
+  return null;
+}
+
+/* Scan address box for a “sqft” number (e.g., 1,650 sqft / 1650 sf) */
+function scanSqftFromAddress(){
+  const txt = ($("#addr").value||"").toLowerCase();
+  // patterns: 1,650 sqft | 1650 sqft | 1650 sf | 1.650 sf (we'll catch digits + optional , .)
+  const m = txt.match(/([\d,.]+)\s*(sq\s?ft|sf|sqft)/i);
+  if(m){
+    const num = parseInt(m[1].replace(/[^\d]/g,""),10);
+    if(num && num>200){ $("#sqft").value = num; return num; }
+  }
+  alert("No square footage found. Enter it in the Square Footage field.");
   return null;
 }
 
@@ -510,24 +529,84 @@ function calcMAO(){
   $("#range").textContent = `${fmt(low)} – ${fmt(high)}`;
 }
 
-/* ---------- Repair Calc ---------- */
+/* ---------- Repair Calc (SF-aware) ---------- */
+function getRates(){
+  // pull possible overrides from Advanced section; fall back to defaults
+  const r = {...RATES};
+  const map = {
+    rate_paint_in:"paint_in_psf",
+    rate_paint_out:"paint_out_psf",
+    rate_floor:"floor_psf",
+    rate_roof_sq:"roof_per_square",
+    rate_window_each:"window_each",
+    rate_elect:"elect_psf",
+    rate_plumb:"plumb_psf"
+  };
+  for(const [inputId,key] of Object.entries(map)){
+    const v = +($("#"+inputId).value||0);
+    if(v>0) r[key]=v;
+  }
+  return r;
+}
+
+function calcItemCost(it, sqft, rates){
+  switch(it.type){
+    case "psf":{
+      const base = sqft * (rates[it.rateKey]||0);
+      return base;
+    }
+    case "roof":{
+      // roof area ≈ 1.2 × living SF (simple heuristic)
+      const roofArea = sqft * 1.2;
+      const squares = roofArea / 100;
+      return squares * (rates.roof_per_square||0);
+    }
+    case "windows":{
+      // approx windows = SF / 200, rounded
+      const windows = Math.max(1, Math.round(sqft/200));
+      return windows * (rates.window_each||0);
+    }
+    case "kitchen":{
+      const qty = +($("#"+it.id+"_qty").value||1);
+      const kicker = Math.round((sqft/1000) * (rates.kitchen_sf_kicker||0));
+      return qty * ((rates.kitchen_base||0) + kicker);
+    }
+    case "bath":{
+      const qty = +($("#"+it.id+"_qty").value||1);
+      return qty * (rates.bath_base||0);
+    }
+    case "hvac":{
+      if(sqft<1200) return rates.hvac_small||0;
+      if(sqft<=2000) return rates.hvac_med||0;
+      return rates.hvac_large||0;
+    }
+    case "flat":{
+      return it.flat||0;
+    }
+    default: return 0;
+  }
+}
+
 function calcRepairs(){
   const abbr = $("#state").value;
   const mult = STATE_MULT[abbr] ?? 1.00;
+  const sqft = +($("#sqft").value||0);
+  if(!sqft || sqft<200){
+    alert("Enter square footage (at least 200) for SF-based accuracy.");
+    return 0;
+  }
+  const rates = getRates();
+
   let total = 0;
   let chosen = [];
 
   LINE_ITEMS.forEach(it=>{
     const cb = $("#"+it.id);
     if(cb && cb.checked){
-      let cost = (+cb.dataset.base||0);
-      if(it.qty){
-        const q = +($("#"+it.id+"_qty").value||1);
-        cost *= Math.max(1, Math.floor(q));
-      }
+      let cost = calcItemCost(it, sqft, rates);
       const adj = cost * mult;
       total += adj;
-      chosen.push(`${it.label}: ${fmt(adj)}`);
+      chosen.push(`${it.label}: ${fmt(adj)} (raw ${fmt(cost)} × state ${mult.toFixed(2)})`);
     }
   });
 
@@ -593,7 +672,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   // Repair wiring
   $("#state").addEventListener("change", updateMultiplierPill);
   $("#detectState").addEventListener("click", detectStateFromAddress);
-  $("#calcRepair").addEventListener("click", calcRepairs);
+  $("#scanSqft").addEventListener("click", scanSqftFromAddress);
+  $("#calcRepair").addEventListener("click", ()=>{
+    const t = calcRepairs();
+    if(t>0) {/* keep result displayed */}
+  });
   $("#resetRepair").addEventListener("click", ()=>{
     LINE_ITEMS.forEach(it=>{
       const cb=$("#"+it.id); if(cb){ cb.checked=false; }
@@ -601,22 +684,24 @@ document.addEventListener("DOMContentLoaded",()=>{
     });
     $("#repairsOut").textContent = "$0";
     $("#notes").innerHTML = '<li class="small muted">No items selected yet.</li>';
+    // reset advanced rate overrides
+    ["rate_paint_in","rate_paint_out","rate_floor","rate_roof_sq","rate_window_each","rate_elect","rate_plumb"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
   });
 
   // Bridge Repair -> Offer
   $("#sendToOffer").addEventListener("click", ()=>{
     const t = calcRepairs();
-    $("#repairs").value = Math.round(t);
-    // switch to offer tab
-    switchCalcTab("offer");
-    // jump to top of calculator
-    document.querySelector('#calc').scrollIntoView({behavior:'smooth',block:'start'});
+    if(t>0){
+      $("#repairs").value = Math.round(t);
+      switchCalcTab("offer");
+      document.querySelector('#calc').scrollIntoView({behavior:'smooth',block:'start'});
+    }
   });
 
   // Also allow Offer to pull latest Repair
   $("#pullRepairs").addEventListener("click", ()=>{
     const t = calcRepairs();
-    $("#repairs").value = Math.round(t);
+    if(t>0) $("#repairs").value = Math.round(t);
   });
 });
 </script>
