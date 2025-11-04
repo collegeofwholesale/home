@@ -1,25 +1,26 @@
+<!-- College of Wholesale Offer Calculator — FULL SINGLE FILE v3.0 -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>College of Wholesale Offer Calculator</title>
+<meta name="description" content="Beginner-friendly wholesale MAO calculator with a state-adjusted Repair Calculator and ARV tips." />
 <style>
   :root{
     --bg:#0b0f1a; --card:#121829; --ink:#e6ebff; --muted:#9aa3b2;
     --accent:#6ea8ff; --accent-2:#8cffc7; --danger:#ff6b6b;
-    --ok:#8bff99; --warn:#ffd06e; --line:#1e2740;
-    --radius:18px;
+    --ok:#8bff99; --warn:#ffd06e; --line:#1e2740; --radius:18px;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.4 Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.45 Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
   a{color:var(--accent)}
   .wrap{max-width:1100px;margin:40px auto;padding:0 16px}
-  .title{font-size:clamp(22px,3.6vw,36px);font-weight:800;letter-spacing:.2px;margin:0 0 6px}
-  .subtitle{color:var(--muted);margin:0 0 28px}
+  h1{font-size:clamp(22px,3.6vw,36px);font-weight:800;letter-spacing:.2px;margin:0 0 6px}
+  .subtitle{color:var(--muted);margin:0 0 22px}
   .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 20px}
-  .tab-btn{border:1px solid var(--line);background:transparent;color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
-  .tab-btn.active{background:linear-gradient(135deg,var(--accent),#7dc0ff);color:#06142e;border-color:transparent}
+  .tab-btn{border:1px solid var(--line);background:#0f1526;color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+  .tab-btn.active{background:linear-gradient(135deg,var(--accent),#7dc0ff);color:#07122b;border-color:transparent}
   .grid{display:grid;gap:16px}
   @media(min-width:900px){.grid.two{grid-template-columns:1fr 1fr}}
   .card{background:linear-gradient(180deg,#121829 0%,#0f1424 100%);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 6px 24px rgba(0,0,0,.35)}
@@ -43,18 +44,18 @@
   .warn{color:var(--warn)}
   .danger{color:var(--danger)}
   .stack{display:flex;flex-direction:column;gap:8px}
-  .flex{display:flex;gap:10px;align-items:center}
   .right{margin-left:auto}
   .muted{color:var(--muted)}
   .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
   .kpi .card{padding:14px;text-align:center}
   .kpi .num{font-size:22px;font-weight:800}
+  .tag{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);display:inline-block}
   .sr{position:absolute;left:-9999px}
 </style>
 </head>
 <body>
   <div class="wrap">
-    <h1 class="title">College of Wholesale Offer Calculator</h1>
+    <h1>College of Wholesale Offer Calculator</h1>
     <p class="subtitle">Beginner-friendly MAO + a state-adjusted Repair Calculator. Fast. Simple. CoW-approved.</p>
 
     <div class="tabs">
@@ -64,7 +65,7 @@
     </div>
 
     <!-- KPI quick glance -->
-    <div class="kpi">
+    <div class="kpi" aria-hidden="true">
       <div class="card">
         <div class="small">Discount Rule</div>
         <div class="num" id="kpi-discount">70%</div>
@@ -94,7 +95,7 @@
           <div class="row">
             <label for="repairs">Repairs (from Repair Calc)</label>
             <input type="number" id="repairs" placeholder="0" min="0" step="500">
-            <button class="btn secondary right" id="pullRepairs">Use Latest Repair Total</button>
+            <button class="btn secondary right" id="pullRepairs" title="Pull latest repair total">Use Latest Repair Total</button>
           </div>
           <div class="row">
             <label for="discount">Buyer Discount %</label>
@@ -122,9 +123,7 @@
           <div class="small">Suggested first offer range:</div>
           <div class="out warn" id="range">$0 – $0</div>
           <div class="hr"></div>
-          <div class="footnote">
-            Heads-up: this is a quick screening tool for <strong>beginners</strong>. Actual buyers, markets, and exit strategies vary.
-          </div>
+          <div class="footnote">This is a quick screening tool for <strong>beginners</strong>. Actual buyers, markets, and exit strategies vary.</div>
         </div>
       </div>
     </section>
@@ -140,10 +139,12 @@
             <input type="text" id="addr" placeholder="123 Main St, Boca Raton, FL 33432">
             <button class="btn secondary" id="detectState">Detect State</button>
           </div>
+
           <div class="row">
             <label for="state">State</label>
             <select id="state"></select>
           </div>
+
           <div class="row">
             <label>Multiplier</label>
             <div id="multiplierView" class="pill">x1.00</div>
@@ -153,9 +154,7 @@
           <div class="hr"></div>
           <div class="small muted">Select items that need work. (Preset averages; you can tweak quantities where shown.)</div>
 
-          <div class="stack" id="lineItems">
-            <!-- Line items injected by JS -->
-          </div>
+          <div class="stack" id="lineItems"></div>
 
           <div class="row">
             <button class="btn" id="calcRepair">Calculate Repair Total</button>
@@ -166,19 +165,23 @@
         <div class="stack">
           <div class="pill">Version B: Checkboxes + Preset Averages</div>
           <div class="hr"></div>
+
           <div class="small">Estimated Repairs:</div>
           <div class="out success" id="repairsOut">$0</div>
+
           <div class="small">Notes:</div>
           <ul class="small muted" id="notes">
-            <li>Multipliers are rough market averages to keep this <em>beginner-friendly</em>.</li>
+            <li>Multipliers are rough market averages to keep this beginner-friendly.</li>
             <li>Use this total directly in the Offer Calculator.</li>
           </ul>
+
           <div class="row">
             <button class="btn secondary" id="sendToOffer">Send to Offer Calculator</button>
           </div>
+
           <div class="hr"></div>
           <div class="footnote">
-            Tip: If the roof and HVAC are newer (< 10 years), you can often uncheck those and save big.
+            Tip: If the roof and HVAC are newer (&lt; 10 years), you can often uncheck those and save big.
           </div>
         </div>
       </div>
@@ -223,8 +226,7 @@ const fmt = (n)=> isNaN(n) ? "$0" : n.toLocaleString(undefined,{style:'currency'
 const clamp = (v,min,max)=> Math.max(min,Math.min(max,v));
 
 /* State cost multipliers (simple approximations to keep newbie-friendly).
-   1.00 = baseline. Higher = more expensive market; Lower = cheaper.
-   You can tweak these anytime. */
+   1.00 = baseline. Higher = more expensive market; Lower = cheaper. */
 const STATE_MULT = {
   AL:0.92, AK:1.30, AZ:1.02, AR:0.90, CA:1.20, CO:1.08, CT:1.12, DE:1.04, FL:1.08,
   GA:0.96, HI:1.40, ID:0.98, IL:1.05, IN:0.93, IA:0.90, KS:0.91, KY:0.90, LA:0.94,
@@ -245,22 +247,20 @@ const STATE_NAMES = {
   WV:"West Virginia", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia"
 };
 
-/* Version B line items with simple preset averages.
-   For a beginner flow, we keep each as a flat average (optionally with quantity).
-   Costs are baseline; a state multiplier will be applied. */
+/* Version B line items with simple preset averages (baseline; state multiplier applies). */
 const LINE_ITEMS = [
-  { id:"paint_in",   label:"Interior Paint",            base:3500, qty:false },
-  { id:"paint_out",  label:"Exterior Paint",            base:3200, qty:false },
-  { id:"floor",      label:"Flooring (whole house)",    base:6000, qty:false },
-  { id:"roof",       label:"Roof Replacement",          base:9500, qty:false },
-  { id:"kitchen",    label:"Kitchen Refresh",           base:8000, qty:true,  qtyLabel:"# Kitchens", min:1, val:1 },
-  { id:"bath",       label:"Bathroom Refresh",          base:3500, qty:true,  qtyLabel:"# Bathrooms", min:1, val:1 },
-  { id:"hvac",       label:"HVAC (replace/major)",      base:6500, qty:false },
-  { id:"windows",    label:"Windows (whole house)",     base:5500, qty:false },
-  { id:"elect",      label:"Electrical (repairs/update)",base:2500, qty:false },
-  { id:"plumb",      label:"Plumbing (repairs)",        base:2200, qty:false },
+  { id:"paint_in",   label:"Interior Paint",                base:3500, qty:false },
+  { id:"paint_out",  label:"Exterior Paint",                base:3200, qty:false },
+  { id:"floor",      label:"Flooring (whole house)",        base:6000, qty:false },
+  { id:"roof",       label:"Roof Replacement",              base:9500, qty:false },
+  { id:"kitchen",    label:"Kitchen Refresh",               base:8000, qty:true,  qtyLabel:"# Kitchens", min:1, val:1 },
+  { id:"bath",       label:"Bathroom Refresh",              base:3500, qty:true,  qtyLabel:"# Bathrooms", min:1, val:1 },
+  { id:"hvac",       label:"HVAC (replace/major)",          base:6500, qty:false },
+  { id:"windows",    label:"Windows (whole house)",         base:5500, qty:false },
+  { id:"elect",      label:"Electrical (repairs/update)",   base:2500, qty:false },
+  { id:"plumb",      label:"Plumbing (repairs)",            base:2200, qty:false },
   { id:"land",       label:"Landscaping/Exterior clean-up", base:1200, qty:false },
-  { id:"misc",       label:"Misc / Contingency",        base:2000, qty:false }
+  { id:"misc",       label:"Misc / Contingency",            base:2000, qty:false }
 ];
 
 /* ==============
@@ -301,12 +301,14 @@ function buildLineItems(){
       if(qwrap) qwrap.hidden = !cb.checked;
     });
     row1.append(lb, cb);
+
     const row2 = document.createElement("div");
     row2.className = "row";
     const base = document.createElement("div");
     base.className = "small";
     base.textContent = `Baseline: ${fmt(it.base)}`;
     row2.append(base);
+
     card.append(row1,row2);
 
     if(it.qty){
@@ -328,7 +330,7 @@ function buildLineItems(){
 /* Try to detect state from address input (very basic, no API). */
 function detectStateFromAddress(){
   const txt = ($("#addr").value||"").toUpperCase();
-  // Look for two-letter state codes bounded by non-letters OR full names
+  // Look for two-letter state codes bounded by word breaks OR full names
   const abbrs = Object.keys(STATE_NAMES);
   for(const ab of abbrs){
     const re = new RegExp(`\\b${ab}\\b`);
@@ -363,8 +365,8 @@ function calcMAO(){
   const mao = Math.max(0, buyerNet - repairs - closingBuffer - fee);
 
   $("#mao").textContent = fmt(mao);
-  const low = Math.max(0, mao * 0.90);
-  const high = Math.max(0, mao * 1.00);
+  const low = Math.max(0, Math.round(mao * 0.90));
+  const high = Math.max(0, Math.round(mao));
   $("#range").textContent = `${fmt(low)} – ${fmt(high)}`;
 }
 
@@ -411,7 +413,7 @@ function calcRepairs(){
 }
 
 /* =========================
-   WIRING
+   TABS & WIRING
    ========================= */
 function switchTab(id){
   ["offer","repair","help"].forEach(sec=>{
@@ -475,4 +477,3 @@ document.addEventListener("DOMContentLoaded",()=>{
 </script>
 </body>
 </html>
-
