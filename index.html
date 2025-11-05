@@ -1,4 +1,4 @@
-<!-- College of Wholesale — FULL SITE (v6.3)  — About page expanded -->
+<!-- College of Wholesale — FULL SITE (v6.3.1) -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -76,8 +76,8 @@
   <div class="wrap navin">
     <div class="brand">College of <span>Wholesale</span></div>
     <div class="spacer"></div>
-    <a href="#home" data-page="home" class="navlink">Home</a>
-    <a href="#about" data-page="about" class="navlink active">About</a>
+    <a href="#home" data-page="home" class="navlink active">Home</a>
+    <a href="#about" data-page="about" class="navlink">About</a>
     <a href="#calc" data-page="calc" class="navlink">Calculator</a>
     <a href="#resources" data-page="resources" class="navlink">Resources</a>
     <a href="#notion" data-page="notion" class="navlink">Notion Hub</a>
@@ -91,8 +91,8 @@
 <!-- ===== PAGES ===== -->
 <main>
 
-  <!-- HOME (unchanged from v6.2) -->
-  <section id="home" class="page hide">
+  <!-- HOME -->
+  <section id="home" class="page">
     <div class="wrap hero">
       <h1>Learn wholesaling the simple way.<br/>Use the tools. Get the reps. Close the deal.</h1>
       <p>College of Wholesale gives beginners a clear path: daily actions, beginner-friendly calculators, scripts, and a community that helps you win your first contract.</p>
@@ -121,13 +121,12 @@
     </div>
   </section>
 
-  <!-- ABOUT (expanded) -->
-  <section id="about" class="page">
+  <!-- ABOUT -->
+  <section id="about" class="page hide">
     <div class="wrap">
       <h2>About College of Wholesale</h2>
       <p class="sub">Founded by <strong>Arya</strong>, CoW helps new wholesalers master the fundamentals through systems, scripts, and reps—not theory.</p>
 
-      <!-- Founder story -->
       <div class="founder">
         <div class="card">
           <span class="badge">Founder’s Note</span>
@@ -201,7 +200,7 @@
     </div>
   </section>
 
-  <!-- CALCULATOR (unchanged from v6.2) -->
+  <!-- CALCULATOR (Offer + Repair + Tips) -->
   <section id="calc" class="page hide">
     <div class="wrap">
       <h2>College of Wholesale Offer Calculator</h2>
@@ -313,7 +312,7 @@
     </div>
   </section>
 
-  <!-- RESOURCES (unchanged) -->
+  <!-- RESOURCES -->
   <section id="resources" class="page hide">
     <div class="wrap">
       <h2>Free Training Resources</h2>
@@ -364,7 +363,7 @@
     </div>
   </section>
 
-  <!-- SCAVENGER -->
+  <!-- SCAVENGER HUNT -->
   <section id="scav" class="page hide">
     <div class="wrap">
       <h2>Seller-Finance Scavenger Hunt</h2>
@@ -440,7 +439,7 @@
 </main>
 
 <footer>
-  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.3 • Education only. Not legal, tax, or financial advice.</div>
+  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.3.1 • Education only. Not legal, tax, or financial advice.</div>
 </footer>
 
 <!-- ===== SCRIPTS ===== -->
@@ -454,15 +453,15 @@ const LINKS = {
   discord: "https://discord.gg/your-invite",               // <- replace
   email: "aaarya3455@gmail.com"
 };
-console.log("CoW site build v6.3 loaded");
+console.log("CoW site build v6.3.1 loaded");
 
 /* --------- Utils & Router --------- */
-const $ = (q)=>document.querySelector(q);
+const $  = (q)=>document.querySelector(q);
 const $$ = (q)=>document.querySelectorAll(q);
 const fmt = (n)=> isNaN(n) ? "$0" : n.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:0});
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
-const pages = ["home","about","calc","resources","notion","whop","contact","scav","intern"];
 
+const pages = ["home","about","calc","resources","notion","whop","contact","scav","intern"];
 function showPage(id){
   pages.forEach(p=>{
     const el = $("#"+p);
@@ -473,12 +472,27 @@ function showPage(id){
   window.scrollTo({top:0,behavior:"instant"});
 }
 function route(){
-  const h = (location.hash||"#about").replace("#","");
-  showPage(pages.includes(h)?h:"about");
+  const h = (location.hash||"#home").replace("#","");
+  showPage(pages.includes(h)?h:"home");
 }
-window.addEventListener("hashchange",route);
+window.addEventListener("hashchange", route);
+window.addEventListener("load", route); // ensure initial render
 
-/* ---------- Calculator data & logic (unchanged) ---------- */
+// Robust nav click handler (prevents browser swallowing the click)
+$$(".navlink").forEach(a =>
+  a.addEventListener("click", (e) => {
+    e.preventDefault();
+    const page = a.dataset.page;
+    // update active state
+    $$(".navlink").forEach(l => l.classList.remove("active"));
+    a.classList.add("active");
+    // update hash + render
+    location.hash = `#${page}`;
+    showPage(page);
+  })
+);
+
+/* ---------- Calculator data & logic ---------- */
 const STATE_MULT = { AL:0.92, AK:1.30, AZ:1.02, AR:0.90, CA:1.20, CO:1.08, CT:1.12, DE:1.04, FL:1.08, GA:0.96, HI:1.40, ID:0.98, IL:1.05, IN:0.93, IA:0.90, KS:0.91, KY:0.90, LA:0.94, ME:1.04, MD:1.10, MA:1.18, MI:0.95, MN:1.02, MS:0.88, MO:0.92, MT:1.00, NE:0.92, NV:1.02, NH:1.06, NJ:1.15, NM:0.96, NY:1.18, NC:0.98, ND:0.98, OH:0.93, OK:0.91, OR:1.08, PA:1.04, RI:1.10, SC:0.97, SD:0.94, TN:0.96, TX:0.94, UT:1.02, VT:1.06, VA:1.05, WA:1.12, WV:0.90, WI:0.95, WY:0.94, DC:1.22 };
 const STATE_NAMES = { AL:"Alabama", AK:"Alaska", AZ:"Arizona", AR:"Arkansas", CA:"California", CO:"Colorado", CT:"Connecticut", DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho", IL:"Illinois", IN:"Indiana", IA:"Iowa", KS:"Kansas", KY:"Kentucky", LA:"Louisiana", ME:"Maine", MD:"Maryland", MA:"Massachusetts", MI:"Michigan", MN:"Minnesota", MS:"Mississippi", MO:"Missouri", MT:"Montana", NE:"Nebraska", NV:"Nevada", NH:"New Hampshire", NJ:"New Jersey", NM:"New Mexico", NY:"New York", NC:"North Carolina", ND:"North Dakota", OH:"Ohio", OK:"Oklahoma", OR:"Oregon", PA:"Pennsylvania", RI:"Rhode Island", SC:"South Carolina", SD:"South Dakota", TN:"Tennessee", TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia" };
 
@@ -489,6 +503,7 @@ const RATES = {
   hvac_small: 4500, hvac_med: 6500, hvac_large: 8000,
   land_flat: 1200, misc_flat: 2000
 };
+
 const LINE_ITEMS = [
   { id:"paint_in",   label:"Interior Paint (SF-Based)",                 type:"psf",   rateKey:"paint_in_psf" },
   { id:"paint_out",  label:"Exterior Paint (SF-Based)",                 type:"psf",   rateKey:"paint_out_psf" },
@@ -504,61 +519,151 @@ const LINE_ITEMS = [
   { id:"misc",       label:"Misc / Contingency (flat)",                 type:"flat",  flat:RATES.misc_flat }
 ];
 
-/* (Calculator functions preserved — omitted for brevity in this comment; same as v6.2) */
-function fmt(n){ return isNaN(n) ? "$0" : n.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:0}); }
-function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
-function buildStateDropdown(){ const sel=$("#state"); if(!sel) return; sel.innerHTML=""; Object.keys(STATE_NAMES).forEach(ab=>{ const o=document.createElement("option"); o.value=ab; o.textContent=`${STATE_NAMES[ab]} (${ab})`; sel.appendChild(o); }); sel.value="FL"; updateMultiplierPill(); }
-function updateMultiplierPill(){ const el=$("#multiplierView"); const sel=$("#state"); if(!el||!sel) return; const ab=sel.value; const mult=STATE_MULT[ab]??1.00; el.textContent=`x${mult.toFixed(2)}`; }
-function buildLineItems(){ const host=$("#lineItems"); if(!host) return; host.innerHTML=""; LINE_ITEMS.forEach(it=>{ const card=document.createElement("div"); card.className="card"; card.style.padding="12px"; const row1=document.createElement("div"); row1.className="row"; const lb=document.createElement("label"); lb.textContent=it.label; lb.setAttribute("for",it.id); const cb=document.createElement("input"); cb.type="checkbox"; cb.id=it.id; cb.addEventListener("change",()=>{ const qwrap=card.querySelector(".qtywrap"); if(qwrap) qwrap.hidden=!cb.checked; }); row1.append(lb,cb); card.append(row1); const row2=document.createElement("div"); row2.className="row"; const hint=document.createElement("div"); hint.className="small"; hint.textContent=({ psf:`Baseline: $${RATES[it.rateKey].toFixed(2)}/SF`, roof:`Baseline: $${RATES.roof_per_square.toFixed(0)} per 100 SF (roof≈1.2×SF)`, windows:`Baseline: ~$${RATES.window_each.toFixed(0)} each (≈1/200 SF)`, kitchen:`Baseline: $${RATES.kitchen_base.toLocaleString()} each + ${fmt(RATES.kitchen_sf_kicker)} per 1,000 SF`, bath:`Baseline: $${RATES.bath_base.toLocaleString()} per bathroom`, hvac:`Baseline: <1200SF ~$${RATES.hvac_small}, 1200–2000SF ~$${RATES.hvac_med}, >2000SF ~$${RATES.hvac_large}`, flat:`Baseline flat: ${fmt(it.flat)}` })[it.type] || ""; row2.append(hint); card.append(row2); if(it.qty){ const qwrap=document.createElement("div"); qwrap.className="row qtywrap"; qwrap.hidden=true; const qlb=document.createElement("label"); qlb.textContent=it.qtyLabel; const qin=document.createElement("input"); qin.type="number"; qin.min=it.min??1; qin.step=1; qin.value=it.val??1; qin.id=it.id+"_qty"; qwrap.append(qlb,qin); card.append(qwrap); } host.append(card); }); }
-function detectStateFromAddress(){ const addr=$("#addr"); if(!addr) return null; const txt=(addr.value||"").toUpperCase(); for(const ab of Object.keys(STATE_NAMES)){ if(new RegExp(`\\b${ab}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } } for(const [ab,name] of Object.entries(STATE_NAMES)){ if(new RegExp(`\\b${name.toUpperCase()}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } } alert("Couldn’t detect a state. Choose it manually."); return null; }
-function scanSqftFromAddress(){ const addr=$("#addr"); if(!addr) return null; const txt=(addr.value||"").toLowerCase(); const m=txt.match(/([\d,.]+)\s*(sq\s?ft|sf|sqft)/i); if(m){ const num=parseInt(m[1].replace(/[^\d]/g,""),10); if(num&&num>200){ $("#sqft").value=num; return num; } } alert("No square footage found. Enter it in the Square Footage field."); return null; }
-function calcMAO(){ const arv=+($("#arv")?.value||0), repairs=+($("#repairs")?.value||0); const discountPct=clamp(+($("#discount")?.value||70),40,90), fee=+($("#fee")?.value||0), closePct=clamp(+($("#closePct")?.value||3),0,10); const k1=$("#kpi-discount"),k2=$("#kpi-fee"),k3=$("#kpi-close"); if(k1) k1.textContent=`${discountPct}%`; if(k2) k2.textContent=fmt(fee); if(k3) k3.textContent=`${closePct}% of ARV`; const mao=Math.max(0,(arv*(discountPct/100))-repairs-(arv*(closePct/100))-fee); const out=$("#mao"), rng=$("#range"); if(out) out.textContent=fmt(mao); if(rng) rng.textContent=`${fmt(Math.max(0,Math.round(mao*0.90)))} – ${fmt(Math.max(0,Math.round(mao)))}`; }
-function getRates(){ const r={...RATES}; const map={ rate_paint_in:"paint_in_psf", rate_paint_out:"paint_out_psf", rate_floor:"floor_psf", rate_roof_sq:"roof_per_square", rate_window_each:"window_each", rate_elect:"elect_psf", rate_plumb:"plumb_psf" }; for(const [id,key] of Object.entries(map)){ const v=+($("#"+id)?.value||0); if(v>0) r[key]=v; } return r; }
-function calcItemCost(it, sqft, rates){ switch(it.type){ case "psf": return sqft*(rates[it.rateKey]||0); case "roof":{ const roofArea=sqft*1.2, squares=roofArea/100; return squares*(rates.roof_per_square||0); } case "windows":{ const windows=Math.max(1,Math.round(sqft/200)); return windows*(rates.window_each||0); } case "kitchen":{ const qty=+($("#"+it.id+"_qty")?.value||1); const kicker=Math.round((sqft/1000)*(rates.kitchen_sf_kicker||0)); return qty*((rates.kitchen_base||0)+kicker); } case "bath":{ const qty=+($("#"+it.id+"_qty")?.value||1); return qty*(rates.bath_base||0); } case "hvac": return sqft<1200 ? (rates.hvac_small||0) : (sqft<=2000 ? (rates.hvac_med||0) : (rates.hvac_large||0)); case "flat": return it.flat||0; default: return 0; } }
-function calcRepairs(){ const stateSel=$("#state"); if(!stateSel) return 0; const abbr=stateSel.value, mult=STATE_MULT[abbr]??1.00, sqft=+($("#sqft")?.value||0); if(!sqft||sqft<200){ alert("Enter square footage (≥200) for SF-based accuracy."); return 0; } const rates=getRates(); let total=0, chosen=[]; LINE_ITEMS.forEach(it=>{ const cb=$("#"+it.id); if(cb&&cb.checked){ const raw=calcItemCost(it,sqft,rates), adj=raw*mult; total+=adj; chosen.push(`${it.label}: ${fmt(adj)} (raw ${fmt(raw)} × state ${mult.toFixed(2)})`); } }); const out=$("#repairsOut"), notes=$("#notes"); if(out) out.textContent=fmt(total); if(notes){ notes.innerHTML=""; if(chosen.length){ chosen.forEach(t=>{ const li=document.createElement("li"); li.className="small"; li.textContent=t; notes.append(li); }); } else { notes.innerHTML='<li class="small">No items selected yet.</li>'; } } return total; }
-function switchCalcTab(id){ ["offer","repair","help"].forEach(t=>{ const sec=$("#tab-"+t), btn=document.querySelector(`.tabBtn[data-tab="${t}"]`); if(!sec||!btn) return; if(t===id){ sec.classList.remove("hide"); btn.classList.add("active"); } else { sec.classList.add("hide"); btn.classList.remove("active"); } }); }
+/* Build Repair UI */
+function buildStateDropdown(){
+  const sel = $("#state"); if(!sel) return;
+  sel.innerHTML = "";
+  Object.keys(STATE_NAMES).forEach(ab=>{ const o=document.createElement("option"); o.value=ab; o.textContent=`${STATE_NAMES[ab]} (${ab})`; sel.appendChild(o); });
+  sel.value = "FL"; updateMultiplierPill();
+}
+function updateMultiplierPill(){ const el=$("#multiplierView"), sel=$("#state"); if(!el||!sel) return; const ab=sel.value; const mult=STATE_MULT[ab] ?? 1.00; el.textContent = `x${mult.toFixed(2)}`; }
+function buildLineItems(){
+  const host = $("#lineItems"); if(!host) return; host.innerHTML = "";
+  LINE_ITEMS.forEach(it=>{
+    const card=document.createElement("div"); card.className="card"; card.style.padding="12px";
+    const row1=document.createElement("div"); row1.className="row";
+    const lb=document.createElement("label"); lb.textContent=it.label; lb.setAttribute("for",it.id);
+    const cb=document.createElement("input"); cb.type="checkbox"; cb.id=it.id;
+    cb.addEventListener("change",()=>{ const qwrap=card.querySelector(".qtywrap"); if(qwrap) qwrap.hidden=!cb.checked; });
+    row1.append(lb,cb); card.append(row1);
+    const row2=document.createElement("div"); row2.className="row";
+    const hint=document.createElement("div"); hint.className="small";
+    hint.textContent = ({
+      psf:`Baseline: $${RATES[it.rateKey].toFixed(2)}/SF`,
+      roof:`Baseline: $${RATES.roof_per_square.toFixed(0)} per 100 SF (roof≈1.2×SF)`,
+      windows:`Baseline: ~$${RATES.window_each.toFixed(0)} each (≈1/200 SF)`,
+      kitchen:`Baseline: $${RATES.kitchen_base.toLocaleString()} each + ${fmt(RATES.kitchen_sf_kicker)} per 1,000 SF`,
+      bath:`Baseline: $${RATES.bath_base.toLocaleString()} per bathroom`,
+      hvac:`Baseline: <1200SF ~$${RATES.hvac_small}, 1200–2000SF ~$${RATES.hvac_med}, >2000SF ~$${RATES.hvac_large}`,
+      flat:`Baseline flat: ${fmt(it.flat)}`
+    })[it.type] || "";
+    row2.append(hint); card.append(row2);
+    if(it.qty){
+      const qwrap=document.createElement("div"); qwrap.className="row qtywrap"; qwrap.hidden=true;
+      const qlb=document.createElement("label"); qlb.textContent=it.qtyLabel;
+      const qin=document.createElement("input"); qin.type="number"; qin.min=it.min??1; qin.step=1; qin.value=it.val??1; qin.id=it.id+"_qty";
+      qwrap.append(qlb,qin); card.append(qwrap);
+    }
+    host.append(card);
+  });
+}
 
-/* --------- INIT --------- */
+/* Address helpers */
+function detectStateFromAddress(){
+  const addr=$("#addr"); if(!addr) return null;
+  const txt = (addr.value||"").toUpperCase();
+  for(const ab of Object.keys(STATE_NAMES)){ if(new RegExp(`\\b${ab}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
+  for(const [ab,name] of Object.entries(STATE_NAMES)){ if(new RegExp(`\\b${name.toUpperCase()}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
+  alert("Couldn’t detect a state. Choose it manually."); return null;
+}
+function scanSqftFromAddress(){
+  const addr=$("#addr"); if(!addr) return null;
+  const txt = (addr.value||"").toLowerCase();
+  const m = txt.match(/([\d,.]+)\s*(sq\s?ft|sf|sqft)/i);
+  if(m){ const num = parseInt(m[1].replace(/[^\d]/g,""),10); if(num && num>200){ $("#sqft").value=num; return num; } }
+  alert("No square footage found. Enter it in the Square Footage field."); return null;
+}
+
+/* Offer Calc */
+function calcMAO(){
+  const arv=+($("#arv")?.value||0), repairs=+($("#repairs")?.value||0);
+  const discountPct=clamp(+($("#discount")?.value||70),40,90), fee=+($("#fee")?.value||0), closePct=clamp(+($("#closePct")?.value||3),0,10);
+  $("#kpi-discount")?.textContent=`${discountPct}%`; $("#kpi-fee")?.textContent=fmt(fee); $("#kpi-close")?.textContent=`${closePct}% of ARV`;
+  const mao=Math.max(0,(arv*(discountPct/100))-repairs-(arv*(closePct/100))-fee);
+  $("#mao")?.textContent=fmt(mao); $("#range")?.textContent=`${fmt(Math.max(0,Math.round(mao*0.90)))} – ${fmt(Math.max(0,Math.round(mao)))}`;
+}
+
+/* Repair Calc */
+function getRates(){
+  const r={...RATES};
+  const map={ rate_paint_in:"paint_in_psf", rate_paint_out:"paint_out_psf", rate_floor:"floor_psf", rate_roof_sq:"roof_per_square", rate_window_each:"window_each", rate_elect:"elect_psf", rate_plumb:"plumb_psf" };
+  for(const [id,key] of Object.entries(map)){ const v=+($("#"+id)?.value||0); if(v>0) r[key]=v; }
+  return r;
+}
+function calcItemCost(it, sqft, rates){
+  switch(it.type){
+    case "psf": return sqft*(rates[it.rateKey]||0);
+    case "roof":{ const roofArea=sqft*1.2, squares=roofArea/100; return squares*(rates.roof_per_square||0); }
+    case "windows":{ const windows=Math.max(1,Math.round(sqft/200)); return windows*(rates.window_each||0); }
+    case "kitchen":{ const qty=+($("#"+it.id+"_qty")?.value||1); const kicker=Math.round((sqft/1000)*(rates.kitchen_sf_kicker||0)); return qty*((rates.kitchen_base||0)+kicker); }
+    case "bath":{ const qty=+($("#"+it.id+"_qty")?.value||1); return qty*(rates.bath_base||0); }
+    case "hvac": return sqft<1200 ? (rates.hvac_small||0) : (sqft<=2000 ? (rates.hvac_med||0) : (rates.hvac_large||0));
+    case "flat": return it.flat||0;
+    default: return 0;
+  }
+}
+function calcRepairs(){
+  const abbr=$("#state")?.value, mult=STATE_MULT[abbr]??1.00, sqft=+($("#sqft")?.value||0);
+  if(!sqft || sqft<200){ alert("Enter square footage (≥200) for SF-based accuracy."); return 0; }
+  const rates=getRates(); let total=0, chosen=[];
+  LINE_ITEMS.forEach(it=>{
+    const cb=$("#"+it.id);
+    if(cb && cb.checked){
+      const raw=calcItemCost(it,sqft,rates), adj=raw*mult; total+=adj;
+      chosen.push(`${it.label}: ${fmt(adj)} (raw ${fmt(raw)} × state ${mult.toFixed(2)})`);
+    }
+  });
+  $("#repairsOut")?.textContent=fmt(total);
+  const notes=$("#notes"); if(notes){ notes.innerHTML=""; if(chosen.length){ chosen.forEach(t=>{ const li=document.createElement("li"); li.className="small"; li.textContent=t; notes.append(li); }); } else { notes.innerHTML='<li class="small">No items selected yet.</li>'; } }
+  return total;
+}
+function switchCalcTab(id){
+  ["offer","repair","help"].forEach(t=>{
+    const sec=$("#tab-"+t), btn=document.querySelector(`.tabBtn[data-tab="${t}"]`);
+    if(!sec||!btn) return;
+    if(t===id){ sec.classList.remove("hide"); btn.classList.add("active"); }
+    else{ sec.classList.add("hide"); btn.classList.remove("active"); }
+  });
+}
+
+/* --------- INIT (actions & links) --------- */
 document.addEventListener("DOMContentLoaded",()=>{
-  route(); $("#year").textContent=new Date().getFullYear();
-
-  // Nav active state
-  $$(".navlink").forEach(a=>a.addEventListener("click",()=>{ $$(".navlink").forEach(l=>l.classList.remove("active")); a.classList.add("active"); }));
+  $("#year").textContent=new Date().getFullYear();
 
   // External links
-  const notion=$("#openNotion"); if(notion) notion.href=LINKS.notion;
-  const whop=$("#openWhop"); if(whop) whop.href=LINKS.whop;
-  const disc2=$("#openDiscord2"); if(disc2) disc2.href=LINKS.discord;
-  const disc3=$("#openDiscord3"); if(disc3) disc3.href=LINKS.discord;
-  const emailBtns=["openEmail","openEmail2"].map(id=>$("#"+id)); emailBtns.forEach(b=>{ if(b){ b.href=`mailto:${LINKS.email}`; } });
-  const emailText=$("#emailText"); if(emailText) emailText.textContent=LINKS.email;
+  $("#openNotion")?.setAttribute("href", LINKS.notion);
+  $("#openWhop")?.setAttribute("href", LINKS.whop);
+  $("#openDiscord2")?.setAttribute("href", LINKS.discord);
+  $("#openDiscord3")?.setAttribute("href", LINKS.discord);
+  ["openEmail","openEmail2"].forEach(id=>{ const b=$("#"+id); if(b) b.href=`mailto:${LINKS.email}`; });
+  $("#emailText")?.append(LINKS.email);
 
-  // Build Repair UI (only exists on Calculator page)
+  // Build Repair UI (exists on Calculator page)
   buildStateDropdown(); buildLineItems();
 
   // Tabs + actions
   $$(".tabBtn").forEach(b=> b.addEventListener("click", ()=> switchCalcTab(b.dataset.tab) ));
-  const calcOfferBtn=$("#calcOffer"); if(calcOfferBtn) calcOfferBtn.addEventListener("click", calcMAO);
-  const resetOfferBtn=$("#resetOffer"); if(resetOfferBtn) resetOfferBtn.addEventListener("click", ()=>{
-    ["arv","repairs","discount","fee","closePct"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
-    const d=$("#discount"),f=$("#fee"),c=$("#closePct"); if(d) d.value=70; if(f) f.value=10000; if(c) c.value=3;
-    const mao=$("#mao"),range=$("#range"); if(mao) mao.textContent="$0"; if(range) range.textContent="$0 – $0";
-    const k1=$("#kpi-discount"),k2=$("#kpi-fee"),k3=$("#kpi-close"); if(k1) k1.textContent="70%"; if(k2) k2.textContent="$10,000"; if(k3) k3.textContent="3% of ARV";
+  $("#calcOffer")?.addEventListener("click", calcMAO);
+  $("#resetOffer")?.addEventListener("click", ()=>{
+    ["arv","repairs","discount","fee","closePct"].forEach(id=>$("#"+id)?.value="");
+    $("#discount").value=70; $("#fee").value=10000; $("#closePct").value=3;
+    $("#mao").textContent="$0"; $("#range").textContent="$0 – $0";
+    $("#kpi-discount").textContent="70%"; $("#kpi-fee").textContent="$10,000"; $("#kpi-close").textContent="3% of ARV";
   });
-  const stateSel=$("#state"); if(stateSel) stateSel.addEventListener("change", updateMultiplierPill);
-  const detectStateBtn=$("#detectState"); if(detectStateBtn) detectStateBtn.addEventListener("click", detectStateFromAddress);
-  const scanSqftBtn=$("#scanSqft"); if(scanSqftBtn) scanSqftBtn.addEventListener("click", scanSqftFromAddress);
-  const calcRepairBtn=$("#calcRepair"); if(calcRepairBtn) calcRepairBtn.addEventListener("click", ()=>{ const t=calcRepairs(); if(t>0){} });
-  const resetRepairBtn=$("#resetRepair"); if(resetRepairBtn) resetRepairBtn.addEventListener("click", ()=>{
+  $("#state")?.addEventListener("change", updateMultiplierPill);
+  $("#detectState")?.addEventListener("click", detectStateFromAddress);
+  $("#scanSqft")?.addEventListener("click", scanSqftFromAddress);
+  $("#calcRepair")?.addEventListener("click", ()=>{ const t=calcRepairs(); if(t>0){} });
+  $("#resetRepair")?.addEventListener("click", ()=>{
     LINE_ITEMS.forEach(it=>{ const cb=$("#"+it.id); if(cb) cb.checked=false; if(it.qty){ const q=$("#"+it.id+"_qty"); if(q) q.value=it.val??1; }});
-    const out=$("#repairsOut"),notes=$("#notes"); if(out) out.textContent="$0"; if(notes) notes.innerHTML='<li class="small">No items selected yet.</li>';
-    ["rate_paint_in","rate_paint_out","rate_floor","rate_roof_sq","rate_window_each","rate_elect","rate_plumb"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
+    $("#repairsOut").textContent="$0"; $("#notes").innerHTML='<li class="small">No items selected yet.</li>';
+    ["rate_paint_in","rate_paint_out","rate_floor","rate_roof_sq","rate_window_each","rate_elect","rate_plumb"].forEach(id=>$("#"+id)?.value="");
   });
-  const sendBtn=$("#sendToOffer"); if(sendBtn) sendBtn.addEventListener("click", ()=>{
+  $("#sendToOffer")?.addEventListener("click", ()=>{
     const t=calcRepairs();
-    if(t>0){ const rep=$("#repairs"); if(rep) rep.value=Math.round(t); switchCalcTab("offer"); const calcSec=document.querySelector('#calc'); if(calcSec) calcSec.scrollIntoView({behavior:'smooth',block:'start'}); }
+    if(t>0){ $("#repairs").value=Math.round(t); switchCalcTab("offer"); document.querySelector('#calc').scrollIntoView({behavior:'smooth',block:'start'}); }
   });
-  const pullBtn=$("#pullRepairs"); if(pullBtn) pullBtn.addEventListener("click", ()=>{ const t=calcRepairs(); const rep=$("#repairs"); if(t>0 && rep) rep.value=Math.round(t); });
+  $("#pullRepairs")?.addEventListener("click", ()=>{ const t=calcRepairs(); if(t>0) $("#repairs").value=Math.round(t); });
 });
 </script>
 </body>
