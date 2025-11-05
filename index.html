@@ -1,4 +1,4 @@
-<!-- College of Wholesale — FULL SITE (v6.1) -->
+<!-- College of Wholesale — FULL SITE (v6.1 mod: no green CTA, Contact at end) -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -23,7 +23,6 @@
   .spacer{flex:1}
   .nav a{padding:8px 10px;border-radius:10px;white-space:nowrap}
   .nav a.active{background:linear-gradient(135deg,var(--accent),#7dc0ff);color:var(--ink-d)}
-  .cta{background:linear-gradient(135deg,var(--accent-2),#b3ffd9);color:#073a28;padding:8px 12px;border-radius:12px;font-weight:800}
   /* LAYOUT */
   section{padding:56px 0;border-top:1px solid var(--line)}
   h1{font-size:clamp(28px,4.2vw,48px);margin:0 0 12px}
@@ -70,7 +69,6 @@
   <div class="wrap navin">
     <div class="brand">College of <span>Wholesale</span></div>
     <div class="spacer"></div>
-    <!-- Keep these visible in the nav -->
     <a href="#home" data-page="home" class="navlink active">Home</a>
     <a href="#about" data-page="about" class="navlink">About</a>
     <a href="#calc" data-page="calc" class="navlink">Calculator</a>
@@ -81,7 +79,7 @@
     <a href="#scav" data-page="scav" class="navlink">Scavenger Hunt</a>
     <a href="#intern" data-page="intern" class="navlink">Internship</a>
     <a href="#contact" data-page="contact" class="navlink">Contact</a>
-    <a href="#calc" class="cta">Open Calculator</a>
+    <!-- removed the green CTA button -->
   </div>
 </div>
 
@@ -100,7 +98,6 @@
         <span class="chip">🟣 Whop + Discord</span>
       </div>
 
-      <!-- Quick Links so those tabs are impossible to miss -->
       <div class="ql">
         <a href="#notion" class="btn secondary">Open Notion Hub</a>
         <a href="#whop" class="btn secondary">Join on Whop</a>
@@ -398,9 +395,9 @@
    LINK CONFIG (EDIT ME)
    ========================= */
 const LINKS = {
-  notion: "https://www.notion.so/your-notion-workspace",   // <- replace
-  whop: "https://whop.com/your-cow-membership",            // <- replace
-  discord: "https://discord.gg/your-invite",               // <- replace
+  notion: "https://www.notion.so/your-notion-workspace",
+  whop: "https://whop.com/your-cow-membership",
+  discord: "https://discord.gg/your-invite",
   email: "aaarya3455@gmail.com"
 };
 console.log("CoW site build v6.1 loaded");
