@@ -1,11 +1,11 @@
-<!-- College of Wholesale — FULL SITE (v6.1) -->
+<!-- College of Wholesale — FULL SITE (v6.2)  — Home page refined per Arya's requests -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>College of Wholesale — Offer Calculator, Training & Community</title>
-<meta name="description" content="College of Wholesale: training, tools, calculators, Notion hub, Whop membership, Discord community, scavenger hunts, and internships for new wholesalers." />
+<meta name="description" content="College of Wholesale: training, tools, calculators, Notion hub, Whop membership, Discord (via Whop), scavenger hunts, and internships for new wholesalers." />
 <style>
   :root{
     --bg:#0b0f1a; --card:#121829; --ink:#e6ebff; --muted:#9aa3b2;
@@ -15,6 +15,7 @@
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.45 Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
   a{color:var(--accent);text-decoration:none}
   .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+
   /* NAV */
   .nav{position:sticky;top:0;z-index:50;background:rgba(11,15,26,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .navin{display:flex;align-items:center;gap:8px;min-height:64px;flex-wrap:wrap}
@@ -23,7 +24,8 @@
   .spacer{flex:1}
   .nav a{padding:8px 10px;border-radius:10px;white-space:nowrap}
   .nav a.active{background:linear-gradient(135deg,var(--accent),#7dc0ff);color:var(--ink-d)}
-  .cta{background:linear-gradient(135deg,var(--accent-2),#b3ffd9);color:#073a28;padding:8px 12px;border-radius:12px;font-weight:800}
+  /* no green CTA button anymore */
+
   /* LAYOUT */
   section{padding:56px 0;border-top:1px solid var(--line)}
   h1{font-size:clamp(28px,4.2vw,48px);margin:0 0 12px}
@@ -70,18 +72,17 @@
   <div class="wrap navin">
     <div class="brand">College of <span>Wholesale</span></div>
     <div class="spacer"></div>
-    <!-- Keep these visible in the nav -->
     <a href="#home" data-page="home" class="navlink active">Home</a>
     <a href="#about" data-page="about" class="navlink">About</a>
     <a href="#calc" data-page="calc" class="navlink">Calculator</a>
     <a href="#resources" data-page="resources" class="navlink">Resources</a>
     <a href="#notion" data-page="notion" class="navlink">Notion Hub</a>
     <a href="#whop" data-page="whop" class="navlink">Whop</a>
-    <a href="#discord" data-page="discord" class="navlink">Discord</a>
+    <!-- Discord removed; Contact moved into its place -->
+    <a href="#contact" data-page="contact" class="navlink">Contact</a>
     <a href="#scav" data-page="scav" class="navlink">Scavenger Hunt</a>
     <a href="#intern" data-page="intern" class="navlink">Internship</a>
-    <a href="#contact" data-page="contact" class="navlink">Contact</a>
-    <a href="#calc" class="cta">Open Calculator</a>
+    <!-- green "Open Calculator" CTA removed -->
   </div>
 </div>
 
@@ -93,18 +94,26 @@
     <div class="wrap hero">
       <h1>Learn wholesaling the simple way.<br/>Use the tools. Get the reps. Close the deal.</h1>
       <p>College of Wholesale gives beginners a clear path: daily actions, beginner-friendly calculators, scripts, and a community that helps you win your first contract.</p>
+
+      <!-- New founder/mission narrative (approved) -->
+      <div class="card" style="margin-top:14px">
+        <p><strong>College of Wholesale exists for the people who weren’t born into a rich family, didn’t have a head start, and aren’t waiting 10 years to “maybe” get ahead.</strong></p>
+        <p>I started wholesaling with no connections, no degrees in real estate, and no family guidance — just pure obsession and willingness to learn through trial, reps, and failure. Most beginners fail not because wholesaling doesn’t work… but because nobody ever showed them a simple, repeatable system they can actually follow every day.</p>
+        <p>That’s why I built College of Wholesale. We cut through the noise, focus on skills that close your <strong>first real wholesale deal</strong>, and then scale the same system forward. If you put in the reps, stay coachable, and follow the blueprint… this becomes the bridge into your next level.</p>
+        <p><em>Welcome to the college that actually makes money.</em></p>
+      </div>
+
       <div class="chips">
         <span class="chip">✅ Beginner-Friendly</span>
         <span class="chip">🧮 Offer & Repair Calculator</span>
         <span class="chip">📚 Notion SOPs</span>
-        <span class="chip">🟣 Whop + Discord</span>
+        <span class="chip">🟣 Discord via Whop</span>
       </div>
 
-      <!-- Quick Links so those tabs are impossible to miss -->
+      <!-- Quick Links (cleaned up — no blank tile; Discord merged into Whop) -->
       <div class="ql">
         <a href="#notion" class="btn secondary">Open Notion Hub</a>
-        <a href="#whop" class="btn secondary">Join on Whop</a>
-        <a href="#discord" class="btn secondary">Join Discord</a>
+        <a href="#whop" class="btn secondary">Join on Whop (includes Discord access)</a>
         <a href="#scav" class="btn secondary">Seller-Finance Scavenger Hunt</a>
         <a href="#intern" class="btn secondary">Internship Program</a>
         <a href="#calc" class="btn">Open Calculator</a>
@@ -284,7 +293,7 @@
   <section id="whop" class="page hide">
     <div class="wrap">
       <h2>Whop Membership</h2>
-      <p class="sub">Join for tools, trainings, and community.</p>
+      <p class="sub">Join for tools, trainings, and community. Discord access is included with membership.</p>
       <div class="grid two">
         <div class="card">
           <h3>What you get</h3>
@@ -297,18 +306,6 @@
             <tbody><tr><td>Starter</td><td>New wholesalers</td><td>Scripts, calculators, community</td></tr>
             <tr><td>Pro</td><td>Scaling ops</td><td>All Starter + advanced SOPs & reviews</td></tr></tbody></table>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DISCORD -->
-  <section id="discord" class="page hide">
-    <div class="wrap">
-      <h2>Discord Community</h2>
-      <p class="sub">Daily accountability, call reviews, and live Q&A.</p>
-      <div class="card">
-        <p><a class="btn" id="openDiscord" href="#" target="_blank" rel="noopener">Join the Discord</a></p>
-        <p class="small">Link is set in LINK CONFIG.</p>
       </div>
     </div>
   </section>
@@ -374,7 +371,7 @@
       <div class="grid two">
         <div class="card">
           <h3>DM on Discord</h3>
-          <p class="small">Shoot Arya a DM with your market and goal for the week.</p>
+          <p class="small">Discord access is included in Whop membership.</p>
           <a class="btn" id="openDiscord3" href="#" target="_blank" rel="noopener">Open Discord</a>
         </div>
         <div class="card">
@@ -389,7 +386,7 @@
 </main>
 
 <footer>
-  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.1 • Education only. Not legal, tax, or financial advice.</div>
+  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.2 • Education only. Not legal, tax, or financial advice.</div>
 </footer>
 
 <!-- ===== SCRIPTS ===== -->
@@ -403,20 +400,23 @@ const LINKS = {
   discord: "https://discord.gg/your-invite",               // <- replace
   email: "aaarya3455@gmail.com"
 };
-console.log("CoW site build v6.1 loaded");
+console.log("CoW site build v6.2 loaded");
 
 /* --------- Utils & Router --------- */
 const $ = (q)=>document.querySelector(q);
 const $$ = (q)=>document.querySelectorAll(q);
 const fmt = (n)=> isNaN(n) ? "$0" : n.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:0});
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
-const pages = ["home","about","calc","resources","notion","whop","discord","scav","intern","contact"];
+
+/* Remove Discord from page list; Contact moved into its slot */
+const pages = ["home","about","calc","resources","notion","whop","contact","scav","intern"];
+
 function showPage(id){
   pages.forEach(p=>{
     const el = $("#"+p);
     const link = document.querySelector(`.nav a[data-page="${p}"]`);
-    if(p===id){ el.classList.remove("hide"); link?.classList.add("active"); }
-    else{ el.classList.add("hide"); link?.classList.remove("active"); }
+    if(p===id){ el?.classList.remove("hide"); link?.classList.add("active"); }
+    else{ el?.classList.add("hide"); link?.classList.remove("active"); }
   });
   window.scrollTo({top:0,behavior:"instant"});
 }
@@ -426,7 +426,7 @@ function route(){
 }
 window.addEventListener("hashchange",route);
 
-/* --------- Calculator Data --------- */
+/* ---------- Calculator Data (unchanged) ---------- */
 const STATE_MULT = { AL:0.92, AK:1.30, AZ:1.02, AR:0.90, CA:1.20, CO:1.08, CT:1.12, DE:1.04, FL:1.08, GA:0.96, HI:1.40, ID:0.98, IL:1.05, IN:0.93, IA:0.90, KS:0.91, KY:0.90, LA:0.94, ME:1.04, MD:1.10, MA:1.18, MI:0.95, MN:1.02, MS:0.88, MO:0.92, MT:1.00, NE:0.92, NV:1.02, NH:1.06, NJ:1.15, NM:0.96, NY:1.18, NC:0.98, ND:0.98, OH:0.93, OK:0.91, OR:1.08, PA:1.04, RI:1.10, SC:0.97, SD:0.94, TN:0.96, TX:0.94, UT:1.02, VT:1.06, VA:1.05, WA:1.12, WV:0.90, WI:0.95, WY:0.94, DC:1.22 };
 const STATE_NAMES = { AL:"Alabama", AK:"Alaska", AZ:"Arizona", AR:"Arkansas", CA:"California", CO:"Colorado", CT:"Connecticut", DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho", IL:"Illinois", IN:"Indiana", IA:"Iowa", KS:"Kansas", KY:"Kentucky", LA:"Louisiana", ME:"Maine", MD:"Maryland", MA:"Massachusetts", MI:"Michigan", MN:"Minnesota", MS:"Mississippi", MO:"Missouri", MT:"Montana", NE:"Nebraska", NV:"Nevada", NH:"New Hampshire", NJ:"New Jersey", NM:"New Mexico", NY:"New York", NC:"North Carolina", ND:"North Dakota", OH:"Ohio", OK:"Oklahoma", OR:"Oregon", PA:"Pennsylvania", RI:"Rhode Island", SC:"South Carolina", SD:"South Dakota", TN:"Tennessee", TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington", WV:"West Virginia", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia" };
 
@@ -570,7 +570,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   // External links
   const notion=$("#openNotion"); if(notion) notion.href=LINKS.notion;
   const whop=$("#openWhop"); if(whop) whop.href=LINKS.whop;
-  const disc=$("#openDiscord"); if(disc) disc.href=LINKS.discord;
   const disc2=$("#openDiscord2"); if(disc2) disc2.href=LINKS.discord;
   const disc3=$("#openDiscord3"); if(disc3) disc3.href=LINKS.discord;
   const emailBtns=["openEmail","openEmail2"].map(id=>$("#"+id)); emailBtns.forEach(b=>{ if(b){ b.href=`mailto:${LINKS.email}`; } });
