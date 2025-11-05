@@ -1,102 +1,580 @@
-diff --git a/index.html b/index.html
-index 8eb015d8b9e0e2503ed37e650f0c3351c2a5465b..aec8c673f69d5df35ca7e068fbd1d252ec561d3c 100644
---- a/index.html
-+++ b/index.html
-@@ -518,92 +518,92 @@
-     $("#kpi-close")?.replaceChildren(document.createTextNode(`${closePct}% of ARV`));
-     const mao=Math.max(0,(arv*(discountPct/100))-repairs-(arv*(closePct/100))-fee);
-     $("#mao")?.replaceChildren(document.createTextNode(new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(mao)));
-     const low=Math.max(0,Math.round(mao*0.90)), hi=Math.max(0,Math.round(mao));
-     $("#range")?.replaceChildren(document.createTextNode(`${new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(low)} – ${new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(hi)}`));
-   }
-   function getRates(){
-     const r={...RATES};
-     const map={ rate_paint_in:"paint_in_psf", rate_paint_out:"paint_out_psf", rate_floor:"floor_psf", rate_roof_sq:"roof_per_square", rate_window_each:"window_each", rate_elect:"elect_psf", rate_plumb:"plumb_psf" };
-     Object.entries(map).forEach(([id,key])=>{ const el=$("#"+id); const v=+(el?el.value:0); if(v>0) r[key]=v; });
-     return r;
-   }
-   function calcItemCost(it, sqft, rates){
-     switch(it.type){
-       case "psf": return sqft*(rates[it.rateKey]||0);
-       case "roof":{ const roofArea=sqft*1.2, squares=roofArea/100; return squares*(rates.roof_per_square||0); }
-       case "windows":{ const windows=Math.max(1,Math.round(sqft/200)); return windows*(rates.window_each||0); }
-       case "kitchen":{ const qEl=$("#"+it.id+"_qty"); const qty=+(qEl?qEl.value:1); const kicker=Math.round((sqft/1000)*(rates.kitchen_sf_kicker||0)); return qty*((rates.kitchen_base||0)+kicker); }
-       case "bath":{ const qEl=$("#"+it.id+"_qty"); const qty=+(qEl?qEl.value:1); return qty*(rates.bath_base||0); }
-       case "hvac": return sqft<1200 ? (rates.hvac_small||0) : (sqft<=2000 ? (rates.hvac_med||0) : (rates.hvac_large||0));
-       case "flat": return it.flat||0;
-       default: return 0;
-     }
-   }
-   function calcRepairs(){
--    const sel=$("#state"); if(!sel) return 0;
-+    const sel=$("#state"); if(!sel) return null;
-     const abbr=sel.value, mult=STATE_MULT[abbr]??1.00;
-     const sfEl=$("#sqft"); const sqft=+(sfEl?sfEl.value:0);
--    if(!sqft||sqft<200){ alert("Enter square footage (≥200) for SF-based accuracy."); return 0; }
-+    if(!sqft||sqft<200){ alert("Enter square footage (≥200) for SF-based accuracy."); return null; }
-     const rates=getRates(); let total=0, chosen=[];
-     LINE_ITEMS.forEach(it=>{
-       const cb=$("#"+it.id);
-       if(cb&&cb.checked){
-         const raw=calcItemCost(it,sqft,rates), adj=raw*mult; total+=adj;
-         chosen.push(`${it.label}: ${new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(adj)} (raw ${new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(raw)} × state ${mult.toFixed(2)})`);
-       }
-     });
-     $("#repairsOut")?.replaceChildren(document.createTextNode(new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(total)));
-     const notes=$("#notes");
-     if(notes){ notes.innerHTML=""; (chosen.length?chosen:["No items selected yet."]).forEach(t=>{ const li=document.createElement("li"); li.className="small"; li.textContent=t; notes.append(li); }); }
-     return total;
-   }
-   function switchCalcTab(id){
-     ["offer","repair","help"].forEach(t=>{
-       const sec=$("#tab-"+t), btn=document.querySelector(`.tabBtn[data-tab="${t}"]`);
-       if(!sec||!btn) return;
-       if(t===id){ sec.classList.remove("hide"); btn.classList.add("active"); }
-       else{ sec.classList.add("hide"); btn.classList.remove("active"); }
-     });
-   }
- 
-   document.addEventListener("DOMContentLoaded", ()=>{
-     $("#year")?.replaceChildren(document.createTextNode(new Date().getFullYear()));
-     applyLinks();
- 
-     buildStateDropdown(); buildLineItems();
- 
-     $$(".tabBtn").forEach(b=> b.addEventListener("click", ()=> switchCalcTab(b.dataset.tab)));
-     $("#calcOffer")?.addEventListener("click", calcMAO);
-     $("#resetOffer")?.addEventListener("click", ()=>{
-       ["arv","repairs","discount","fee","closePct"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
-       $("#discount")&&(document.getElementById("discount").value=70);
-       $("#fee")&&(document.getElementById("fee").value=10000);
-       $("#closePct")&&(document.getElementById("closePct").value=3);
-       $("#mao")&&(document.getElementById("mao").textContent="$0");
-       $("#range")&&(document.getElementById("range").textContent="$0 – $0");
-       $("#kpi-discount")&&(document.getElementById("kpi-discount").textContent="70%");
-       $("#kpi-fee")&&(document.getElementById("kpi-fee").textContent="$10,000");
-       $("#kpi-close")&&(document.getElementById("kpi-close").textContent="3% of ARV");
-     });
-     $("#state")?.addEventListener("change", updateMultiplierPill);
-     $("#detectState")?.addEventListener("click", detectStateFromAddress);
-     $("#scanSqft")?.addEventListener("click", scanSqftFromAddress);
-     $("#calcRepair")?.addEventListener("click", ()=>{ const t=calcRepairs(); void t; });
-     $("#resetRepair")?.addEventListener("click", ()=>{
--      LINE_ITEMS.forEach(it=>{ const cb=$("#"+it.id); if(cb) cb.checked=false; if(it.qty){ const q=$("#"+it.id+"_qty"; if(q) q.value=it.val??1; }});
-+      LINE_ITEMS.forEach(it=>{ const cb=$("#"+it.id); if(cb) cb.checked=false; if(it.qty){ const q=$("#"+it.id+"_qty"); if(q) q.value=it.val??1; } });
-       $("#repairsOut")&&(document.getElementById("repairsOut").textContent="$0");
-       $("#notes")&&(document.getElementById("notes").innerHTML='<li class="small">No items selected yet.</li>');
-       ["rate_paint_in","rate_paint_out","rate_floor","rate_roof_sq","rate_window_each","rate_elect","rate_plumb"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
-     });
-     $("#sendToOffer")?.addEventListener("click", ()=>{
--      const t=calcRepairs(); if(t>0){ const rep=$("#repairs"); if(rep) rep.value=Math.round(t); switchCalcTab("offer"); const calcSec=$("#calc"); if(calcSec) calcSec.scrollIntoView({behavior:"smooth",block:"start"}); }
-+      const t=calcRepairs(); if(t!==null && Number.isFinite(t)){ const rep=$("#repairs"); if(rep) rep.value=Math.round(t); switchCalcTab("offer"); const calcSec=$("#calc"); if(calcSec) calcSec.scrollIntoView({behavior:"smooth",block:"start"}); }
-     });
--    $("#pullRepairs")?.addEventListener("click", ()=>{ const t=calcRepairs(); const rep=$("#repairs"); if(t>0 && rep) rep.value=Math.round(t); });
-+    $("#pullRepairs")?.addEventListener("click", ()=>{ const t=calcRepairs(); const rep=$("#repairs"); if(t!==null && Number.isFinite(t) && rep) rep.value=Math.round(t); });
- 
-     window.addEventListener("hashchange", route);
-     route();
-   });
- })();
- </script>
- </body>
- </html>
+<!-- College of Wholesale — FULL SITE (v6.3.6 - stable) -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>College of Wholesale — Offer Calculator, Training & Community</title>
+<meta name="description" content="College of Wholesale: training, tools, calculators, Notion hub, Whop membership, internship program and community for new wholesalers." />
+<style>
+  :root{
+    --bg:#0b0f1a; --card:#121829; --ink:#e6ebff; --muted:#9aa3b2;
+    --accent:#6ea8ff; --accent-2:#8cffc7; --line:#1e2740; --ink-d:#08122b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.45 Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(11,15,26,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .navin{display:flex;align-items:center;gap:8px;min-height:64px;flex-wrap:wrap}
+  .brand{font-weight:900;letter-spacing:.2px}
+  .brand span{background:linear-gradient(135deg,var(--accent),#7dc0ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .spacer{flex:1}
+  .nav a{padding:8px 10px;border-radius:10px;white-space:nowrap}
+  .nav a.active{background:linear-gradient(135deg,var(--accent),#7dc0ff);color:var(--ink-d)}
+@@ -39,91 +39,94 @@
+  label{min-width:170px;color:var(--muted)}
+  input[type="number"],input[type="text"],select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0b1020;color:var(--ink);outline:none}
+  input[type="checkbox"]{transform:scale(1.15)}
+  .btn{background:linear-gradient(135deg,var(--accent),#7dc0ff);border:none;color:var(--ink-d);padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+  .btn.secondary{background:#0b1020;border:1px solid var(--line);color:var(--ink)}
+  .btn.ghost{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+  .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#0b1020;border:1px solid var(--line);color:var(--muted);font-size:12px;margin-right:6px}
+  .small{font-size:12px;color:var(--muted)}
+  .out{font-size:28px;font-weight:800;margin-top:8px}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .kpis .card{text-align:center;padding:14px}
+  .kpis .num{font-size:22px;font-weight:800}
+  .hr{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:14px 0}
+  .stack{display:flex;flex-direction:column;gap:8px}
+  .right{margin-left:auto}
+  .hide{display:none}
+  .hero{padding:72px 0;background:radial-gradient(1200px 400px at 50% -50%, rgba(110,168,255,.22), transparent 70%);}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .chip{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:999px}
+  footer{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{border:1px solid var(--line);padding:10px;text-align:left}
+  th{background:#0f1526}
+  .ql{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-top:16px}
+  .ql a{display:block;text-align:center;padding:14px;border-radius:12px;border:1px solid var(--line);background:#0b1020}
+  .founder{display:grid;gap:16px;grid-template-columns:1fr}
+  @media(min-width:900px){.founder{grid-template-columns:1.2fr .8fr}}
+  .badge{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0b1020;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<div class="nav">
+  <div class="wrap navin">
+    <div class="brand">College of <span>Wholesale</span></div>
+    <div class="spacer"></div>
+    <a href="#home" data-page="home" class="navlink active">Home</a>
+    <a href="#about" data-page="about" class="navlink">About</a>
+    <a href="#calc" data-page="calc" class="navlink">Calculator</a>
+    <a href="#resources" data-page="resources" class="navlink">Resources</a>
+    <a href="#notion" data-page="notion" class="navlink">Notion Hub</a>
+    <a href="#whop" data-page="whop" class="navlink">Whop</a>
+    <a href="#intern" data-page="intern" class="navlink">Internship</a>
+    <a href="#contact" data-page="contact" class="navlink">Contact</a>
+  </div>
+</div>
+
+<!-- ===== PAGES ===== -->
+<main>
+
+  <!-- HOME -->
+  <section id="home" class="page">
+    <div class="wrap hero">
+      <h1>Learn wholesaling the simple way.<br/>Use the tools. Get the reps. Close the deal.</h1>
+      <p>College of Wholesale gives beginners a clear path: daily actions, beginner-friendly calculators, scripts, and a community that helps you win your first contract.</p>
+
+      <div class="card" style="margin-top:14px">
+        <p><strong>College of Wholesale exists for the people who weren’t born into a rich family, didn’t have a head start, and aren’t waiting 10 years to “maybe” get ahead.</strong></p>
+        <p>I started wholesaling with no connections, no degrees in real estate, and no family guidance — just pure obsession and willingness to learn through trial, reps, and failure. Most beginners fail not because wholesaling doesn’t work… but because nobody ever showed them a simple, repeatable system they can actually follow every day.</p>
+        <p>That’s why I built College of Wholesale. We cut through the noise, focus on skills that close your <strong>first real wholesale deal</strong>, and then scale the same system forward. If you put in the reps, stay coachable, and follow the blueprint… this becomes the bridge into your next level.</p>
+        <p>That’s why I built College of Wholesale. We cut through the noise, focus on skills that close your <strong>first real wholesale deal</strong>, and then scale the same system forward.</p>
+        <p><em>Welcome to the college that actually makes money.</em></p>
+      </div>
+
+      <div class="chips">
+        <span class="chip">✅ Beginner-Friendly</span>
+        <span class="chip">🧮 Offer & Repair Calculator</span>
+        <span class="chip">📚 Notion SOPs</span>
+        <span class="chip">🟣 Whop-Membership</span>
+        <span class="chip">🟣 Whop Membership</span>
+      </div>
+
+      <div class="ql">
+        <a href="#notion" class="btn secondary">Open Notion Hub</a>
+        <a href="#whop" class="btn secondary">Join on Whop</a>
+        <a href="#intern" class="btn secondary">Internship Program</a>
+        <a href="#calc" class="btn">Open Calculator</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="page hide">
+    <div class="wrap">
+      <h2>About College of Wholesale</h2>
+      <p class="sub">Founded by <strong>Arya</strong>, CoW helps new wholesalers master the fundamentals through systems, scripts, and reps—not theory.</p>
+
+      <div class="founder">
+        <div class="card">
+          <span class="badge">Founder’s Note</span>
+          <h3 style="margin-top:8px">Why I built CoW</h3>
+          <p>I wasn’t born into real estate. I started from scratch and learned by doing—cold calls, messy first offers, and a lot of practice. The biggest problem I saw for beginners wasn’t motivation; it was <em>clarity</em>. Nobody gave a simple, repeatable path to the first deal. College of Wholesale is the system I wish I had: clean SOPs, the right tools, and daily actions that actually move deals forward.</p>
+          <ul class="small">
+            <li>First deal focus → then scale with the same playbook</li>
+            <li>Honest numbers, beginner-friendly calculators, zero fluff</li>
+@@ -224,386 +227,382 @@
+              <div class="row"><button class="btn" id="calcOffer">Calculate MAO</button><button class="btn ghost right" id="resetOffer">Reset</button></div>
+            </div>
+            <div class="stack">
+              <div class="pill">70% rule (editable)</div>
+              <div class="pill">Subtract Repairs + Buffer + Your Fee</div>
+              <div class="hr"></div>
+              <div class="small">Max Allowable Offer (to seller):</div>
+              <div class="out" id="mao">$0</div>
+              <div class="small">Suggested first offer range:</div>
+              <div class="out" id="range">$0 – $0</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Repair -->
+        <section id="tab-repair" class="hide">
+          <div class="grid two">
+            <div class="stack">
+              <div class="row wrap">
+                <label for="addr">Property Address</label>
+                <input type="text" id="addr" placeholder="123 Main St, Boca Raton, FL 33432 or paste: …1,650 sqft">
+                <button class="btn secondary" id="detectState">Detect State</button>
+                <button class="btn ghost" id="scanSqft" title="Looks for '1,650 sqft' or '1650 sf' in the address box">Scan Address for Sq Ft</button>
+              </div>
+              <div class="row"><label for="sqft">Square Footage</label><input type="number" id="sqft" placeholder="e.g., 1650" min="200" step="10"></div>
+              <div among="row"><label for="state">State</label><select id="state"></select></div>
+              <div class="row"><label for="state">State</label><select id="state"></select></div>
+              <div class="row"><label>Multiplier</label><div id="multiplierView" class="pill">x1.00</div><span class="small">Costs auto-scale by state</span></div>
+
+              <details style="margin:10px 0">
+                <summary>Advanced: Edit cost rates (optional)</summary>
+                <div class="row"><label>Interior Paint $/SF</label><input type="number" id="rate_paint_in" step="0.1"></div>
+                <div class="row"><label>Exterior Paint $/SF</label><input type="number" id="rate_paint_out" step="0.1"></div>
+                <div class="row"><label>Flooring $/SF</label><input type="number" id="rate_floor" step="0.1"></div>
+                <div class="row"><label>Roof $ per 100 SF (“per square”)</label><input type="number" id="rate_roof_sq" step="10"></div>
+                <div class="row"><label>Window cost (each)</label><input type="number" id="rate_window_each" step="25"></div>
+                <div class="row"><label>Electrical $/SF</label><input type="number" id="rate_elect" step="0.1"></div>
+                <div class="row"><label>Plumbing $/SF</label><input type="number" id="rate_plumb" step="0.1"></div>
+                <div class="small">These are baseline rates. State multiplier applies after.</div>
+              </details>
+
+              <div class="hr"></div>
+              <div class="small">Check items that need work. “SF-Based” items scale by square footage.</div>
+              <div class="stack" id="lineItems"></div>
+              <div class="row"><button class="btn" id="calcRepair">Calculate Repair Total</button><button class="btn ghost right" id="resetRepair">Reset</button></div>
+            </div>
+            <div class="stack">
+              <div class="pill">Version B + SF logic</div>
+              <div class="hr"></div>
+              <div class="small">Estimated Repairs:</div><div class="out" id="repairsOut">$0</div>
+              <div class="small">Breakdown:</div>
+              <ul class="small" id="notes"><li>No items selected yet.</li></ul>
+              <div class="row"><button class="btn secondary" id="sendToOffer">Send to Offer Calculator</button></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Help -->
+        <section id="tab-help" class="hide">
+          <div class="grid two">
+            <div class="stack">
+              <h4>Beginner Rules of Thumb</h4>
+              <ul class="small">
+                <li><strong>70% Rule:</strong> MAO ≈ (ARV × 0.70) − Repairs − Your Fee − Closing Buffer.</li>
+                <li><strong>Closing/Holding Buffer:</strong> 2-4% of ARV (use 3% default).</li>
+                <li><strong>Closing/Holding Buffer:</strong> 2–4% of ARV (use 3% default).</li>
+                <li><strong>Your Fee:</strong> Start at $10k; adjust by market.</li>
+                <li><strong>Offer Range:</strong> Open 5-10% under MAO to leave room.</li>
+                <li><strong>Offer Range:</strong> Open 5–10% under MAO to leave room.</li>
+              </ul>
+            </div>
+            <div class="stack">
+              <h4>How to Find ARV (simple)</h4>
+              <ol class="small">
+                <li>Pull comps within 0.5-1.0 mi, same beds/baths, ±15% size, 3-6 mo.</li>
+                <li>Pull comps within 0.5–1.0 mi, same beds/baths, ±15% size, 3–6 mo.</li>
+                <li>Match style/year built; verify photos for reno level.</li>
+                <li>Use 3-5 best comps and average after light adjustments.</li>
+                <li>Use 3–5 best comps and average after light adjustments.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section id="resources" class="page hide">
+    <div class="wrap">
+      <h2>Free Training Resources</h2>
+      <p class="sub">Grab these starter assets and get to work.</p>
+      <div class="grid two">
+        <div class="card">
+          <h3>Cold Call Opener</h3>
+          <pre class="small">“Hey, is this {FirstName}? My name’s {YourName}. I’m buying a place nearby and wondered if you’d consider an offer on {Address} if the price made sense?”</pre>
+        </div>
+        <div class="card">
+          <h3>Lead Tagging (simple)</h3>
+          <ul class="small"><li>Hot — tomorrow</li><li>Warm — 1 week</li><li>Nurture — 1 month</li><li>Long — 3 months</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTION -->
+  <section id="notion" class="page hide">
+    <div class="wrap">
+      <h2>Notion Hub</h2>
+      <p class="sub">All SOPs, trackers, scripts, and templates live here.</p>
+      <div class="card">
+        <p><a class="btn" id="openNotion" href="#" target="_blank" rel="noopener">Open Notion Hub</a></p>
+        <p><a class="btn" id="openNotion" href="https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676?pvs=74" target="_blank" rel="noopener">Open Notion Hub</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHOP -->
+  <section id="whop" class="page hide">
+    <div class="wrap">
+      <h2>Whop Membership</h2>
+      <p class="sub">Join for tools, trainings, and community. Discord access is included with membership.</p>
+      <div class="grid two">
+        <div class="card">
+          <h3>What you get</h3>
+          <ul class="small">
+            <li>Notion SOPs & templates</li>
+            <li>Trainings & replays</li>
+            <li>Private Discord channels</li>
+            <li>Downloadables</li>
+          </ul>
+          <p><a class="btn" id="openWhop" href="#" target="_blank" rel="noopener">Join on Whop</a></p>
+          <p><a class="btn" id="openWhop" href="https://whop.com/collegeofwholesale" target="_blank" rel="noopener">Join on Whop</a></p>
+        </div>
+        <div class="card">
+          <h3>Plans</h3>
+          <table><thead><tr><th>Tier</th><th>Best for</th><th>Includes</th></tr></thead>
+            <tbody><tr><td>Starter</td><td>New wholesalers</td><td>Scripts, calculators, community</td></tr>
+            <tr><td>Pro</td><td>Scaling ops</td><td>All Starter + advanced SOPs & reviews</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERNSHIP -->
+  <section id="intern" class="page hide">
+    <div class="wrap">
+      <h2>Internship Program</h2>
+      <p class="sub">Get reps, learn the system, and earn commissions.</p>
+      <div class="grid two">
+        <div class="card">
+          <h3>What you’ll do</h3>
+          <ul class="small">
+            <li>Pull niche lists (probate, liens, code violations)</li>
+            <li>Use dialer + script, tag leads in CRM</li>
+            <li>Estimate repairs, calculate offers, follow up</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Apply Now</h3>
+          <p>Fill out the form below and we’ll be in touch shortly if accepted:</p>
+          <p><a class="btn" href="https://forms.gle/37a9hSfmb8bAwjM26" target="_blank">Go to Application Form</a></p>
+          <p>Fill out the form below and we’ll be in touch if accepted:</p>
+          <p><a class="btn" href="https://forms.gle/37a9hSfmb8bAwjM26" target="_blank" rel="noopener">Go to Application Form</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="page hide">
+    <div class="wrap">
+      <h2>Contact</h2>
+      <p class="sub">Questions, collabs, or ready to join the community?</p>
+      <div class="card">
+        <h3>Email</h3>
+        <p class="small"><a href="mailto:collegeofwholesale@gmail.com">collegeofwholesale@gmail.com</a></p>
+      </div>
+      <div class="card">
+        <h3>Follow on TikTok</h3>
+        <p class="small"><a href="https://www.tiktok.com/@college.of.wholesale" target="_blank">@college.of.wholesale</a></p>
+        <p class="small"><a href="https://www.tiktok.com/@college.of.wholesale" target="_blank" rel="noopener">@college.of.wholesale</a></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.3.5 • Education only. Not legal, tax, or financial advice.</div>
+  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.3.6 • Education only. Not legal, tax, or financial advice.</div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+(function(){
+  const LINKS = {
+    notion: "https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676?pvs=74",
+    whop: "https://whop.com/collegeofwholesale",
+    email: "collegeofwholesale@gmail.com"
+  };
+
+  const $  = (q)=>document.querySelector(q);
+  const $$ = (q)=>document.querySelectorAll(q);
+  const fmt = (n)=> isNaN(n) ? "$0" : n.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:0});
+  const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+
+  /* -------- Router (hash-based) -------- */
+  const pages = ["home","about","calc","resources","notion","whop","intern","contact"];
+  function showPage(id){
+    try{
+      pages.forEach(p=>{
+        const el=$("#"+p);
+        const link=document.querySelector(`.nav a[data-page="${p}"]`);
+        if(!el||!link) return;
+        if(p===id){ el.classList.remove("hide"); link.classList.add("active"); }
+        else{ el.classList.add("hide"); link.classList.remove("active"); }
+      });
+      try { window.scrollTo({top:0,left:0,behavior:"auto"}); } catch(e){ window.scrollTo(0,0); }
+    }catch(e){ console.error(e); }
+    pages.forEach(p=>{
+      const el=$("#"+p);
+      const link=document.querySelector(`.nav a[data-page="${p}"]`);
+      if(!el||!link) return;
+      if(p===id){ el.classList.remove("hide"); link.classList.add("active"); }
+      else{ el.classList.add("hide"); link.classList.remove("active"); }
+    });
+    window.scrollTo(0,0);
+  }
+  function route(){
+    try{
+      const h=(location.hash||"#home").replace("#","");
+      showPage(pages.includes(h)?h:"home");
+    }catch(e){ console.error(e); }
+    const h=(location.hash||"#home").slice(1);
+    showPage(pages.includes(h)?h:"home");
+  }
+
+  // Calculator logic
+  /* -------- Calculator Data -------- */
+  const STATE_MULT = { AL:0.92, AK:1.30, AZ:1.02, AR:0.90, CA:1.20, CO:1.08, CT:1.12, DE:1.04, FL:1.08, GA:0.96, HI:1.40, ID:0.98, IL:1.05, IN:0.93, IA:0.90, KS:0.91, KY:0.90, LA:0.94, ME:1.04, MD:1.10, MA:1.18, MI:0.95, MN:1.02, MS:0.88, MO:0.92, MT:1.00, NE:0.92, NV:1.02, NH:1.06, NJ:1.15, NM:0.96, NY:1.18, NC:0.98, ND:0.98, OH:0.93, OK:0.91, OR:1.08, PA:1.04, RI:1.10, SC:0.97, SD:0.94, TN:0.96, TX:0.94, UT:1.02, VT:1.06, VA:1.05, WA:1.12, WV:0.90, WI:0.95, WY:0.94, DC:1.22 };
+  const STATE_NAMES = { AL:"Alabama", AK:"Alaska", AZ:"Arizona", AR:"Arkarksas", CA:"California", CO:"Colorado", CT:"Connecticut", DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho", IL:"Illinois", IN:"Indiana", IA:"Iowa", KS:"Kansas", KY:"Kentucky", LA:"Louisiana", ME:"Maine", MD:"Maryland", MA:"Massachusetts", MI:"Michigan", MN:"Minnesota", MS:"Mississippi", MO:"Missouri", MT:"Montana", NE:"Nebraska", NV:"Nevada", NH:"New Hampshire", NJ:"New Jersey", NM:"New Mexico", NY:"New York", NC:"North Carolina", ND:"North Dakota", OH:"Ohio", OK:"Oklahoma", OR:"Oregon", PA:"Pennsylvania", RI:"Rhode Island", SC:"South Carolina", SD:"South Dakota", TN:"Tennessee", TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia" };
+  const STATE_NAMES = { AL:"Alabama", AK:"Alaska", AZ:"Arizona", AR:"Arkansas", CA:"California", CO:"Colorado", CT:"Connecticut", DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho", IL:"Illinois", IN:"Indiana", IA:"Iowa", KS:"Kansas", KY:"Kentucky", LA:"Louisiana", ME:"Maine", MD:"Maryland", MA:"Massachusetts", MI:"Michigan", MN:"Minnesota", MS:"Mississippi", MO:"Missouri", MT:"Montana", NE:"Nebraska", NV:"Nevada", NH:"New Hampshire", NJ:"New Jersey", NM:"New Mexico", NY:"New York", NC:"North Carolina", ND:"North Dakota", OH:"Ohio", OK:"Oklahoma", OR:"Oregon", PA:"Pennsylvania", RI:"Rhode Island", SC:"South Carolina", SD:"South Dakota", TN:"Tennessee", TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia" };
+
+  const RATES = { paint_in_psf:1.25, paint_out_psf:1.50, floor_psf:3.50, roof_per_square:450, window_each:450, elect_psf:1.00, plumb_psf:0.80, kitchen_base:8000, kitchen_sf_kicker:500, bath_base:3500, hvac_small:4500, hvac_med:6500, hvac_large:8000, land_flat:1200, misc_flat:2000 };
+  const LINE_ITEMS = [
+    { id:"paint_in",label:"Interior Paint (SF-Based)",type:"psf",rateKey:"paint_in_psf" },
+    { id:"paint_out",label:"Exterior Paint (SF-Based)",type:"psf",rateKey:"paint_out_psf" },
+    { id:"floor",label:"Flooring (whole house, SF-Based)",type:"psf",rateKey:"floor_psf" },
+    { id:"roof",label:"Roof Replacement (auto by SF)",type:"roof",rateKey:"roof_per_square" },
+    { id:"kitchen",label:"Kitchen Refresh (per kitchen)",type:"kitchen",qty:true,qtyLabel:"# Kitchens",min:1,val:1 },
+    { id:"bath",label:"Bathroom Refresh (per bathroom)",type:"bath",qty:true,qtyLabel:"# Bathrooms",min:1,val:1 },
+    { id:"hvac",label:"HVAC (replace/major, auto by SF)",type:"hvac" },
+    { id:"windows",label:"Windows (auto: ~1 per 200 SF)",type:"windows",rateKey:"window_each" },
+    { id:"elect",label:"Electrical (repairs/update, SF-Based)",type:"psf",rateKey:"elect_psf" },
+    { id:"plumb",label:"Plumbing (repairs, SF-Based)",type:"psf",rateKey:"plumb_psf" },
+    { id:"land",label:"Landscaping / Exterior clean-up (flat)",type:"flat",flat:RATES.land_flat },
+    { id:"misc",label:"Misc / Contingency (flat)",type:"flat",flat:RATES.misc_flat }
+  ];
+
+  const money = (n)=> new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
+
+  function buildStateDropdown(){
+    const sel=$("#state"); if(!sel) return;
+    sel.innerHTML="";
+    Object.keys(STATE_NAMES).forEach(ab=>{ const o=document.createElement("option"); o.value=ab; o.textContent=`${STATE_NAMES[ab]} (${ab})`; sel.appendChild(o); });
+    sel.value="FL"; updateMultiplierPill();
+  }
+  function updateMultiplierPill(){
+    const sel=$("#state"), pill=$("#multiplierView"); if(!sel||!pill) return;
+    const mult=STATE_MULT[sel.value] ?? 1.00;
+    pill.textContent=`x${mult.toFixed(2)}`;
+  }
+  function buildLineItems(){
+    const host=$("#lineItems"); if(!host) return; host.innerHTML="";
+    LINE_ITEMS.forEach(it=>{
+      const card=document.createElement("div"); card.className="card"; card.style.padding="12px";
+      const row1=document.createElement("div"); row1.className="row";
+      const lb=document.createElement("label"); lb.textContent=it.label; lb.setAttribute("for",it.id);
+      const cb=document.createElement("input"); cb.type="checkbox"; cb.id=it.id; cb.addEventListener("change",()=>{ const qwrap=card.querySelector(".qtywrap"); if(qwrap) qwrap.hidden=!cb.checked; });
+      row1.append(lb,cb); card.append(row1);
+      const hint=document.createElement("div"); hint.className="small"; hint.textContent=({
+        psf:`Baseline: $${RATES[it.rateKey].toFixed(2)}/SF`,
+        roof:`Baseline: $${RATES.roof_per_square.toFixed(0)} per 100 SF (roof≈1.2×SF)`,
+        windows:`Baseline: ~$${RATES.window_each.toFixed(0)} each (≈1/200 SF)`,
+        kitchen:`Baseline: $${RATES.kitchen_base.toLocaleString()} each + ${fmt(RATES.kitchen_sf_kicker)} per 1,000 SF`,
+        kitchen:`Baseline: $${RATES.kitchen_base.toLocaleString()} each + $${RATES.kitchen_sf_kicker} per 1,000 SF`,
+        bath:`Baseline: $${RATES.bath_base.toLocaleString()} per bathroom`,
+        hvac:`Baseline: <1200SF ~$${RATES.hvac_small}, 1200–2000SF ~$${RATES.hvac_med}, >2000SF ~$${RATES.hvac_large}`,
+        flat:`Baseline flat: ${fmt(it.flat)}`
+        flat:`Baseline flat: ${money(it.flat)}`
+      })[it.type]||"";
+      const row2=document.createElement("div"); row2.className="row"; row2.append(hint); card.append(row2);
+      if(it.qty){
+        const qwrap=document.createElement("div"); qwrap.className="row qtywrap"; qwrap.hidden=true;
+        const qlb=document.createElement("label"); qlb.textContent=it.qtyLabel;
+        const qin=document.createElement("input"); qin.type="number"; qin.min=it.min??1; qin.step=1; qin.value=it.val??1; qin.id=it.id+"_qty";
+        qwrap.append(qlb,qin); card.append(qwrap);
+      }
+      host.append(card);
+    });
+  }
+
+  function detectStateFromAddress(){
+    const addr=$("#addr"); if(!addr) return null;
+    const txt=(addr.value||"").toUpperCase();
+    for(const ab of Object.keys(STATE_NAMES)){ if(new RegExp(`\\b${ab}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
+    for(const [ab,name] of Object.entries(STATE_NAMES)){ if(new RegExp(`\\b${name.toUpperCase()}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
+    alert("Couldn’t detect a state. Choose it manually."); return null;
+  }
+  function scanSqftFromAddress(){
+    const addr=$("#addr"); if(!addr) return null;
+    const m=(addr.value||"").toLowerCase().match(/([\d,.]+)\s*(sq\s?ft|sf|sqft)/i);
+    if(m){ const num=parseInt(m[1].replace(/[^\d]/g,""),10); if(num && num>200){ $("#sqft").value=num; return num; } }
+    alert("No square footage found. Enter it in the Square Footage field."); return null;
+  }
+
+  function calcMAO(){
+    const arv=+(($("#arv")||{}).value||0), repairs=+(($("#repairs")||{}).value||0);
+    const discountPct=Math.max(40,Math.min(90, +((($("#discount")||{}).value)||70)));
+    const fee=+(($("#fee")||{}).value||0), closePct=Math.max(0,Math.min(10, +((($("#closePct")||{}).value)||3)));
+    $("#kpi-discount")?.replaceChildren(document.createTextNode(`${discountPct}%`));
+    $("#kpi-fee")?.replaceChildren(document.createTextNode(arv.toLocaleString? new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(fee):"$0"));
+    $("#kpi-close")?.replaceChildren(document.createTextNode(`${closePct}% of ARV`));
+    $("#kpi-discount").textContent=`${discountPct}%`;
+    $("#kpi-fee").textContent="$"+fee.toLocaleString();
+    $("#kpi-close").textContent=`${closePct}% of ARV`;
+    const mao=Math.max(0,(arv*(discountPct/100))-repairs-(arv*(closePct/100))-fee);
+    $("#mao")?.replaceChildren(document.createTextNode(new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(mao)));
+    $("#mao").textContent=money(mao);
+    const low=Math.max(0,Math.round(mao*0.90)), hi=Math.max(0,Math.round(mao));
+    $("#range")?.replaceChildren(document.createTextNode(`${new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(low)} – ${new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(hi)}`));
+    $("#range").textContent=`${money(low)} – ${money(hi)}`;
+  }
+
+  function getRates(){
+    const r={...RATES};
+    const map={ rate_paint_in:"paint_in_psf", rate_paint_out:"paint_out_psf", rate_floor:"floor_psf", rate_roof_sq:"roof_per_square", rate_window_each:"window_each", rate_elect:"elect_psf", rate_plumb:"plumb_psf" };
+    Object.entries(map).forEach(([id,key])=>{ const el=$("#"+id); const v=+(el?el.value:0); if(v>0) r[key]=v; });
+    return r;
+  }
+  function calcItemCost(it, sqft, rates){
+    switch(it.type){
+      case "psf": return sqft*(rates[it.rateKey]||0);
+      case "roof":{ const roofArea=sqft*1.2, squares=roofArea/100; return squares*(rates.roof_per_square||0); }
+      case "windows":{ const windows=Math.max(1,Math.round(sqft/200)); return windows*(rates.window_each||0); }
+      case "kitchen":{ const qEl=$("#"+it.id+"_qty"); const qty=+(qEl?qEl.value:1); const kicker=Math.round((sqft/1000)*(rates.kitchen_sf_kicker||0)); return qty*((rates.kitchen_base||0)+kicker); }
+      case "bath":{ const qEl=$("#"+it.id+"_qty"); const qty=+(qEl?qEl.value:1); return qty*(rates.bath_base||0); }
+      case "hvac": return sqft<1200 ? (rates.hvac_small||0) : (sqft<=2000 ? (rates.hvac_med||0) : (rates.hvac_large||0));
+      case "flat": return it.flat||0;
+      default: return 0;
+    }
+  }
+  function calcRepairs(){
+    const sel=$("#state"); if(!sel) return 0;
+    const abbr=sel.value, mult=STATE_MULT[abbr]??1.00;
+    const sfEl=$("#sqft"); const sqft=+(sfEl?sfEl.value:0);
+    const abbr=$("#state").value, mult=STATE_MULT[abbr]??1.00;
+    const sqft=+($("#sqft").value||0);
+    if(!sqft||sqft<200){ alert("Enter square footage (≥200) for SF-based accuracy."); return 0; }
+    const rates=getRates(); let total=0, chosen=[];
+    LINE_ITEMS.forEach(it=>{
+      const cb=$("#"+it.id);
+      if(cb&&cb.checked){
+      if(cb && cb.checked){
+        const raw=calcItemCost(it,sqft,rates), adj=raw*mult; total+=adj;
+        chosen.push(`${it.label}: ${new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(adj)} (raw ${new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(raw)} × state ${mult.toFixed(2)})`);
+        chosen.push(`${it.label}: ${money(adj)} (raw ${money(raw)} × state ${mult.toFixed(2)})`);
+      }
+    });
+    $("#repairsOut")?.replaceChildren(document.createTextNode(new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(total)));
+    const notes=$("#notes");
+    if(notes){ notes.innerHTML=""; (chosen.length?chosen:["No items selected yet."]).forEach(t=>{ const li=document.createElement("li"); li.className="small"; li.textContent=t; notes.append(li); }); }
+    $("#repairsOut").textContent=money(total);
+    const notes=$("#notes"); notes.innerHTML=""; (chosen.length?chosen:["No items selected yet."]).forEach(t=>{ const li=document.createElement("li"); li.className="small"; li.textContent=t; notes.append(li); });
+    return total;
+  }
+  function switchCalcTab(id){
+    ["offer","repair","help"].forEach(t=>{
+      const sec=$("#tab-"+t), btn=document.querySelector(`.tabBtn[data-tab="${t}"]`);
+      if(!sec||!btn) return;
+      if(t===id){ sec.classList.remove("hide"); btn.classList.add("active"); }
+      else{ sec.classList.add("hide"); btn.classList.remove("active"); }
+    });
+  }
+
+  /* -------- Init -------- */
+  document.addEventListener("DOMContentLoaded", ()=>{
+    $("#year")?.replaceChildren(document.createTextNode(new Date().getFullYear()));
+    applyLinks();
+    $("#year").textContent=new Date().getFullYear();
+
+    // Build calculator UI
+    buildStateDropdown(); buildLineItems();
+
+    // Tabs inside calculator
+    $$(".tabBtn").forEach(b=> b.addEventListener("click", ()=> switchCalcTab(b.dataset.tab)));
+    $("#calcOffer")?.addEventListener("click", calcMAO);
+    $("#resetOffer")?.addEventListener("click", ()=>{
+
+    // Offer events
+    $("#calcOffer").addEventListener("click", calcMAO);
+    $("#resetOffer").addEventListener("click", ()=>{
+      ["arv","repairs","discount","fee","closePct"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
+      $("#discount")&&(document.getElementById("discount").value=70);
+      $("#fee")&&(document.getElementById("fee").value=10000);
+      $("#closePct")&&(document.getElementById("closePct").value=3);
+      $("#mao")&&(document.getElementById("mao").textContent="$0");
+      $("#range")&&(document.getElementById("range").textContent="$0 – $0");
+      $("#kpi-discount")&&(document.getElementById("kpi-discount").textContent="70%");
+      $("#kpi-fee")&&(document.getElementById("kpi-fee").textContent="$10,000");
+      $("#kpi-close")&&(document.getElementById("kpi-close").textContent="3% of ARV");
+      $("#discount").value=70; $("#fee").value=10000; $("#closePct").value=3;
+      $("#mao").textContent="$0"; $("#range").textContent="$0 – $0";
+      $("#kpi-discount").textContent="70%"; $("#kpi-fee").textContent="$10,000"; $("#kpi-close").textContent="3% of ARV";
+    });
+    $("#state")?.addEventListener("change", updateMultiplierPill);
+    $("#detectState")?.addEventListener("click", detectStateFromAddress);
+    $("#scanSqft")?.addEventListener("click", scanSqftFromAddress);
+    $("#calcRepair")?.addEventListener("click", ()=>{ const t=calcRepairs(); void t; });
+    $("#resetRepair")?.addEventListener("click", ()=>{
+      LINE_ITEMS.forEach(it=>{ const cb=$("#"+it.id); if(cb) cb.checked=false; if(it.qty){ const q=$("#"+it.id+"_qty"; if(q) q.value=it.val??1; }});
+      $("#repairsOut")&&(document.getElementById("repairsOut").textContent="$0");
+      $("#notes")&&(document.getElementById("notes").innerHTML='<li class="small">No items selected yet.</li>');
+
+    // Repair events
+    $("#state").addEventListener("change", updateMultiplierPill);
+    $("#detectState").addEventListener("click", detectStateFromAddress);
+    $("#scanSqft").addEventListener("click", scanSqftFromAddress);
+    $("#calcRepair").addEventListener("click", ()=>{ calcRepairs(); });
+    $("#resetRepair").addEventListener("click", ()=>{
+      LINE_ITEMS.forEach(it=>{
+        const cb=$("#"+it.id); if(cb) cb.checked=false;
+        if(it.qty){ const q=$("#"+it.id+"_qty"); if(q) q.value=it.val??1; }
+      });
+      ["rate_paint_in","rate_paint_out","rate_floor","rate_roof_sq","rate_window_each","rate_elect","rate_plumb"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
+      $("#repairsOut").textContent="$0"; $("#notes").innerHTML='<li class="small">No items selected yet.</li>';
+    });
+    $("#sendToOffer")?.addEventListener("click", ()=>{
+      const t=calcRepairs(); if(t>0){ const rep=$("#repairs"); if(rep) rep.value=Math.round(t); switchCalcTab("offer"); const calcSec=$("#calc"); if(calcSec) calcSec.scrollIntoView({behavior:"smooth",block:"start"}); }
+    $("#sendToOffer").addEventListener("click", ()=>{
+      const t=calcRepairs(); if(t>0){ $("#repairs").value=Math.round(t); switchCalcTab("offer"); $("#calc").scrollIntoView({behavior:'smooth'}); }
+    });
+    $("#pullRepairs")?.addEventListener("click", ()=>{ const t=calcRepairs(); const rep=$("#repairs"); if(t>0 && rep) rep.value=Math.round(t); });
+    $("#pullRepairs").addEventListener("click", ()=>{ const t=calcRepairs(); if(t>0){ $("#repairs").value=Math.round(t); } });
+
+    // Router
+    window.addEventListener("hashchange", route);
+    route();
+    route(); // initial
+  });
+})();
+</script>
+</body>
+</html>
