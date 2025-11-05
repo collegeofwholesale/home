@@ -1,4 +1,4 @@
-<!-- College of Wholesale — FULL SITE (v6.1.1)  • Discord + Scavenger removed, Notion link set -->
+<!-- College of Wholesale — FULL SITE (v6.1.2) -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -15,6 +15,7 @@
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.45 Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
   a{color:var(--accent);text-decoration:none}
   .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+
   /* NAV */
   .nav{position:sticky;top:0;z-index:50;background:rgba(11,15,26,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .navin{display:flex;align-items:center;gap:8px;min-height:64px;flex-wrap:wrap}
@@ -23,7 +24,8 @@
   .spacer{flex:1}
   .nav a{padding:8px 10px;border-radius:10px;white-space:nowrap}
   .nav a.active{background:linear-gradient(135deg,var(--accent),#7dc0ff);color:var(--ink-d)}
-  /* LAYOUT */
+
+  /* LAYOUT / COMMON */
   section{padding:56px 0;border-top:1px solid var(--line)}
   h1{font-size:clamp(28px,4.2vw,48px);margin:0 0 12px}
   h2{font-size:clamp(22px,3vw,32px);margin:0 0 8px}
@@ -53,11 +55,13 @@
   .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   .chip{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:999px}
   footer{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+
   /* TABLE */
   table{width:100%;border-collapse:collapse;font-size:14px}
   th,td{border:1px solid var(--line);padding:10px;text-align:left}
   th{background:#0f1526}
-  /* Quick-links grid */
+
+  /* Quick-links grid on Home */
   .ql{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-top:16px}
   .ql a{display:block;text-align:center;padding:14px;border-radius:12px;border:1px solid var(--line);background:#0b1020}
 </style>
@@ -94,8 +98,6 @@
         <span class="chip">📚 Notion SOPs</span>
         <span class="chip">🟣 Whop Community</span>
       </div>
-
-      <!-- Quick Links (Discord + Scavenger removed) -->
       <div class="ql">
         <a href="#notion" class="btn secondary">Open Notion Hub</a>
         <a href="#whop" class="btn secondary">Join on Whop</a>
@@ -109,7 +111,7 @@
   <section id="about" class="page hide">
     <div class="wrap">
       <h2>About College of Wholesale</h2>
-      <p class="sub">Founded by Arya Saliany, CoW helps new wholesalers master the fundamentals through systems, scripts, and reps—not theory.</p>
+      <p class="sub">Founded by Arya, CoW helps new wholesalers master the fundamentals through systems, scripts, and reps—not theory.</p>
       <div class="grid two">
         <div class="card">
           <h3>Our approach</h3>
@@ -131,7 +133,7 @@
     </div>
   </section>
 
-  <!-- CALCULATOR (Offer + Repair + Tips) -->
+  <!-- CALCULATOR -->
   <section id="calc" class="page hide">
     <div class="wrap">
       <h2>College of Wholesale Offer Calculator</h2>
@@ -151,7 +153,7 @@
         </div>
         <div class="hr"></div>
 
-        <!-- Offer -->
+        <!-- Offer tab -->
         <section id="tab-offer">
           <div class="grid two">
             <div class="stack">
@@ -174,7 +176,7 @@
           </div>
         </section>
 
-        <!-- Repair -->
+        <!-- Repair tab -->
         <section id="tab-repair" class="hide">
           <div class="grid two">
             <div class="stack">
@@ -182,7 +184,7 @@
                 <label for="addr">Property Address</label>
                 <input type="text" id="addr" placeholder="123 Main St, Boca Raton, FL 33432 or paste: ... 1,650 sqft">
                 <button class="btn secondary" id="detectState">Detect State</button>
-                <button class="btn ghost" id="scanSqft" title="Looks for '1,650 sqft' or '1650 sf' in the address box">Scan Address for Sq Ft</button>
+                <button class="btn ghost" id="scanSqft" title="Looks for '1,650 sqft' or '1650 sf' in the address">Scan Address for Sq Ft</button>
               </div>
               <div class="row"><label for="sqft">Square Footage</label><input type="number" id="sqft" placeholder="e.g., 1650" min="200" step="10"></div>
               <div class="row"><label for="state">State</label><select id="state"></select></div>
@@ -216,7 +218,7 @@
           </div>
         </section>
 
-        <!-- Help -->
+        <!-- Help tab -->
         <section id="tab-help" class="hide">
           <div class="grid two">
             <div class="stack">
@@ -325,13 +327,16 @@
       <div class="grid two">
         <div class="card">
           <h3>Join the Community</h3>
-          <p class="small">Access the Discord and resources via Whop.</p>
+          <p class="small">Access the Discord via Whop.</p>
           <a class="btn" id="openWhop2" href="#" target="_blank" rel="noopener">Open Whop</a>
         </div>
         <div class="card">
-          <h3>Email</h3>
+          <h3>Email & TikTok</h3>
           <p class="small"><span id="emailText"></span></p>
-          <a class="btn secondary" id="openEmail2" href="#">Email Arya</a>
+          <div class="row">
+            <a class="btn secondary" id="openEmail2" href="#">Email Arya</a>
+            <a class="btn" id="openTikTok" href="#" target="_blank" rel="noopener">TikTok: @college.of.wholesale</a>
+          </div>
         </div>
       </div>
     </div>
@@ -340,33 +345,32 @@
 </main>
 
 <footer>
-  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.1.1 • Education only. Not legal, tax, or financial advice.</div>
+  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.1.2 • Education only. Not legal, tax, or financial advice.</div>
 </footer>
 
-<!-- ===== SCRIPTS ===== -->
+<!-- ===== SCRIPTS (router + calculator wired) ===== -->
 <script>
-<!-- ===== SCRIPTS (calculator + router wired) ===== -->
-<script>
-/* ---------- Link targets ---------- */
+/* --------- LINK CONFIG --------- */
 const LINKS = {
   notion: "https://puzzled-sand-3fb.notion.site/Cold-Caller-HQ-1fc3f51148a7805ea4d7fde4cbafa676",
   whop: "https://whop.com/collegeofwholesale",
   intern: "https://forms.gle/37a9hSfmb8bAwjM26",
-  email: "collegeofwholesale@gmail.com"
+  email: "collegeofwholesale@gmail.com",
+  tiktok: "https://www.tiktok.com/@college.of.wholesale"
 };
 
-/* ---------- tiny helpers ---------- */
-const $  = (q) => document.querySelector(q);
-const $$ = (q) => document.querySelectorAll(q);
-const fmt = (n)=> isNaN(n) ? "$0" : n.toLocaleString(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0});
+/* --------- Helpers --------- */
+const $=(q)=>document.querySelector(q);
+const $$=(q)=>document.querySelectorAll(q);
+const fmt=(n)=>isNaN(n)?"$0":n.toLocaleString(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0});
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 
-/* ---------- hash router (makes top tabs work) ---------- */
-const PAGES = ["home","about","calc","resources","notion","whop","intern","contact"];
+/* --------- Router (tabs) --------- */
+const PAGES=["home","about","calc","resources","notion","whop","intern","contact"];
 function showPage(id){
   PAGES.forEach(p=>{
-    const el = $("#"+p);
-    const link = document.querySelector(`.nav a[data-page="${p}"]`);
+    const el=$("#"+p);
+    const link=document.querySelector(`.nav a[data-page="${p}"]`);
     if(!el) return;
     if(p===id){ el.classList.remove("hide"); link?.classList.add("active"); }
     else{ el.classList.add("hide"); link?.classList.remove("active"); }
@@ -379,48 +383,45 @@ function route(){
 }
 window.addEventListener("hashchange",route);
 
-/* ---------- state cost multipliers + names ---------- */
-const STATE_MULT = { AL:0.92, AK:1.30, AZ:1.02, AR:0.90, CA:1.20, CO:1.08, CT:1.12, DE:1.04, FL:1.08, GA:0.96, HI:1.40, ID:0.98, IL:1.05, IN:0.93, IA:0.90, KS:0.91, KY:0.90, LA:0.94, ME:1.04, MD:1.10, MA:1.18, MI:0.95, MN:1.02, MS:0.88, MO:0.92, MT:1.00, NE:0.92, NV:1.02, NH:1.06, NJ:1.15, NM:0.96, NY:1.18, NC:0.98, ND:0.98, OH:0.93, OK:0.91, OR:1.08, PA:1.04, RI:1.10, SC:0.97, SD:0.94, TN:0.96, TX:0.94, UT:1.02, VT:1.06, VA:1.05, WA:1.12, WV:0.90, WI:0.95, WY:0.94, DC:1.22 };
-const STATE_NAMES = { AL:"Alabama", AK:"Alaska", AZ:"Arizona", AR:"Arkansas", CA:"California", CO:"Colorado", CT:"Connecticut", DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho", IL:"Illinois", IN:"Indiana", IA:"Iowa", KS:"Kansas", KY:"Kentucky", LA:"Louisiana", ME:"Maine", MD:"Maryland", MA:"Massachusetts", MI:"Michigan", MN:"Minnesota", MS:"Mississippi", MO:"Missouri", MT:"Montana", NE:"Nebraska", NV:"Nevada", NH:"New Hampshire", NJ:"New Jersey", NM:"New Mexico", NY:"New York", NC:"North Carolina", ND:"North Dakota", OH:"Ohio", OK:"Oklahoma", OR:"Oregon", PA:"Pennsylvania", RI:"Rhode Island", SC:"South Carolina", SD:"South Dakota", TN:"Tennessee", TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington", WV:"West Virginia", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia" };
+/* --------- Calculator data --------- */
+const STATE_MULT={AL:.92,AK:1.30,AZ:1.02,AR:.90,CA:1.20,CO:1.08,CT:1.12,DE:1.04,FL:1.08,GA:.96,HI:1.40,ID:.98,IL:1.05,IN:.93,IA:.90,KS:.91,KY:.90,LA:.94,ME:1.04,MD:1.10,MA:1.18,MI:.95,MN:1.02,MS:.88,MO:.92,MT:1.00,NE:.92,NV:1.02,NH:1.06,NJ:1.15,NM:.96,NY:1.18,NC:.98,ND:.98,OH:.93,OK:.91,OR:1.08,PA:1.04,RI:1.10,SC:.97,SD:.94,TN:.96,TX:.94,UT:1.02,VT:1.06,VA:1.05,WA:1.12,WV:.90,WI:.95,WY:.94,DC:1.22};
+const STATE_NAMES={AL:"Alabama",AK:"Alaska",AZ:"Arizona",AR:"Arkansas",CA:"California",CO:"Colorado",CT:"Connecticut",DE:"Delaware",FL:"Florida",GA:"Georgia",HI:"Hawaii",ID:"Idaho",IL:"Illinois",IN:"Indiana",IA:"Iowa",KS:"Kansas",KY:"Kentucky",LA:"Louisiana",ME:"Maine",MD:"Maryland",MA:"Massachusetts",MI:"Michigan",MN:"Minnesota",MS:"Mississippi",MO:"Missouri",MT:"Montana",NE:"Nebraska",NV:"Nevada",NH:"New Hampshire",NJ:"New Jersey",NM:"New Mexico",NY:"New York",NC:"North Carolina",ND:"North Dakota",OH:"Ohio",OK:"Oklahoma",OR:"Oregon",PA:"Pennsylvania",RI:"Rhode Island",SC:"South Carolina",SD:"South Dakota",TN:"Tennessee",TX:"Texas",UT:"Utah",VT:"Vermont",VA:"Virginia",WA:"Washington",WV:"West Virginia",WI:"Wisconsin",WY:"Wyoming",DC:"District of Columbia"};
 
-/* ---------- base rates + line items ---------- */
-const RATES = {
-  paint_in_psf: 1.25, paint_out_psf: 1.50, floor_psf: 3.50,
-  roof_per_square: 450, window_each: 450, elect_psf: 1.00, plumb_psf: 0.80,
-  kitchen_base: 8000, kitchen_sf_kicker: 500, bath_base: 3500,
-  hvac_small: 4500, hvac_med: 6500, hvac_large: 8000,
-  land_flat: 1200, misc_flat: 2000
+const RATES={
+  paint_in_psf:1.25,paint_out_psf:1.50,floor_psf:3.50,
+  roof_per_square:450,window_each:450,elect_psf:1.00,plumb_psf:0.80,
+  kitchen_base:8000,kitchen_sf_kicker:500,bath_base:3500,
+  hvac_small:4500,hvac_med:6500,hvac_large:8000,
+  land_flat:1200,misc_flat:2000
 };
-const LINE_ITEMS = [
-  { id:"paint_in",  label:"Interior Paint (SF-Based)",              type:"psf",   rateKey:"paint_in_psf" },
-  { id:"paint_out", label:"Exterior Paint (SF-Based)",              type:"psf",   rateKey:"paint_out_psf" },
-  { id:"floor",     label:"Flooring (whole house, SF-Based)",       type:"psf",   rateKey:"floor_psf" },
-  { id:"roof",      label:"Roof Replacement (auto by SF)",          type:"roof",  rateKey:"roof_per_square" },
-  { id:"kitchen",   label:"Kitchen Refresh (per kitchen)",          type:"kitchen", qty:true, qtyLabel:"# Kitchens", min:1, val:1 },
-  { id:"bath",      label:"Bathroom Refresh (per bathroom)",        type:"bath",    qty:true, qtyLabel:"# Bathrooms", min:1, val:1 },
-  { id:"hvac",      label:"HVAC (replace/major, auto by SF)",       type:"hvac" },
-  { id:"windows",   label:"Windows (auto: ~1 per 200 SF)",          type:"windows", rateKey:"window_each" },
-  { id:"elect",     label:"Electrical (repairs/update, SF-Based)",  type:"psf",   rateKey:"elect_psf" },
-  { id:"plumb",     label:"Plumbing (repairs, SF-Based)",           type:"psf",   rateKey:"plumb_psf" },
-  { id:"land",      label:"Landscaping / Exterior clean-up (flat)", type:"flat",  flat:RATES.land_flat },
-  { id:"misc",      label:"Misc / Contingency (flat)",              type:"flat",  flat:RATES.misc_flat }
+const LINE_ITEMS=[
+  {id:"paint_in",label:"Interior Paint (SF-Based)",type:"psf",rateKey:"paint_in_psf"},
+  {id:"paint_out",label:"Exterior Paint (SF-Based)",type:"psf",rateKey:"paint_out_psf"},
+  {id:"floor",label:"Flooring (whole house, SF-Based)",type:"psf",rateKey:"floor_psf"},
+  {id:"roof",label:"Roof Replacement (auto by SF)",type:"roof",rateKey:"roof_per_square"},
+  {id:"kitchen",label:"Kitchen Refresh (per kitchen)",type:"kitchen",qty:true,qtyLabel:"# Kitchens",min:1,val:1},
+  {id:"bath",label:"Bathroom Refresh (per bathroom)",type:"bath",qty:true,qtyLabel:"# Bathrooms",min:1,val:1},
+  {id:"hvac",label:"HVAC (replace/major, auto by SF)",type:"hvac"},
+  {id:"windows",label:"Windows (auto: ~1 per 200 SF)",type:"windows",rateKey:"window_each"},
+  {id:"elect",label:"Electrical (repairs/update, SF-Based)",type:"psf",rateKey:"elect_psf"},
+  {id:"plumb",label:"Plumbing (repairs, SF-Based)",type:"psf",rateKey:"plumb_psf"},
+  {id:"land",label:"Landscaping / Exterior clean-up (flat)",type:"flat",flat:RATES.land_flat},
+  {id:"misc",label:"Misc / Contingency (flat)",type:"flat",flat:RATES.misc_flat}
 ];
 
-/* ---------- build Repair UI ---------- */
+/* --------- Build Repair UI --------- */
 function buildStateDropdown(){
-  const sel = $("#state"); if(!sel) return;
+  const sel=$("#state"); if(!sel) return;
   sel.innerHTML="";
   Object.keys(STATE_NAMES).forEach(ab=>{
     const o=document.createElement("option");
     o.value=ab; o.textContent=`${STATE_NAMES[ab]} (${ab})`;
     sel.appendChild(o);
   });
-  sel.value="FL";
-  updateMultiplierPill();
+  sel.value="FL"; updateMultiplierPill();
 }
 function updateMultiplierPill(){
-  const ab=$("#state")?.value || "FL";
-  const mult=STATE_MULT[ab] ?? 1.00;
+  const ab=$("#state")?.value||"FL"; const mult=STATE_MULT[ab]??1.00;
   $("#multiplierView") && ($("#multiplierView").textContent=`x${mult.toFixed(2)}`);
 }
 function buildLineItems(){
@@ -443,7 +444,7 @@ function buildLineItems(){
       bath:`Baseline: $${RATES.bath_base.toLocaleString()} per bathroom`,
       hvac:`Baseline: <1200SF ~$${RATES.hvac_small}, 1200–2000SF ~$${RATES.hvac_med}, >2000SF ~$${RATES.hvac_large}`,
       flat:`Baseline flat: ${fmt(it.flat)}`
-    })[it.type] || "";
+    })[it.type]||"";
     card.append(hint);
 
     if(it.qty){
@@ -456,61 +457,54 @@ function buildLineItems(){
   });
 }
 
-/* ---------- address helpers ---------- */
+/* --------- Address helpers --------- */
 function detectStateFromAddress(){
-  const txt = ($("#addr")?.value||"").toUpperCase();
-  for(const ab of Object.keys(STATE_NAMES)){
-    if(new RegExp(`\\b${ab}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; }
-  }
-  for(const [ab,name] of Object.entries(STATE_NAMES)){
-    if(new RegExp(`\\b${name.toUpperCase()}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; }
-  }
+  const txt=($("#addr")?.value||"").toUpperCase();
+  for(const ab of Object.keys(STATE_NAMES)){ if(new RegExp(`\\b${ab}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
+  for(const [ab,name] of Object.entries(STATE_NAMES)){ if(new RegExp(`\\b${name.toUpperCase()}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
   alert("Couldn’t detect a state. Choose it manually."); return null;
 }
 function scanSqftFromAddress(){
-  const txt = ($("#addr")?.value||"").toLowerCase();
-  const m = txt.match(/([\d,.]+)\s*(sq\s?ft|sf|sqft)/i);
+  const txt=($("#addr")?.value||"").toLowerCase();
+  const m=txt.match(/([\d,.]+)\s*(sq\s?ft|sf|sqft)/i);
   if(m){ const num=parseInt(m[1].replace(/[^\d]/g,""),10); if(num && num>200){ $("#sqft").value=num; return num; } }
   alert("No square footage found. Enter it in the Square Footage field."); return null;
 }
 
-/* ---------- offer calc ---------- */
+/* --------- Offer calc --------- */
 function calcMAO(){
   const arv=+($("#arv")?.value||0), repairs=+($("#repairs")?.value||0);
   const discountPct=clamp(+($("#discount")?.value||70),40,90);
   const fee=+($("#fee")?.value||0), closePct=clamp(+($("#closePct")?.value||3),0,10);
   $("#kpi-discount") && ($("#kpi-discount").textContent=`${discountPct}%`);
-  $("#kpi-fee")      && ($("#kpi-fee").textContent=fmt(fee));
-  $("#kpi-close")    && ($("#kpi-close").textContent=`${closePct}% of ARV`);
+  $("#kpi-fee") && ($("#kpi-fee").textContent=fmt(fee));
+  $("#kpi-close") && ($("#kpi-close").textContent=`${closePct}% of ARV`);
   const mao=Math.max(0,(arv*(discountPct/100))-repairs-(arv*(closePct/100))-fee);
-  $("#mao")   && ($("#mao").textContent=fmt(mao));
+  $("#mao") && ($("#mao").textContent=fmt(mao));
   $("#range") && ($("#range").textContent=`${fmt(Math.max(0,Math.round(mao*0.90)))} – ${fmt(Math.max(0,Math.round(mao)))}`);
 }
 
-/* ---------- repair calc ---------- */
+/* --------- Repair calc --------- */
 function getRates(){
   const r={...RATES};
-  const map={ rate_paint_in:"paint_in_psf", rate_paint_out:"paint_out_psf", rate_floor:"floor_psf", rate_roof_sq:"roof_per_square", rate_window_each:"window_each", rate_elect:"elect_psf", rate_plumb:"plumb_psf" };
-  for(const [id,key] of Object.entries(map)){
-    const v=+($("#"+id)?.value||0); if(v>0) r[key]=v;
-  }
+  const map={rate_paint_in:"paint_in_psf",rate_paint_out:"paint_out_psf",rate_floor:"floor_psf",rate_roof_sq:"roof_per_square",rate_window_each:"window_each",rate_elect:"elect_psf",rate_plumb:"plumb_psf"};
+  for(const [id,key] of Object.entries(map)){ const v=+($("#"+id)?.value||0); if(v>0) r[key]=v; }
   return r;
 }
-function calcItemCost(it, sqft, rates){
+function calcItemCost(it,sqft,rates){
   switch(it.type){
-    case "psf":     return sqft*(rates[it.rateKey]||0);
-    case "roof":    { const roofArea=sqft*1.2, squares=roofArea/100; return squares*(rates.roof_per_square||0); }
-    case "windows": { const windows=Math.max(1,Math.round(sqft/200)); return windows*(rates.window_each||0); }
-    case "kitchen": { const qty=+($("#"+it.id+"_qty")?.value||1); const kicker=Math.round((sqft/1000)*(rates.kitchen_sf_kicker||0)); return qty*((rates.kitchen_base||0)+kicker); }
-    case "bath":    { const qty=+($("#"+it.id+"_qty")?.value||1); return qty*(rates.bath_base||0); }
-    case "hvac":    return sqft<1200 ? (rates.hvac_small||0) : (sqft<=2000 ? (rates.hvac_med||0) : (rates.hvac_large||0));
-    case "flat":    return it.flat||0;
-    default:        return 0;
+    case "psf":return sqft*(rates[it.rateKey]||0);
+    case "roof":{const roofArea=sqft*1.2,squares=roofArea/100;return squares*(rates.roof_per_square||0);}
+    case "windows":{const windows=Math.max(1,Math.round(sqft/200));return windows*(rates.window_each||0);}
+    case "kitchen":{const qty=+($("#"+it.id+"_qty")?.value||1);const kicker=Math.round((sqft/1000)*(rates.kitchen_sf_kicker||0));return qty*((rates.kitchen_base||0)+kicker);}
+    case "bath":{const qty=+($("#"+it.id+"_qty")?.value||1);return qty*(rates.bath_base||0);}
+    case "hvac":return sqft<1200?(rates.hvac_small||0):(sqft<=2000?(rates.hvac_med||0):(rates.hvac_large||0));
+    case "flat":return it.flat||0;
+    default:return 0;
   }
 }
 function calcRepairs(){
-  const abbr=$("#state")?.value || "FL";
-  const mult=STATE_MULT[abbr]??1.00;
+  const ab=$("#state")?.value||"FL"; const mult=STATE_MULT[ab]??1.00;
   const sqft=+($("#sqft")?.value||0);
   if(!sqft || sqft<200){ alert("Enter square footage (≥200) for SF-based accuracy."); return 0; }
   const rates=getRates(); let total=0, chosen=[];
@@ -531,11 +525,10 @@ function calcRepairs(){
   return total;
 }
 
-/* ---------- tabs inside calculator ---------- */
+/* --------- Tabs inside calculator --------- */
 function switchCalcTab(id){
   ["offer","repair","help"].forEach(t=>{
-    const sec=$("#tab-"+t);
-    const btn=document.querySelector(`.tabBtn[data-tab="${t}"]`);
+    const sec=$("#tab-"+t), btn=document.querySelector(`.tabBtn[data-tab="${t}"]`);
     if(sec && btn){
       if(t===id){ sec.classList.remove("hide"); btn.classList.add("active"); }
       else{ sec.classList.add("hide"); btn.classList.remove("active"); }
@@ -543,56 +536,58 @@ function switchCalcTab(id){
   });
 }
 
-/* ---------- boot ---------- */
-document.addEventListener("DOMContentLoaded", ()=>{
-  // Router + active state
-  route();
-  $$("#year").forEach(y=> y.textContent=new Date().getFullYear());
+/* --------- Init --------- */
+document.addEventListener("DOMContentLoaded",()=>{
+  route(); $("#year").textContent=new Date().getFullYear();
+
+  // Nav active highlight
   $$(".navlink").forEach(a=>a.addEventListener("click",()=>{ $$(".navlink").forEach(l=>l.classList.remove("active")); a.classList.add("active"); }));
 
   // External links
-  const notion=$("#openNotion"); if(notion) notion.href=LINKS.notion;
-  const whop=$("#openWhop"); if(whop) whop.href=LINKS.whop;
-  const whop2=$("#openWhop2"); if(whop2) whop2.href=LINKS.whop;
-  const intern=$("#openIntern"); if(intern) intern.href=LINKS.intern;
-  const email=$("#openEmail2"); if(email) email.href=`mailto:${LINKS.email}`;
-  const emailText=$("#emailText"); if(emailText) emailText.textContent=LINKS.email;
+  $("#openNotion")?.setAttribute("href",LINKS.notion);
+  $("#openWhop")?.setAttribute("href",LINKS.whop);
+  $("#openWhop2")?.setAttribute("href",LINKS.whop);
+  $("#openIntern")?.setAttribute("href",LINKS.intern);
+  $("#openEmail2")?.setAttribute("href",`mailto:${LINKS.email}`);
+  $("#emailText") && ($("#emailText").textContent=LINKS.email);
+  $("#openTikTok")?.setAttribute("href",LINKS.tiktok);
 
   // Build Repair UI
-  buildStateDropdown();
-  buildLineItems();
-  $("#state")?.addEventListener("change", updateMultiplierPill);
+  buildStateDropdown(); buildLineItems();
+  $("#state")?.addEventListener("change",updateMultiplierPill);
 
   // Address helpers
-  $("#detectState")?.addEventListener("click", detectStateFromAddress);
-  $("#scanSqft")?.addEventListener("click", scanSqftFromAddress);
+  $("#detectState")?.addEventListener("click",detectStateFromAddress);
+  $("#scanSqft")?.addEventListener("click",scanSqftFromAddress);
 
   // Calc tab switching
-  $$(".tabBtn").forEach(b=> b.addEventListener("click", ()=> switchCalcTab(b.dataset.tab) ));
+  $$(".tabBtn").forEach(b=> b.addEventListener("click",()=>switchCalcTab(b.dataset.tab)));
 
   // Offer calc actions
-  $("#calcOffer")?.addEventListener("click", calcMAO);
-  $("#resetOffer")?.addEventListener("click", ()=>{
-    ["arv","repairs","discount","fee","closePct"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
+  $("#calcOffer")?.addEventListener("click",calcMAO);
+  $("#resetOffer")?.addEventListener("click",()=>{
+    ["arv","repairs","discount","fee","closePct"].forEach(id=>{const el=$("#"+id); if(el) el.value="";});
     $("#discount").value=70; $("#fee").value=10000; $("#closePct").value=3;
     $("#mao")?.textContent="$0"; $("#range")?.textContent="$0 – $0";
     $("#kpi-discount") && ($("#kpi-discount").textContent="70%");
     $("#kpi-fee") && ($("#kpi-fee").textContent="$10,000");
     $("#kpi-close") && ($("#kpi-close").textContent="3% of ARV");
   });
-  $("#pullRepairs")?.addEventListener("click", ()=>{ const t=calcRepairs(); if(t>0) $("#repairs").value=Math.round(t); });
+  $("#pullRepairs")?.addEventListener("click",()=>{const t=calcRepairs(); if(t>0) $("#repairs").value=Math.round(t);});
 
   // Repair calc actions
-  $("#calcRepair")?.addEventListener("click", ()=>{ const t=calcRepairs(); if(t>0){} });
-  $("#resetRepair")?.addEventListener("click", ()=>{
-    LINE_ITEMS.forEach(it=>{ const cb=$("#"+it.id); if(cb) cb.checked=false; if(it.qty){ const q=$("#"+it.id+"_qty"); if(q) q.value=it.val??1; }});
+  $("#calcRepair")?.addEventListener("click",()=>{const t=calcRepairs(); if(t>0){}});
+  $("#resetRepair")?.addEventListener("click",()=>{
+    LINE_ITEMS.forEach(it=>{const cb=$("#"+it.id); if(cb) cb.checked=false; if(it.qty){const q=$("#"+it.id+"_qty"); if(q) q.value=it.val??1;}});
     $("#repairsOut")?.textContent="$0";
     const notes=$("#notes"); if(notes) notes.innerHTML='<li class="small">No items selected yet.</li>';
-    ["rate_paint_in","rate_paint_out","rate_floor","rate_roof_sq","rate_window_each","rate_elect","rate_plumb"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
+    ["rate_paint_in","rate_paint_out","rate_floor","rate_roof_sq","rate_window_each","rate_elect","rate_plumb"].forEach(id=>{const el=$("#"+id); if(el) el.value="";});
   });
-  $("#sendToOffer")?.addEventListener("click", ()=>{
+  $("#sendToOffer")?.addEventListener("click",()=>{
     const t=calcRepairs();
     if(t>0){ $("#repairs").value=Math.round(t); switchCalcTab("offer"); document.querySelector("#calc").scrollIntoView({behavior:"smooth",block:"start"}); }
   });
 });
 </script>
+</body>
+</html>
