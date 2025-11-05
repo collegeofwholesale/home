@@ -1,4 +1,4 @@
-<!-- College of Wholesale — FULL SITE (v6.3.1) -->
+<!-- College of Wholesale — FULL SITE (v6.3.2) -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -56,14 +56,11 @@
   .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   .chip{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:999px}
   footer{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
-  /* TABLE */
   table{width:100%;border-collapse:collapse;font-size:14px}
   th,td{border:1px solid var(--line);padding:10px;text-align:left}
   th{background:#0f1526}
-  /* Quick-links grid (home) */
   .ql{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-top:16px}
   .ql a{display:block;text-align:center;padding:14px;border-radius:12px;border:1px solid var(--line);background:#0b1020}
-  /* Founder block (About) */
   .founder{display:grid;gap:16px;grid-template-columns:1fr}
   @media(min-width:900px){.founder{grid-template-columns:1.2fr .8fr}}
   .badge{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0b1020;color:var(--muted);font-size:12px}
@@ -200,7 +197,7 @@
     </div>
   </section>
 
-  <!-- CALCULATOR (Offer + Repair + Tips) -->
+  <!-- CALCULATOR -->
   <section id="calc" class="page hide">
     <div class="wrap">
       <h2>College of Wholesale Offer Calculator</h2>
@@ -439,232 +436,223 @@
 </main>
 
 <footer>
-  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.3.1 • Education only. Not legal, tax, or financial advice.</div>
+  <div class="wrap">© <span id="year"></span> College of Wholesale • v6.3.2 • Education only. Not legal, tax, or financial advice.</div>
 </footer>
 
 <!-- ===== SCRIPTS ===== -->
 <script>
-/* =========================
-   LINK CONFIG (EDIT ME)
-   ========================= */
-const LINKS = {
-  notion: "https://www.notion.so/your-notion-workspace",   // <- replace
-  whop: "https://whop.com/your-cow-membership",            // <- replace
-  discord: "https://discord.gg/your-invite",               // <- replace
-  email: "aaarya3455@gmail.com"
-};
-console.log("CoW site build v6.3.1 loaded");
+(function(){
+  /* Config */
+  const LINKS = {
+    notion: "https://www.notion.so/your-notion-workspace",
+    whop: "https://whop.com/your-cow-membership",
+    discord: "https://discord.gg/your-invite",
+    email: "aaarya3455@gmail.com"
+  };
 
-/* --------- Utils & Router --------- */
-const $  = (q)=>document.querySelector(q);
-const $$ = (q)=>document.querySelectorAll(q);
-const fmt = (n)=> isNaN(n) ? "$0" : n.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:0});
-const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+  /* Helpers */
+  const $  = (q)=>document.querySelector(q);
+  const $$ = (q)=>document.querySelectorAll(q);
+  const fmt = (n)=> isNaN(n) ? "$0" : n.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:0});
+  const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 
-const pages = ["home","about","calc","resources","notion","whop","contact","scav","intern"];
-function showPage(id){
-  pages.forEach(p=>{
-    const el = $("#"+p);
-    const link = document.querySelector(`.nav a[data-page="${p}"]`);
-    if(p===id){ el?.classList.remove("hide"); link?.classList.add("active"); }
-    else{ el?.classList.add("hide"); link?.classList.remove("active"); }
-  });
-  window.scrollTo({top:0,behavior:"instant"});
-}
-function route(){
-  const h = (location.hash||"#home").replace("#","");
-  showPage(pages.includes(h)?h:"home");
-}
-window.addEventListener("hashchange", route);
-window.addEventListener("load", route); // ensure initial render
-
-// Robust nav click handler (prevents browser swallowing the click)
-$$(".navlink").forEach(a =>
-  a.addEventListener("click", (e) => {
-    e.preventDefault();
-    const page = a.dataset.page;
-    // update active state
-    $$(".navlink").forEach(l => l.classList.remove("active"));
-    a.classList.add("active");
-    // update hash + render
-    location.hash = `#${page}`;
-    showPage(page);
-  })
-);
-
-/* ---------- Calculator data & logic ---------- */
-const STATE_MULT = { AL:0.92, AK:1.30, AZ:1.02, AR:0.90, CA:1.20, CO:1.08, CT:1.12, DE:1.04, FL:1.08, GA:0.96, HI:1.40, ID:0.98, IL:1.05, IN:0.93, IA:0.90, KS:0.91, KY:0.90, LA:0.94, ME:1.04, MD:1.10, MA:1.18, MI:0.95, MN:1.02, MS:0.88, MO:0.92, MT:1.00, NE:0.92, NV:1.02, NH:1.06, NJ:1.15, NM:0.96, NY:1.18, NC:0.98, ND:0.98, OH:0.93, OK:0.91, OR:1.08, PA:1.04, RI:1.10, SC:0.97, SD:0.94, TN:0.96, TX:0.94, UT:1.02, VT:1.06, VA:1.05, WA:1.12, WV:0.90, WI:0.95, WY:0.94, DC:1.22 };
-const STATE_NAMES = { AL:"Alabama", AK:"Alaska", AZ:"Arizona", AR:"Arkansas", CA:"California", CO:"Colorado", CT:"Connecticut", DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho", IL:"Illinois", IN:"Indiana", IA:"Iowa", KS:"Kansas", KY:"Kentucky", LA:"Louisiana", ME:"Maine", MD:"Maryland", MA:"Massachusetts", MI:"Michigan", MN:"Minnesota", MS:"Mississippi", MO:"Missouri", MT:"Montana", NE:"Nebraska", NV:"Nevada", NH:"New Hampshire", NJ:"New Jersey", NM:"New Mexico", NY:"New York", NC:"North Carolina", ND:"North Dakota", OH:"Ohio", OK:"Oklahoma", OR:"Oregon", PA:"Pennsylvania", RI:"Rhode Island", SC:"South Carolina", SD:"South Dakota", TN:"Tennessee", TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia" };
-
-const RATES = {
-  paint_in_psf: 1.25, paint_out_psf: 1.50, floor_psf: 3.50,
-  roof_per_square: 450, window_each: 450, elect_psf: 1.00, plumb_psf: 0.80,
-  kitchen_base: 8000, kitchen_sf_kicker: 500, bath_base: 3500,
-  hvac_small: 4500, hvac_med: 6500, hvac_large: 8000,
-  land_flat: 1200, misc_flat: 2000
-};
-
-const LINE_ITEMS = [
-  { id:"paint_in",   label:"Interior Paint (SF-Based)",                 type:"psf",   rateKey:"paint_in_psf" },
-  { id:"paint_out",  label:"Exterior Paint (SF-Based)",                 type:"psf",   rateKey:"paint_out_psf" },
-  { id:"floor",      label:"Flooring (whole house, SF-Based)",          type:"psf",   rateKey:"floor_psf" },
-  { id:"roof",       label:"Roof Replacement (auto by SF)",             type:"roof",  rateKey:"roof_per_square" },
-  { id:"kitchen",    label:"Kitchen Refresh (per kitchen)",             type:"kitchen", qty:true, qtyLabel:"# Kitchens", min:1, val:1 },
-  { id:"bath",       label:"Bathroom Refresh (per bathroom)",           type:"bath",    qty:true, qtyLabel:"# Bathrooms", min:1, val:1 },
-  { id:"hvac",       label:"HVAC (replace/major, auto by SF)",          type:"hvac" },
-  { id:"windows",    label:"Windows (auto: ~1 per 200 SF)",             type:"windows", rateKey:"window_each" },
-  { id:"elect",      label:"Electrical (repairs/update, SF-Based)",     type:"psf",   rateKey:"elect_psf" },
-  { id:"plumb",      label:"Plumbing (repairs, SF-Based)",              type:"psf",   rateKey:"plumb_psf" },
-  { id:"land",       label:"Landscaping / Exterior clean-up (flat)",    type:"flat",  flat:RATES.land_flat },
-  { id:"misc",       label:"Misc / Contingency (flat)",                 type:"flat",  flat:RATES.misc_flat }
-];
-
-/* Build Repair UI */
-function buildStateDropdown(){
-  const sel = $("#state"); if(!sel) return;
-  sel.innerHTML = "";
-  Object.keys(STATE_NAMES).forEach(ab=>{ const o=document.createElement("option"); o.value=ab; o.textContent=`${STATE_NAMES[ab]} (${ab})`; sel.appendChild(o); });
-  sel.value = "FL"; updateMultiplierPill();
-}
-function updateMultiplierPill(){ const el=$("#multiplierView"), sel=$("#state"); if(!el||!sel) return; const ab=sel.value; const mult=STATE_MULT[ab] ?? 1.00; el.textContent = `x${mult.toFixed(2)}`; }
-function buildLineItems(){
-  const host = $("#lineItems"); if(!host) return; host.innerHTML = "";
-  LINE_ITEMS.forEach(it=>{
-    const card=document.createElement("div"); card.className="card"; card.style.padding="12px";
-    const row1=document.createElement("div"); row1.className="row";
-    const lb=document.createElement("label"); lb.textContent=it.label; lb.setAttribute("for",it.id);
-    const cb=document.createElement("input"); cb.type="checkbox"; cb.id=it.id;
-    cb.addEventListener("change",()=>{ const qwrap=card.querySelector(".qtywrap"); if(qwrap) qwrap.hidden=!cb.checked; });
-    row1.append(lb,cb); card.append(row1);
-    const row2=document.createElement("div"); row2.className="row";
-    const hint=document.createElement("div"); hint.className="small";
-    hint.textContent = ({
-      psf:`Baseline: $${RATES[it.rateKey].toFixed(2)}/SF`,
-      roof:`Baseline: $${RATES.roof_per_square.toFixed(0)} per 100 SF (roof≈1.2×SF)`,
-      windows:`Baseline: ~$${RATES.window_each.toFixed(0)} each (≈1/200 SF)`,
-      kitchen:`Baseline: $${RATES.kitchen_base.toLocaleString()} each + ${fmt(RATES.kitchen_sf_kicker)} per 1,000 SF`,
-      bath:`Baseline: $${RATES.bath_base.toLocaleString()} per bathroom`,
-      hvac:`Baseline: <1200SF ~$${RATES.hvac_small}, 1200–2000SF ~$${RATES.hvac_med}, >2000SF ~$${RATES.hvac_large}`,
-      flat:`Baseline flat: ${fmt(it.flat)}`
-    })[it.type] || "";
-    row2.append(hint); card.append(row2);
-    if(it.qty){
-      const qwrap=document.createElement("div"); qwrap.className="row qtywrap"; qwrap.hidden=true;
-      const qlb=document.createElement("label"); qlb.textContent=it.qtyLabel;
-      const qin=document.createElement("input"); qin.type="number"; qin.min=it.min??1; qin.step=1; qin.value=it.val??1; qin.id=it.id+"_qty";
-      qwrap.append(qlb,qin); card.append(qwrap);
-    }
-    host.append(card);
-  });
-}
-
-/* Address helpers */
-function detectStateFromAddress(){
-  const addr=$("#addr"); if(!addr) return null;
-  const txt = (addr.value||"").toUpperCase();
-  for(const ab of Object.keys(STATE_NAMES)){ if(new RegExp(`\\b${ab}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
-  for(const [ab,name] of Object.entries(STATE_NAMES)){ if(new RegExp(`\\b${name.toUpperCase()}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
-  alert("Couldn’t detect a state. Choose it manually."); return null;
-}
-function scanSqftFromAddress(){
-  const addr=$("#addr"); if(!addr) return null;
-  const txt = (addr.value||"").toLowerCase();
-  const m = txt.match(/([\d,.]+)\s*(sq\s?ft|sf|sqft)/i);
-  if(m){ const num = parseInt(m[1].replace(/[^\d]/g,""),10); if(num && num>200){ $("#sqft").value=num; return num; } }
-  alert("No square footage found. Enter it in the Square Footage field."); return null;
-}
-
-/* Offer Calc */
-function calcMAO(){
-  const arv=+($("#arv")?.value||0), repairs=+($("#repairs")?.value||0);
-  const discountPct=clamp(+($("#discount")?.value||70),40,90), fee=+($("#fee")?.value||0), closePct=clamp(+($("#closePct")?.value||3),0,10);
-  $("#kpi-discount")?.textContent=`${discountPct}%`; $("#kpi-fee")?.textContent=fmt(fee); $("#kpi-close")?.textContent=`${closePct}% of ARV`;
-  const mao=Math.max(0,(arv*(discountPct/100))-repairs-(arv*(closePct/100))-fee);
-  $("#mao")?.textContent=fmt(mao); $("#range")?.textContent=`${fmt(Math.max(0,Math.round(mao*0.90)))} – ${fmt(Math.max(0,Math.round(mao)))}`;
-}
-
-/* Repair Calc */
-function getRates(){
-  const r={...RATES};
-  const map={ rate_paint_in:"paint_in_psf", rate_paint_out:"paint_out_psf", rate_floor:"floor_psf", rate_roof_sq:"roof_per_square", rate_window_each:"window_each", rate_elect:"elect_psf", rate_plumb:"plumb_psf" };
-  for(const [id,key] of Object.entries(map)){ const v=+($("#"+id)?.value||0); if(v>0) r[key]=v; }
-  return r;
-}
-function calcItemCost(it, sqft, rates){
-  switch(it.type){
-    case "psf": return sqft*(rates[it.rateKey]||0);
-    case "roof":{ const roofArea=sqft*1.2, squares=roofArea/100; return squares*(rates.roof_per_square||0); }
-    case "windows":{ const windows=Math.max(1,Math.round(sqft/200)); return windows*(rates.window_each||0); }
-    case "kitchen":{ const qty=+($("#"+it.id+"_qty")?.value||1); const kicker=Math.round((sqft/1000)*(rates.kitchen_sf_kicker||0)); return qty*((rates.kitchen_base||0)+kicker); }
-    case "bath":{ const qty=+($("#"+it.id+"_qty")?.value||1); return qty*(rates.bath_base||0); }
-    case "hvac": return sqft<1200 ? (rates.hvac_small||0) : (sqft<=2000 ? (rates.hvac_med||0) : (rates.hvac_large||0));
-    case "flat": return it.flat||0;
-    default: return 0;
+  /* Pages + Router */
+  const pages = ["home","about","calc","resources","notion","whop","contact","scav","intern"];
+  function showPage(id){
+    try{
+      pages.forEach(p=>{
+        const el = $("#"+p);
+        const link = document.querySelector(`.nav a[data-page="${p}"]`);
+        if(!el || !link) return;
+        if(p===id){ el.classList.remove("hide"); link.classList.add("active"); }
+        else{ el.classList.add("hide"); link.classList.remove("active"); }
+      });
+      window.scrollTo({top:0,behavior:"instant"});
+    }catch(e){ console.error(e); }
   }
-}
-function calcRepairs(){
-  const abbr=$("#state")?.value, mult=STATE_MULT[abbr]??1.00, sqft=+($("#sqft")?.value||0);
-  if(!sqft || sqft<200){ alert("Enter square footage (≥200) for SF-based accuracy."); return 0; }
-  const rates=getRates(); let total=0, chosen=[];
-  LINE_ITEMS.forEach(it=>{
-    const cb=$("#"+it.id);
-    if(cb && cb.checked){
-      const raw=calcItemCost(it,sqft,rates), adj=raw*mult; total+=adj;
-      chosen.push(`${it.label}: ${fmt(adj)} (raw ${fmt(raw)} × state ${mult.toFixed(2)})`);
+  function route(){
+    try{
+      const h = (location.hash||"#home").replace("#","");
+      showPage(pages.includes(h)?h:"home");
+    }catch(e){ console.error(e); }
+  }
+
+  /* Calculator data (same as 6.3.1) */
+  const STATE_MULT = { AL:0.92, AK:1.30, AZ:1.02, AR:0.90, CA:1.20, CO:1.08, CT:1.12, DE:1.04, FL:1.08, GA:0.96, HI:1.40, ID:0.98, IL:1.05, IN:0.93, IA:0.90, KS:0.91, KY:0.90, LA:0.94, ME:1.04, MD:1.10, MA:1.18, MI:0.95, MN:1.02, MS:0.88, MO:0.92, MT:1.00, NE:0.92, NV:1.02, NH:1.06, NJ:1.15, NM:0.96, NY:1.18, NC:0.98, ND:0.98, OH:0.93, OK:0.91, OR:1.08, PA:1.04, RI:1.10, SC:0.97, SD:0.94, TN:0.96, TX:0.94, UT:1.02, VT:1.06, VA:1.05, WA:1.12, WV:0.90, WI:0.95, WY:0.94, DC:1.22 };
+  const STATE_NAMES = { AL:"Alabama", AK:"Alaska", AZ:"Arizona", AR:"Arkansas", CA:"California", CO:"Colorado", CT:"Connecticut", DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho", IL:"Illinois", IN:"Indiana", IA:"Iowa", KS:"Kansas", KY:"Kentucky", LA:"Louisiana", ME:"Maine", MD:"Maryland", MA:"Massachusetts", MI:"Michigan", MN:"Minnesota", MS:"Mississippi", MO:"Missouri", MT:"Montana", NE:"Nebraska", NV:"Nevada", NH:"New Hampshire", NJ:"New Jersey", NM:"New Mexico", NY:"New York", NC:"North Carolina", ND:"North Dakota", OH:"Ohio", OK:"Oklahoma", OR:"Oregon", PA:"Pennsylvania", RI:"Rhode Island", SC:"South Carolina", SD:"South Dakota", TN:"Tennessee", TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia" };
+
+  const RATES = { paint_in_psf:1.25, paint_out_psf:1.50, floor_psf:3.50, roof_per_square:450, window_each:450, elect_psf:1.00, plumb_psf:0.80, kitchen_base:8000, kitchen_sf_kicker:500, bath_base:3500, hvac_small:4500, hvac_med:6500, hvac_large:8000, land_flat:1200, misc_flat:2000 };
+  const LINE_ITEMS = [
+    { id:"paint_in",label:"Interior Paint (SF-Based)",type:"psf",rateKey:"paint_in_psf" },
+    { id:"paint_out",label:"Exterior Paint (SF-Based)",type:"psf",rateKey:"paint_out_psf" },
+    { id:"floor",label:"Flooring (whole house, SF-Based)",type:"psf",rateKey:"floor_psf" },
+    { id:"roof",label:"Roof Replacement (auto by SF)",type:"roof",rateKey:"roof_per_square" },
+    { id:"kitchen",label:"Kitchen Refresh (per kitchen)",type:"kitchen",qty:true,qtyLabel:"# Kitchens",min:1,val:1 },
+    { id:"bath",label:"Bathroom Refresh (per bathroom)",type:"bath",qty:true,qtyLabel:"# Bathrooms",min:1,val:1 },
+    { id:"hvac",label:"HVAC (replace/major, auto by SF)",type:"hvac" },
+    { id:"windows",label:"Windows (auto: ~1 per 200 SF)",type:"windows",rateKey:"window_each" },
+    { id:"elect",label:"Electrical (repairs/update, SF-Based)",type:"psf",rateKey:"elect_psf" },
+    { id:"plumb",label:"Plumbing (repairs, SF-Based)",type:"psf",rateKey:"plumb_psf" },
+    { id:"land",label:"Landscaping / Exterior clean-up (flat)",type:"flat",flat:RATES.land_flat },
+    { id:"misc",label:"Misc / Contingency (flat)",type:"flat",flat:RATES.misc_flat }
+  ];
+
+  function buildStateDropdown(){
+    const sel = $("#state"); if(!sel) return;
+    sel.innerHTML="";
+    Object.keys(STATE_NAMES).forEach(ab=>{ const o=document.createElement("option"); o.value=ab; o.textContent=`${STATE_NAMES[ab]} (${ab})`; sel.appendChild(o); });
+    sel.value="FL"; updateMultiplierPill();
+  }
+  function updateMultiplierPill(){
+    const sel=$("#state"), pill=$("#multiplierView"); if(!sel||!pill) return;
+    const mult = STATE_MULT[sel.value] ?? 1.00;
+    pill.textContent = `x${mult.toFixed(2)}`;
+  }
+  function buildLineItems(){
+    const host=$("#lineItems"); if(!host) return; host.innerHTML="";
+    LINE_ITEMS.forEach(it=>{
+      const card=document.createElement("div"); card.className="card"; card.style.padding="12px";
+      const row1=document.createElement("div"); row1.className="row";
+      const lb=document.createElement("label"); lb.textContent=it.label; lb.setAttribute("for",it.id);
+      const cb=document.createElement("input"); cb.type="checkbox"; cb.id=it.id;
+      cb.addEventListener("change",()=>{ const qwrap=card.querySelector(".qtywrap"); if(qwrap) qwrap.hidden=!cb.checked; });
+      row1.append(lb,cb); card.append(row1);
+      const hint=document.createElement("div"); hint.className="small"; hint.textContent=({
+        psf:`Baseline: $${RATES[it.rateKey].toFixed(2)}/SF`,
+        roof:`Baseline: $${RATES.roof_per_square.toFixed(0)} per 100 SF (roof≈1.2×SF)`,
+        windows:`Baseline: ~$${RATES.window_each.toFixed(0)} each (≈1/200 SF)`,
+        kitchen:`Baseline: $${RATES.kitchen_base.toLocaleString()} each + ${fmt(RATES.kitchen_sf_kicker)} per 1,000 SF`,
+        bath:`Baseline: $${RATES.bath_base.toLocaleString()} per bathroom`,
+        hvac:`Baseline: <1200SF ~$${RATES.hvac_small}, 1200–2000SF ~$${RATES.hvac_med}, >2000SF ~$${RATES.hvac_large}`,
+        flat:`Baseline flat: ${fmt(it.flat)}`
+      })[it.type]||"";
+      const row2=document.createElement("div"); row2.className="row"; row2.append(hint); card.append(row2);
+      if(it.qty){
+        const qwrap=document.createElement("div"); qwrap.className="row qtywrap"; qwrap.hidden=true;
+        const qlb=document.createElement("label"); qlb.textContent=it.qtyLabel;
+        const qin=document.createElement("input"); qin.type="number"; qin.min=it.min??1; qin.step=1; qin.value=it.val??1; qin.id=it.id+"_qty";
+        qwrap.append(qlb,qin); card.append(qwrap);
+      }
+      host.append(card);
+    });
+  }
+
+  function detectStateFromAddress(){
+    const addr=$("#addr"); if(!addr) return null;
+    const txt=(addr.value||"").toUpperCase();
+    for(const ab of Object.keys(STATE_NAMES)){ if(new RegExp(`\\b${ab}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
+    for(const [ab,name] of Object.entries(STATE_NAMES)){ if(new RegExp(`\\b${name.toUpperCase()}\\b`).test(txt)){ $("#state").value=ab; updateMultiplierPill(); return ab; } }
+    alert("Couldn’t detect a state. Choose it manually."); return null;
+  }
+  function scanSqftFromAddress(){
+    const addr=$("#addr"); if(!addr) return null;
+    const m=(addr.value||"").toLowerCase().match(/([\d,.]+)\s*(sq\s?ft|sf|sqft)/i);
+    if(m){ const num=parseInt(m[1].replace(/[^\d]/g,""),10); if(num && num>200){ $("#sqft").value=num; return num; } }
+    alert("No square footage found. Enter it in the Square Footage field."); return null;
+  }
+
+  function calcMAO(){
+    const arv=+(($("#arv")||{}).value||0), repairs=+(($("#repairs")||{}).value||0);
+    const discountPct=Math.max(40,Math.min(90, +((($("#discount")||{}).value)||70)));
+    const fee=+(($("#fee")||{}).value||0), closePct=Math.max(0,Math.min(10, +((($("#closePct")||{}).value)||3)));
+    const k1=$("#kpi-discount"),k2=$("#kpi-fee"),k3=$("#kpi-close");
+    if(k1) k1.textContent=`${discountPct}%`; if(k2) k2.textContent=fmt(fee); if(k3) k3.textContent=`${closePct}% of ARV`;
+    const mao=Math.max(0,(arv*(discountPct/100))-repairs-(arv*(closePct/100))-fee);
+    const out=$("#mao"),rng=$("#range");
+    if(out) out.textContent=fmt(mao);
+    if(rng) rng.textContent=`${fmt(Math.max(0,Math.round(mao*0.90)))} – ${fmt(Math.max(0,Math.round(mao)))}`;
+  }
+
+  function getRates(){
+    const r={...RATES};
+    const map={ rate_paint_in:"paint_in_psf", rate_paint_out:"paint_out_psf", rate_floor:"floor_psf", rate_roof_sq:"roof_per_square", rate_window_each:"window_each", rate_elect:"elect_psf", rate_plumb:"plumb_psf" };
+    Object.entries(map).forEach(([id,key])=>{ const el=$("#"+id); const v=+(el?el.value:0); if(v>0) r[key]=v; });
+    return r;
+  }
+  function calcItemCost(it, sqft, rates){
+    switch(it.type){
+      case "psf": return sqft*(rates[it.rateKey]||0);
+      case "roof":{ const roofArea=sqft*1.2, squares=roofArea/100; return squares*(rates.roof_per_square||0); }
+      case "windows":{ const windows=Math.max(1,Math.round(sqft/200)); return windows*(rates.window_each||0); }
+      case "kitchen":{ const qEl=$("#"+it.id+"_qty"); const qty=+(qEl?qEl.value:1); const kicker=Math.round((sqft/1000)*(rates.kitchen_sf_kicker||0)); return qty*((rates.kitchen_base||0)+kicker); }
+      case "bath":{ const qEl=$("#"+it.id+"_qty"); const qty=+(qEl?qEl.value:1); return qty*(rates.bath_base||0); }
+      case "hvac": return sqft<1200 ? (rates.hvac_small||0) : (sqft<=2000 ? (rates.hvac_med||0) : (rates.hvac_large||0));
+      case "flat": return it.flat||0;
+      default: return 0;
     }
-  });
-  $("#repairsOut")?.textContent=fmt(total);
-  const notes=$("#notes"); if(notes){ notes.innerHTML=""; if(chosen.length){ chosen.forEach(t=>{ const li=document.createElement("li"); li.className="small"; li.textContent=t; notes.append(li); }); } else { notes.innerHTML='<li class="small">No items selected yet.</li>'; } }
-  return total;
-}
-function switchCalcTab(id){
-  ["offer","repair","help"].forEach(t=>{
-    const sec=$("#tab-"+t), btn=document.querySelector(`.tabBtn[data-tab="${t}"]`);
-    if(!sec||!btn) return;
-    if(t===id){ sec.classList.remove("hide"); btn.classList.add("active"); }
-    else{ sec.classList.add("hide"); btn.classList.remove("active"); }
-  });
-}
+  }
+  function calcRepairs(){
+    const sel=$("#state"); if(!sel) return 0;
+    const abbr=sel.value, mult=STATE_MULT[abbr]??1.00;
+    const sfEl=$("#sqft"); const sqft=+(sfEl?sfEl.value:0);
+    if(!sqft || sqft<200){ alert("Enter square footage (≥200) for SF-based accuracy."); return 0; }
+    const rates=getRates(); let total=0, chosen=[];
+    LINE_ITEMS.forEach(it=>{
+      const cb=$("#"+it.id);
+      if(cb && cb.checked){
+        const raw=calcItemCost(it,sqft,rates), adj=raw*mult; total+=adj;
+        chosen.push(`${it.label}: ${fmt(adj)} (raw ${fmt(raw)} × state ${mult.toFixed(2)})`);
+      }
+    });
+    const out=$("#repairsOut"); if(out) out.textContent=fmt(total);
+    const notes=$("#notes");
+    if(notes){ notes.innerHTML=""; (chosen.length?chosen:["No items selected yet."]).forEach(t=>{ const li=document.createElement("li"); li.className="small"; li.textContent=t; notes.append(li); }); }
+    return total;
+  }
+  function switchCalcTab(id){
+    ["offer","repair","help"].forEach(t=>{
+      const sec=$("#tab-"+t), btn=document.querySelector(`.tabBtn[data-tab="${t}"]`);
+      if(!sec||!btn) return;
+      if(t===id){ sec.classList.remove("hide"); btn.classList.add("active"); }
+      else{ sec.classList.add("hide"); btn.classList.remove("active"); }
+    });
+  }
 
-/* --------- INIT (actions & links) --------- */
-document.addEventListener("DOMContentLoaded",()=>{
-  $("#year").textContent=new Date().getFullYear();
+  /* Init after DOM ready */
+  document.addEventListener("DOMContentLoaded", ()=>{
+    const year=$("#year"); if(year) year.textContent=new Date().getFullYear();
 
-  // External links
-  $("#openNotion")?.setAttribute("href", LINKS.notion);
-  $("#openWhop")?.setAttribute("href", LINKS.whop);
-  $("#openDiscord2")?.setAttribute("href", LINKS.discord);
-  $("#openDiscord3")?.setAttribute("href", LINKS.discord);
-  ["openEmail","openEmail2"].forEach(id=>{ const b=$("#"+id); if(b) b.href=`mailto:${LINKS.email}`; });
-  $("#emailText")?.append(LINKS.email);
+    // External links
+    const notion=$("#openNotion"); if(notion) notion.href=LINKS.notion;
+    const whop=$("#openWhop"); if(whop) whop.href=LINKS.whop;
+    const disc2=$("#openDiscord2"); if(disc2) disc2.href=LINKS.discord;
+    const disc3=$("#openDiscord3"); if(disc3) disc3.href=LINKS.discord;
+    ["openEmail","openEmail2"].forEach(id=>{ const b=$("#"+id); if(b) b.href=`mailto:${LINKS.email}`; });
+    const et=$("#emailText"); if(et) et.textContent=LINKS.email;
 
-  // Build Repair UI (exists on Calculator page)
-  buildStateDropdown(); buildLineItems();
+    // Build Repair UI if present
+    buildStateDropdown(); buildLineItems();
 
-  // Tabs + actions
-  $$(".tabBtn").forEach(b=> b.addEventListener("click", ()=> switchCalcTab(b.dataset.tab) ));
-  $("#calcOffer")?.addEventListener("click", calcMAO);
-  $("#resetOffer")?.addEventListener("click", ()=>{
-    ["arv","repairs","discount","fee","closePct"].forEach(id=>$("#"+id)?.value="");
-    $("#discount").value=70; $("#fee").value=10000; $("#closePct").value=3;
-    $("#mao").textContent="$0"; $("#range").textContent="$0 – $0";
-    $("#kpi-discount").textContent="70%"; $("#kpi-fee").textContent="$10,000"; $("#kpi-close").textContent="3% of ARV";
+    // Calc tab controls
+    $$(".tabBtn").forEach(b=> b.addEventListener("click", ()=> switchCalcTab(b.dataset.tab) ));
+    const calcOffer=$("#calcOffer"); if(calcOffer) calcOffer.addEventListener("click", calcMAO);
+    const resetOffer=$("#resetOffer"); if(resetOffer) resetOffer.addEventListener("click", ()=>{
+      ["arv","repairs","discount","fee","closePct"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
+      const d=$("#discount"),f=$("#fee"),c=$("#closePct"); if(d) d.value=70; if(f) f.value=10000; if(c) c.value=3;
+      const mao=$("#mao"),range=$("#range"); if(mao) mao.textContent="$0"; if(range) range.textContent="$0 – $0";
+      const k1=$("#kpi-discount"),k2=$("#kpi-fee"),k3=$("#kpi-close"); if(k1) k1.textContent="70%"; if(k2) k2.textContent="$10,000"; if(k3) k3.textContent="3% of ARV";
+    });
+    const stateSel=$("#state"); if(stateSel) stateSel.addEventListener("change", updateMultiplierPill);
+    const detect=$("#detectState"); if(detect) detect.addEventListener("click", detectStateFromAddress);
+    const scan=$("#scanSqft"); if(scan) scan.addEventListener("click", scanSqftFromAddress);
+    const calcRep=$("#calcRepair"); if(calcRep) calcRep.addEventListener("click", ()=>{ const t=calcRepairs(); void t; });
+    const resetRep=$("#resetRepair"); if(resetRep) resetRep.addEventListener("click", ()=>{
+      LINE_ITEMS.forEach(it=>{ const cb=$("#"+it.id); if(cb) cb.checked=false; if(it.qty){ const q=$("#"+it.id+"_qty"); if(q) q.value=it.val??1; }});
+      const out=$("#repairsOut"); if(out) out.textContent="$0";
+      const notes=$("#notes"); if(notes) notes.innerHTML='<li class="small">No items selected yet.</li>';
+      ["rate_paint_in","rate_paint_out","rate_floor","rate_roof_sq","rate_window_each","rate_elect","rate_plumb"].forEach(id=>{ const el=$("#"+id); if(el) el.value=""; });
+    });
+    const send=$("#sendToOffer"); if(send) send.addEventListener("click", ()=>{
+      const t=calcRepairs();
+      if(t>0){ const rep=$("#repairs"); if(rep) rep.value=Math.round(t); switchCalcTab("offer"); const calcSec=$("#calc"); if(calcSec) calcSec.scrollIntoView({behavior:'smooth',block:'start'}); }
+    });
+    const pull=$("#pullRepairs"); if(pull) pull.addEventListener("click", ()=>{ const t=calcRepairs(); const rep=$("#repairs"); if(t>0 && rep) rep.value=Math.round(t); });
+
+    // Router: use native anchor behavior; we just react to the hash
+    window.addEventListener("hashchange", route);
+    route(); // initial
   });
-  $("#state")?.addEventListener("change", updateMultiplierPill);
-  $("#detectState")?.addEventListener("click", detectStateFromAddress);
-  $("#scanSqft")?.addEventListener("click", scanSqftFromAddress);
-  $("#calcRepair")?.addEventListener("click", ()=>{ const t=calcRepairs(); if(t>0){} });
-  $("#resetRepair")?.addEventListener("click", ()=>{
-    LINE_ITEMS.forEach(it=>{ const cb=$("#"+it.id); if(cb) cb.checked=false; if(it.qty){ const q=$("#"+it.id+"_qty"); if(q) q.value=it.val??1; }});
-    $("#repairsOut").textContent="$0"; $("#notes").innerHTML='<li class="small">No items selected yet.</li>';
-    ["rate_paint_in","rate_paint_out","rate_floor","rate_roof_sq","rate_window_each","rate_elect","rate_plumb"].forEach(id=>$("#"+id)?.value="");
-  });
-  $("#sendToOffer")?.addEventListener("click", ()=>{
-    const t=calcRepairs();
-    if(t>0){ $("#repairs").value=Math.round(t); switchCalcTab("offer"); document.querySelector('#calc').scrollIntoView({behavior:'smooth',block:'start'}); }
-  });
-  $("#pullRepairs")?.addEventListener("click", ()=>{ const t=calcRepairs(); if(t>0) $("#repairs").value=Math.round(t); });
-});
+})();
 </script>
 </body>
 </html>
